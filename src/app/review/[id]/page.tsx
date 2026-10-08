@@ -38,7 +38,6 @@ export default function ReviewDetailPage() {
   return (
     <AppShell
       title={canReview ? "复核付款单明细" : "查看付款单"}
-      description="明细字段只读，不可编辑修改。"
       actions={
         <Link href="/review">
           <Button variant="secondary">返回列表</Button>
