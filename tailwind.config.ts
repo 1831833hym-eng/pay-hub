@@ -53,8 +53,20 @@ export default {
           "linear-gradient(160deg, #4b6bfb 0%, #5a68f4 28%, #6f66f2 55%, #8570f6 100%)",
       },
       fontFamily: {
-        sans: ["var(--font-noto-sans-sc)", "system-ui", "sans-serif"],
-        display: ["var(--font-plus-jakarta)", "var(--font-noto-sans-sc)", "sans-serif"],
+        sans: [
+          '"Noto Sans SC"',
+          '"PingFang SC"',
+          '"Microsoft YaHei"',
+          "system-ui",
+          "sans-serif",
+        ],
+        display: [
+          '"Plus Jakarta Sans"',
+          '"Noto Sans SC"',
+          '"PingFang SC"',
+          "system-ui",
+          "sans-serif",
+        ],
       },
       keyframes: {
         "fade-up": {

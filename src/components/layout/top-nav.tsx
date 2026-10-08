@@ -8,23 +8,30 @@ import { cn } from "@/lib/utils";
 const NAV_ITEMS = [
   { href: "/", label: "付款中心", match: (p: string) => p === "/" },
   {
+    href: "/feishu",
+    label: "飞书审批承接",
+    match: (p: string) => p.startsWith("/feishu"),
+  },
+  {
     href: "/payments",
-    label: "付款单管理",
-    match: (p: string) =>
-      p.startsWith("/payments") && !p.startsWith("/payments/create"),
+    label: "付款单",
+    match: (p: string) => p.startsWith("/payments"),
   },
   {
-    href: "/payments/create",
-    label: "发起付款",
-    match: (p: string) => p.startsWith("/payments/create"),
+    href: "/review",
+    label: "复核中心",
+    match: (p: string) => p.startsWith("/review"),
   },
   {
-    href: "/beneficiaries",
-    label: "收款方管理",
-    match: (p: string) => p.startsWith("/beneficiaries"),
+    href: "/worldfirst",
+    label: "万里汇出款",
+    match: (p: string) => p.startsWith("/worldfirst"),
   },
-  { href: "/#channels", label: "付款通道", match: () => false },
-  { href: "/#reports", label: "报表中心", match: () => false },
+  {
+    href: "/receipts",
+    label: "回单回传",
+    match: (p: string) => p.startsWith("/receipts"),
+  },
 ];
 
 export function TopNav() {
@@ -33,7 +40,10 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-[#f3f4f6]/95 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-[1280px] items-center gap-4 px-4 sm:px-6">
-        <Link href="/" className="shrink-0 font-display text-lg font-bold text-brand-500">
+        <Link
+          href="/"
+          className="shrink-0 font-display text-lg font-bold text-brand-500"
+        >
           资金中台
         </Link>
 

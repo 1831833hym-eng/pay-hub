@@ -1,112 +1,212 @@
-export type PaymentStatus =
+export type FeishuApprovalStatus =
+  | "approved"
+  | "approving"
+  | "rejected"
+  | "cancelled";
+
+export type PaymentOrderStatus =
   | "draft"
   | "pending_review"
-  | "approved"
+  | "review_rejected"
+  | "ready_to_pay"
   | "paying"
-  | "success"
-  | "failed"
-  | "rejected";
+  | "paid"
+  | "pay_failed"
+  | "receipt_synced"
+  | "closed";
 
 export type Currency = "USD" | "EUR" | "GBP" | "JPY" | "HKD" | "CNY" | "SGD";
 
-export interface Beneficiary {
+export interface FeishuApproval {
   id: string;
-  name: string;
-  country: string;
-  bankName: string;
-  accountMasked: string;
+  instanceCode: string;
+  title: string;
+  applicant: string;
+  department: string;
+  amount: number;
   currency: Currency;
-  type: "供应商" | "物流商" | "服务商" | "个人";
-  status: "已认证" | "审核中" | "已停用";
+  payeeName: string;
+  payeeBank: string;
+  payeeAccountMasked: string;
+  purpose: string;
+  approvedAt: string;
+  status: FeishuApprovalStatus;
+  linkedOrderId?: string;
+  attachmentCount: number;
 }
 
 export interface PaymentOrder {
   id: string;
   orderNo: string;
+  feishuId: string;
+  feishuInstanceCode: string;
   merchantName: string;
-  beneficiaryName: string;
-  beneficiaryId: string;
+  applicant: string;
+  payeeName: string;
+  payeeBank: string;
+  payeeAccountMasked: string;
   amount: number;
   currency: Currency;
   cnyEquivalent: number;
   purpose: string;
-  channel: string;
-  status: PaymentStatus;
+  status: PaymentOrderStatus;
   createdAt: string;
   updatedAt: string;
-  applicant: string;
-  payerAccount: string;
-  remark?: string;
+  reviewer?: string;
+  reviewComment?: string;
+  worldfirstTxId?: string;
+  worldfirstStatus?: string;
+  receiptNo?: string;
+  receiptSyncedAt?: string;
   timeline: { time: string; title: string; desc: string; actor: string }[];
 }
 
-export const STATUS_META: Record<
-  PaymentStatus,
+export const FEISHU_STATUS_META: Record<
+  FeishuApprovalStatus,
+  { label: string; tone: string; bg: string }
+> = {
+  approved: { label: "审批通过", tone: "text-emerald-700", bg: "bg-emerald-50" },
+  approving: { label: "审批中", tone: "text-amber-700", bg: "bg-amber-50" },
+  rejected: { label: "已驳回", tone: "text-rose-700", bg: "bg-rose-50" },
+  cancelled: { label: "已撤销", tone: "text-ink-3", bg: "bg-slate-100" },
+};
+
+export const ORDER_STATUS_META: Record<
+  PaymentOrderStatus,
   { label: string; tone: string; bg: string }
 > = {
   draft: { label: "草稿", tone: "text-ink-3", bg: "bg-slate-100" },
   pending_review: {
-    label: "待审核",
+    label: "待复核",
     tone: "text-amber-700",
     bg: "bg-amber-50",
   },
-  approved: { label: "已审批", tone: "text-sky-700", bg: "bg-sky-50" },
-  paying: { label: "付款中", tone: "text-brand-700", bg: "bg-brand-50" },
-  success: { label: "付款成功", tone: "text-emerald-700", bg: "bg-emerald-50" },
-  failed: { label: "付款失败", tone: "text-rose-700", bg: "bg-rose-50" },
-  rejected: { label: "已驳回", tone: "text-rose-700", bg: "bg-rose-50" },
+  review_rejected: {
+    label: "复核驳回",
+    tone: "text-rose-700",
+    bg: "bg-rose-50",
+  },
+  ready_to_pay: {
+    label: "待出款",
+    tone: "text-sky-700",
+    bg: "bg-sky-50",
+  },
+  paying: { label: "万里汇出款中", tone: "text-brand-700", bg: "bg-brand-50" },
+  paid: { label: "已付款", tone: "text-emerald-700", bg: "bg-emerald-50" },
+  pay_failed: { label: "出款失败", tone: "text-rose-700", bg: "bg-rose-50" },
+  receipt_synced: {
+    label: "回单已回传",
+    tone: "text-emerald-800",
+    bg: "bg-emerald-50",
+  },
+  closed: { label: "已关闭", tone: "text-ink-3", bg: "bg-slate-100" },
 };
 
-export const beneficiaries: Beneficiary[] = [
+/** @deprecated use ORDER_STATUS_META */
+export const STATUS_META = ORDER_STATUS_META;
+/** @deprecated */
+export type PaymentStatus = PaymentOrderStatus;
+
+export const feishuApprovals: FeishuApproval[] = [
   {
-    id: "ben-001",
-    name: "Amazon Fulfillment Services Inc.",
-    country: "美国",
-    bankName: "JPMorgan Chase",
-    accountMasked: "****4821",
+    id: "fs-001",
+    instanceCode: "A30B8C2D-FEISHU-20260328-001",
+    title: "FBA仓储尾程费用付款申请",
+    applicant: "王晓雯",
+    department: "跨境运营一部",
+    amount: 12850,
     currency: "USD",
-    type: "物流商",
-    status: "已认证",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    payeeBank: "JPMorgan Chase",
+    payeeAccountMasked: "****4821",
+    purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
+    approvedAt: "2026-03-28T09:05:00+08:00",
+    status: "approved",
+    linkedOrderId: "pay-1001",
+    attachmentCount: 3,
   },
   {
-    id: "ben-002",
-    name: "Shenzhen Huaqiang Supply Co.",
-    country: "中国",
-    bankName: "招商银行香港分行",
-    accountMasked: "****9033",
-    currency: "HKD",
-    type: "供应商",
-    status: "已认证",
-  },
-  {
-    id: "ben-003",
-    name: "EuroPack Logistics GmbH",
-    country: "德国",
-    bankName: "Deutsche Bank",
-    accountMasked: "****1176",
+    id: "fs-002",
+    instanceCode: "A30B8C2D-FEISHU-20260328-002",
+    title: "欧洲仓代发服务费",
+    applicant: "李明轩",
+    department: "供应链中心",
+    amount: 6420.5,
     currency: "EUR",
-    type: "物流商",
-    status: "已认证",
+    payeeName: "EuroPack Logistics GmbH",
+    payeeBank: "Deutsche Bank",
+    payeeAccountMasked: "****1176",
+    purpose: "欧洲仓一件代发服务费",
+    approvedAt: "2026-03-28T10:20:00+08:00",
+    status: "approved",
+    linkedOrderId: "pay-1002",
+    attachmentCount: 2,
   },
   {
-    id: "ben-004",
-    name: "Tokyo Media Agency KK",
-    country: "日本",
-    bankName: "MUFG Bank",
-    accountMasked: "****5520",
-    currency: "JPY",
-    type: "服务商",
-    status: "审核中",
-  },
-  {
-    id: "ben-005",
-    name: "Singapore Ads Pte. Ltd.",
-    country: "新加坡",
-    bankName: "DBS Bank",
-    accountMasked: "****7742",
+    id: "fs-003",
+    instanceCode: "A30B8C2D-FEISHU-20260328-003",
+    title: "东南亚广告投放结算",
+    applicant: "赵一诺",
+    department: "增长市场部",
+    amount: 9800,
     currency: "SGD",
-    type: "服务商",
-    status: "已认证",
+    payeeName: "Singapore Ads Pte. Ltd.",
+    payeeBank: "DBS Bank",
+    payeeAccountMasked: "****7742",
+    purpose: "东南亚广告投放结算",
+    approvedAt: "2026-03-27T16:40:00+08:00",
+    status: "approved",
+    linkedOrderId: "pay-1003",
+    attachmentCount: 4,
+  },
+  {
+    id: "fs-004",
+    instanceCode: "A30B8C2D-FEISHU-20260328-004",
+    title: "采购货款-3月批次",
+    applicant: "王晓雯",
+    department: "跨境运营一部",
+    amount: 186000,
+    currency: "HKD",
+    payeeName: "Shenzhen Huaqiang Supply Co.",
+    payeeBank: "招商银行香港分行",
+    payeeAccountMasked: "****9033",
+    purpose: "采购货款-3月批次",
+    approvedAt: "2026-03-28T11:00:00+08:00",
+    status: "approved",
+    attachmentCount: 5,
+  },
+  {
+    id: "fs-005",
+    instanceCode: "A30B8C2D-FEISHU-20260328-005",
+    title: "日本站内容营销服务费",
+    applicant: "孙可",
+    department: "品牌市场部",
+    amount: 450000,
+    currency: "JPY",
+    payeeName: "Tokyo Media Agency KK",
+    payeeBank: "MUFG Bank",
+    payeeAccountMasked: "****5520",
+    purpose: "日本站内容营销服务费",
+    approvedAt: "2026-03-28T11:30:00+08:00",
+    status: "approving",
+    attachmentCount: 2,
+  },
+  {
+    id: "fs-006",
+    instanceCode: "A30B8C2D-FEISHU-20260326-018",
+    title: "仓储超期费补缴",
+    applicant: "李明轩",
+    department: "供应链中心",
+    amount: 5200,
+    currency: "USD",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    payeeBank: "JPMorgan Chase",
+    payeeAccountMasked: "****4821",
+    purpose: "仓储超期费补缴",
+    approvedAt: "2026-03-26T09:10:00+08:00",
+    status: "approved",
+    linkedOrderId: "pay-1006",
+    attachmentCount: 2,
   },
 ];
 
@@ -114,195 +214,223 @@ export const payments: PaymentOrder[] = [
   {
     id: "pay-1001",
     orderNo: "PAY20260328001",
+    feishuId: "fs-001",
+    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-001",
     merchantName: "星辰跨境旗舰店",
-    beneficiaryName: "Amazon Fulfillment Services Inc.",
-    beneficiaryId: "ben-001",
-    amount: 12850.0,
+    applicant: "王晓雯",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    payeeBank: "JPMorgan Chase",
+    payeeAccountMasked: "****4821",
+    amount: 12850,
     currency: "USD",
     cnyEquivalent: 93212.5,
-    purpose: "FBA仓储与尾程费用",
-    channel: "SWIFT / 合作银行通道",
+    purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
     status: "pending_review",
     createdAt: "2026-03-28T09:12:00+08:00",
     updatedAt: "2026-03-28T09:12:00+08:00",
-    applicant: "王晓雯",
-    payerAccount: "USD结算户 ****6612",
-    remark: "对应结算周期 2026-03-01 ~ 2026-03-15",
     timeline: [
       {
+        time: "2026-03-28 09:05",
+        title: "飞书审批通过",
+        desc: "审批实例 A30B8C2D-FEISHU-20260328-001 已通过，付款中心已承接申请信息",
+        actor: "飞书审批",
+      },
+      {
         time: "2026-03-28 09:12",
-        title: "提交付款申请",
-        desc: "申请人已提交付款单，等待风控与财务审核",
-        actor: "王晓雯",
+        title: "生成付款单",
+        desc: "系统根据飞书字段自动生成付款单，待财务复核",
+        actor: "系统",
       },
     ],
   },
   {
     id: "pay-1002",
-    orderNo: "PAY20260327018",
+    orderNo: "PAY20260328002",
+    feishuId: "fs-002",
+    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-002",
     merchantName: "蓝海数贸",
-    beneficiaryName: "EuroPack Logistics GmbH",
-    beneficiaryId: "ben-003",
+    applicant: "李明轩",
+    payeeName: "EuroPack Logistics GmbH",
+    payeeBank: "Deutsche Bank",
+    payeeAccountMasked: "****1176",
     amount: 6420.5,
     currency: "EUR",
     cnyEquivalent: 50248.3,
     purpose: "欧洲仓一件代发服务费",
-    channel: "SEPA 合作通道",
     status: "paying",
-    createdAt: "2026-03-27T16:40:00+08:00",
-    updatedAt: "2026-03-28T08:05:00+08:00",
-    applicant: "李明轩",
-    payerAccount: "EUR结算户 ****2281",
+    createdAt: "2026-03-28T10:25:00+08:00",
+    updatedAt: "2026-03-28T11:05:00+08:00",
+    reviewer: "财务-陈静",
+    reviewComment: "材料齐全，额度校验通过",
+    worldfirstTxId: "WF20260328110500981",
+    worldfirstStatus: "PROCESSING",
     timeline: [
       {
-        time: "2026-03-27 16:40",
-        title: "提交付款申请",
-        desc: "付款单已创建",
-        actor: "李明轩",
+        time: "2026-03-28 10:20",
+        title: "飞书审批通过",
+        desc: "付款申请信息已同步至付款中心",
+        actor: "飞书审批",
       },
       {
-        time: "2026-03-27 18:10",
-        title: "财务审核通过",
-        desc: "材料齐全，额度校验通过",
+        time: "2026-03-28 10:25",
+        title: "生成付款单",
+        desc: "自动生成付款单 PAY20260328002",
+        actor: "系统",
+      },
+      {
+        time: "2026-03-28 10:48",
+        title: "复核通过",
+        desc: "财务复核通过，准备调用万里汇付款接口",
         actor: "财务-陈静",
       },
       {
-        time: "2026-03-28 08:05",
-        title: "通道受理中",
-        desc: "已推送至 SEPA 合作通道",
+        time: "2026-03-28 11:05",
+        title: "提交万里汇出款",
+        desc: "已调用万里汇付款接口，交易号 WF20260328110500981",
         actor: "系统",
       },
     ],
   },
   {
     id: "pay-1003",
-    orderNo: "PAY20260326007",
+    orderNo: "PAY20260327018",
+    feishuId: "fs-003",
+    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-003",
     merchantName: "北极光品牌",
-    beneficiaryName: "Singapore Ads Pte. Ltd.",
-    beneficiaryId: "ben-005",
-    amount: 9800.0,
-    currency: "SGD",
-    cnyEquivalent: 53116.0,
-    purpose: "东南亚广告投放结算",
-    channel: "本地清算通道",
-    status: "success",
-    createdAt: "2026-03-26T11:20:00+08:00",
-    updatedAt: "2026-03-26T15:48:00+08:00",
     applicant: "赵一诺",
-    payerAccount: "SGD结算户 ****4409",
+    payeeName: "Singapore Ads Pte. Ltd.",
+    payeeBank: "DBS Bank",
+    payeeAccountMasked: "****7742",
+    amount: 9800,
+    currency: "SGD",
+    cnyEquivalent: 53116,
+    purpose: "东南亚广告投放结算",
+    status: "receipt_synced",
+    createdAt: "2026-03-27T16:50:00+08:00",
+    updatedAt: "2026-03-28T09:40:00+08:00",
+    reviewer: "财务-陈静",
+    worldfirstTxId: "WF20260327172000412",
+    worldfirstStatus: "SUCCESS",
+    receiptNo: "WFR-20260328-00412",
+    receiptSyncedAt: "2026-03-28T09:40:00+08:00",
     timeline: [
       {
-        time: "2026-03-26 11:20",
-        title: "提交付款申请",
-        desc: "付款单已创建",
-        actor: "赵一诺",
+        time: "2026-03-27 16:40",
+        title: "飞书审批通过",
+        desc: "审批通过并同步付款要素",
+        actor: "飞书审批",
       },
       {
-        time: "2026-03-26 13:02",
-        title: "审核通过",
-        desc: "风控与财务双重通过",
+        time: "2026-03-27 16:50",
+        title: "生成付款单",
+        desc: "付款单已创建并进入复核",
+        actor: "系统",
+      },
+      {
+        time: "2026-03-27 17:10",
+        title: "复核通过",
+        desc: "复核通过，提交万里汇出款",
         actor: "财务-陈静",
       },
       {
-        time: "2026-03-26 15:48",
-        title: "付款成功",
-        desc: "收款方银行已入账",
+        time: "2026-03-27 17:20",
+        title: "万里汇付款成功",
+        desc: "交易号 WF20260327172000412 出款成功",
+        actor: "万里汇",
+      },
+      {
+        time: "2026-03-28 09:30",
+        title: "获取万里汇回单",
+        desc: "回单号 WFR-20260328-00412 已拉取",
         actor: "系统",
       },
-    ],
-  },
-  {
-    id: "pay-1004",
-    orderNo: "PAY20260325022",
-    merchantName: "星辰跨境旗舰店",
-    beneficiaryName: "Shenzhen Huaqiang Supply Co.",
-    beneficiaryId: "ben-002",
-    amount: 186000.0,
-    currency: "HKD",
-    cnyEquivalent: 170220.0,
-    purpose: "采购货款-3月批次",
-    channel: "FPS / 香港本地",
-    status: "rejected",
-    createdAt: "2026-03-25T10:05:00+08:00",
-    updatedAt: "2026-03-25T14:30:00+08:00",
-    applicant: "王晓雯",
-    payerAccount: "HKD结算户 ****1188",
-    remark: "合同附件缺失，请补充后重新提交",
-    timeline: [
       {
-        time: "2026-03-25 10:05",
-        title: "提交付款申请",
-        desc: "付款单已创建",
-        actor: "王晓雯",
-      },
-      {
-        time: "2026-03-25 14:30",
-        title: "审核驳回",
-        desc: "缺少采购合同扫描件与发票",
-        actor: "风控-周然",
-      },
-    ],
-  },
-  {
-    id: "pay-1005",
-    orderNo: "PAY20260328009",
-    merchantName: "云帆出海",
-    beneficiaryName: "Tokyo Media Agency KK",
-    beneficiaryId: "ben-004",
-    amount: 450000,
-    currency: "JPY",
-    cnyEquivalent: 21735.0,
-    purpose: "日本站内容营销服务费",
-    channel: "SWIFT",
-    status: "draft",
-    createdAt: "2026-03-28T10:40:00+08:00",
-    updatedAt: "2026-03-28T10:40:00+08:00",
-    applicant: "孙可",
-    payerAccount: "JPY结算户 ****3301",
-    timeline: [
-      {
-        time: "2026-03-28 10:40",
-        title: "保存草稿",
-        desc: "收款方认证未完成，暂存草稿",
-        actor: "孙可",
+        time: "2026-03-28 09:40",
+        title: "回单回传飞书",
+        desc: "回单已上传至飞书审批实例附件，流程闭环",
+        actor: "系统",
       },
     ],
   },
   {
     id: "pay-1006",
-    orderNo: "PAY20260324011",
+    orderNo: "PAY20260326011",
+    feishuId: "fs-006",
+    feishuInstanceCode: "A30B8C2D-FEISHU-20260326-018",
     merchantName: "蓝海数贸",
-    beneficiaryName: "Amazon Fulfillment Services Inc.",
-    beneficiaryId: "ben-001",
-    amount: 5200.0,
-    currency: "USD",
-    cnyEquivalent: 37700.0,
-    purpose: "仓储超期费补缴",
-    channel: "SWIFT / 合作银行通道",
-    status: "failed",
-    createdAt: "2026-03-24T09:00:00+08:00",
-    updatedAt: "2026-03-24T17:20:00+08:00",
     applicant: "李明轩",
-    payerAccount: "USD结算户 ****6612",
-    remark: "中间行退回：收款账号校验失败",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    payeeBank: "JPMorgan Chase",
+    payeeAccountMasked: "****4821",
+    amount: 5200,
+    currency: "USD",
+    cnyEquivalent: 37700,
+    purpose: "仓储超期费补缴",
+    status: "pay_failed",
+    createdAt: "2026-03-26T09:20:00+08:00",
+    updatedAt: "2026-03-26T17:20:00+08:00",
+    reviewer: "财务-陈静",
+    worldfirstTxId: "WF20260326140000771",
+    worldfirstStatus: "FAILED",
+    reviewComment: "账号校验失败，待修正后重推",
     timeline: [
       {
-        time: "2026-03-24 09:00",
-        title: "提交付款申请",
-        desc: "付款单已创建",
-        actor: "李明轩",
+        time: "2026-03-26 09:10",
+        title: "飞书审批通过",
+        desc: "付款申请已承接",
+        actor: "飞书审批",
       },
       {
-        time: "2026-03-24 11:15",
-        title: "审核通过并出款",
-        desc: "已推送 SWIFT",
+        time: "2026-03-26 09:20",
+        title: "生成付款单并复核通过",
+        desc: "复核通过后提交万里汇",
+        actor: "财务-陈静",
+      },
+      {
+        time: "2026-03-26 17:20",
+        title: "万里汇出款失败",
+        desc: "收款账号校验失败，可修正后重新调用付款接口",
+        actor: "万里汇",
+      },
+    ],
+  },
+  {
+    id: "pay-1004",
+    orderNo: "PAY20260328004",
+    feishuId: "fs-004",
+    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-004",
+    merchantName: "星辰跨境旗舰店",
+    applicant: "王晓雯",
+    payeeName: "Shenzhen Huaqiang Supply Co.",
+    payeeBank: "招商银行香港分行",
+    payeeAccountMasked: "****9033",
+    amount: 186000,
+    currency: "HKD",
+    cnyEquivalent: 170220,
+    purpose: "采购货款-3月批次",
+    status: "ready_to_pay",
+    createdAt: "2026-03-28T11:10:00+08:00",
+    updatedAt: "2026-03-28T11:45:00+08:00",
+    reviewer: "财务-陈静",
+    reviewComment: "大额付款已二次核对合同与发票",
+    timeline: [
+      {
+        time: "2026-03-28 11:00",
+        title: "飞书审批通过",
+        desc: "大额采购付款审批通过",
+        actor: "飞书审批",
+      },
+      {
+        time: "2026-03-28 11:10",
+        title: "生成付款单",
+        desc: "已从飞书字段映射生成付款单",
         actor: "系统",
       },
       {
-        time: "2026-03-24 17:20",
-        title: "付款失败",
-        desc: "中间行退回，账号校验失败",
-        actor: "系统",
+        time: "2026-03-28 11:45",
+        title: "复核通过",
+        desc: "待提交万里汇付款接口",
+        actor: "财务-陈静",
       },
     ],
   },
@@ -310,58 +438,67 @@ export const payments: PaymentOrder[] = [
 
 export const overviewStats = [
   {
-    label: "今日付款额",
-    value: "¥186.4万",
-    hint: "较昨日 +12.6%",
-    trend: "up" as const,
-  },
-  {
-    label: "待审核付款",
-    value: "28",
-    hint: "需在 2 小时内处理",
+    label: "待承接飞书单",
+    value: "1",
+    hint: "审批通过尚未生成付款单",
     trend: "warn" as const,
   },
   {
-    label: "付款中",
-    value: "14",
-    hint: "含跨境通道 9 笔",
+    label: "待复核",
+    value: "1",
+    hint: "提交后可调用万里汇出款",
+    trend: "warn" as const,
+  },
+  {
+    label: "万里汇出款中",
+    value: "1",
+    hint: "等待付款结果与回单",
     trend: "neutral" as const,
   },
   {
-    label: "本月成功率",
-    value: "97.8%",
-    hint: "失败 11 笔已重试",
+    label: "回单已回传",
+    value: "12",
+    hint: "本月已闭环飞书审批",
     trend: "up" as const,
   },
 ];
 
-export const quickActions = [
+export const flowSteps = [
   {
-    title: "发起单笔付款",
-    desc: "选择付款账户与收款方，提交审核",
-    href: "/payments/create",
-    icon: "send",
+    step: "01",
+    title: "承接飞书审批",
+    desc: "监听飞书付款审批通过事件，拉取申请字段与附件。",
   },
   {
-    title: "批量付款导入",
-    desc: "按模板上传 Excel，批量生成付款单",
-    href: "/payments/create?mode=batch",
-    icon: "upload",
+    step: "02",
+    title: "生成付款单",
+    desc: "将审批信息映射为付款单，补齐商户、账户等出款要素。",
   },
   {
-    title: "收款方管理",
-    desc: "维护供应商与海外收款账户",
-    href: "/beneficiaries",
-    icon: "users",
+    step: "03",
+    title: "提交复核",
+    desc: "财务复核通过后，付款单进入可出款状态。",
   },
   {
-    title: "付款单查询",
-    desc: "按状态、币种、商户筛选付款记录",
-    href: "/payments",
-    icon: "list",
+    step: "04",
+    title: "万里汇出款",
+    desc: "调用万里汇付款接口执行跨境付款。",
+  },
+  {
+    step: "05",
+    title: "回单回传飞书",
+    desc: "获取万里汇回单，并上传至原飞书审批流附件。",
   },
 ];
 
 export function getPaymentById(id: string) {
   return payments.find((item) => item.id === id);
+}
+
+export function getFeishuById(id: string) {
+  return feishuApprovals.find((item) => item.id === id);
+}
+
+export function getPaymentsByStatus(status: PaymentOrderStatus) {
+  return payments.filter((item) => item.status === status);
 }

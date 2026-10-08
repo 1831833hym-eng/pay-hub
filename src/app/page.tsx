@@ -2,17 +2,12 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  BarChart3,
-  Building2,
   CheckCircle2,
-  Clock3,
-  FileSpreadsheet,
-  ListOrdered,
+  ClipboardCheck,
+  FileText,
+  RefreshCw,
   Send,
-  ShieldAlert,
   Upload,
-  Users,
-  Wallet,
 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
@@ -24,48 +19,38 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
-import { overviewStats, payments, quickActions } from "@/lib/payments-data";
+import {
+  flowSteps,
+  overviewStats,
+  payments,
+} from "@/lib/payments-data";
 import { formatMoney } from "@/lib/utils";
-
-const iconMap = {
-  send: Send,
-  upload: Upload,
-  users: Users,
-  list: ListOrdered,
-} as const;
 
 const moduleCards = [
   {
-    title: "发起付款",
-    desc: "单笔或批量提交跨境付款申请，自动校验账户额度与收款方认证状态。",
-    href: "/payments/create",
+    title: "飞书审批承接",
+    desc: "拉取飞书付款审批通过单据，映射金额、收款方与用途等字段。",
+    href: "/feishu",
+    icon: FileText,
+  },
+  {
+    title: "付款单 / 复核",
+    desc: "由审批信息生成付款单，财务复核通过后方可出款。",
+    href: "/review",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "万里汇出款",
+    desc: "复核通过后调用万里汇付款接口，跟踪出款状态。",
+    href: "/worldfirst",
     icon: Send,
   },
   {
-    title: "付款审核",
-    desc: "财务与风控双节点审核，大额与高风险国家付款优先排队处理。",
-    href: "/payments",
-    icon: ShieldAlert,
+    title: "回单回传飞书",
+    desc: "获取万里汇回单并上传至原飞书审批流，完成闭环。",
+    href: "/receipts",
+    icon: Upload,
   },
-  {
-    title: "出款追踪",
-    desc: "按通道查看付款中与失败单据，支持修正账号后一键重推出款。",
-    href: "/payments",
-    icon: BarChart3,
-  },
-  {
-    title: "收款方管理",
-    desc: "维护供应商、物流商与服务商海外账户，完成 KYC 后可出款。",
-    href: "/beneficiaries",
-    icon: Building2,
-  },
-];
-
-const channelStats = [
-  { name: "SWIFT 合作通道", success: "98.2%", latency: "T+1~T+2", load: "高" },
-  { name: "SEPA 本地清算", success: "99.1%", latency: "当日", load: "中" },
-  { name: "香港 FPS", success: "99.6%", latency: "准实时", load: "中" },
-  { name: "本地钱包通道", success: "97.4%", latency: "分钟级", load: "低" },
 ];
 
 export default function PaymentCenterPage() {
@@ -74,32 +59,33 @@ export default function PaymentCenterPage() {
   return (
     <AppShell
       title="付款中心"
-      description="付款中心统一管理跨境电商资金出款：发起申请、合规审核、通道出款与失败重试，覆盖多币种结算账户与海外收款方。"
+      description="承接飞书审批付款申请 → 生成付款单 → 复核通过 → 调用万里汇付款 → 获取回单并回传飞书审批流。"
       actions={
         <>
-          <Link href="/payments">
-            <Button variant="secondary">查看全部付款单</Button>
+          <Link href="/feishu">
+            <Button variant="secondary">
+              <RefreshCw className="h-4 w-4" />
+              同步飞书审批
+            </Button>
           </Link>
-          <Link href="/payments/create">
+          <Link href="/review">
             <Button>
-              <Send className="h-4 w-4" />
-              发起付款
+              <ClipboardCheck className="h-4 w-4" />
+              去复核
             </Button>
           </Link>
         </>
       }
     >
-      {/* Hero — mirrors 资金中台管理系统 title block on gradient */}
       <section className="mb-8 px-2 py-6 text-center text-white sm:py-10">
         <h2 className="font-display text-3xl font-bold tracking-tight drop-shadow-sm sm:text-5xl">
           付款中心管理系统
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base">
-          统一管理各子业务跨境付款，提供高效的付款申请、审核与出款服务
+          打通飞书审批与万里汇出款，实现付款申请、复核、出款与回单回传一体化
         </p>
       </section>
 
-      {/* KPI strip — matches reference white metric bar */}
       <section className="mb-6 rounded-2xl bg-white px-4 py-6 shadow-card sm:px-8 sm:py-7">
         <div className="grid grid-cols-2 gap-6 lg:grid-cols-4 lg:divide-x lg:divide-slate-100">
           {overviewStats.map((stat) => (
@@ -114,7 +100,36 @@ export default function PaymentCenterPage() {
         </div>
       </section>
 
-      {/* Module cards — blue square icons like reference */}
+      <section className="mb-6 overflow-hidden rounded-2xl bg-white px-4 py-5 shadow-card sm:px-6">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <h3 className="text-base font-semibold text-ink-1">端到端付款链路</h3>
+            <p className="mt-1 text-sm text-ink-3">
+              飞书审批 → 付款单 → 复核 → 万里汇 → 回单回传
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-3 md:grid-cols-5">
+          {flowSteps.map((item, idx) => (
+            <div
+              key={item.step}
+              className="relative rounded-xl border border-slate-100 bg-surface-soft p-3"
+            >
+              <div className="mb-2 font-display text-xs font-bold text-brand-500">
+                {item.step}
+              </div>
+              <div className="text-sm font-medium text-ink-1">{item.title}</div>
+              <p className="mt-1 text-xs leading-relaxed text-ink-3">
+                {item.desc}
+              </p>
+              {idx < flowSteps.length - 1 ? (
+                <ArrowRight className="absolute -right-2 top-1/2 hidden h-4 w-4 -translate-y-1/2 text-brand-300 md:block" />
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {moduleCards.map((mod) => {
           const Icon = mod.icon;
@@ -145,31 +160,12 @@ export default function PaymentCenterPage() {
         })}
       </section>
 
-      <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {quickActions.map((action) => {
-          const Icon = iconMap[action.icon as keyof typeof iconMap];
-          return (
-            <Link key={action.title} href={action.href} className="group">
-              <div className="flex h-full items-center gap-3 rounded-2xl border border-white/40 bg-white/15 px-4 py-3 text-white backdrop-blur-sm transition hover:bg-white/25">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-brand-500">
-                  <Icon className="h-4 w-4" />
-                </span>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-medium">{action.title}</div>
-                  <div className="truncate text-xs text-white/75">{action.desc}</div>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </section>
-
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-3">
           <CardHeader className="flex flex-row items-center justify-between gap-3">
             <div>
               <CardTitle>最近付款单</CardTitle>
-              <CardDescription>实时跟踪审核与出款进展</CardDescription>
+              <CardDescription>来自飞书审批，跟踪复核与万里汇出款</CardDescription>
             </div>
             <Link href="/payments">
               <Button variant="outline" size="sm">
@@ -190,7 +186,7 @@ export default function PaymentCenterPage() {
                     <StatusBadge status={item.status} />
                   </div>
                   <p className="mt-1 truncate text-sm text-ink-3">
-                    {item.merchantName} · {item.beneficiaryName}
+                    飞书 {item.feishuInstanceCode.slice(-12)} · {item.payeeName}
                   </p>
                 </div>
                 <div className="text-left sm:text-right">
@@ -198,7 +194,9 @@ export default function PaymentCenterPage() {
                     {formatMoney(item.amount, item.currency)}
                   </div>
                   <div className="text-xs text-ink-4">
-                    约 {formatMoney(item.cnyEquivalent, "CNY")}
+                    {item.worldfirstTxId
+                      ? `万里汇 ${item.worldfirstTxId.slice(-8)}`
+                      : "尚未提交万里汇"}
                   </div>
                 </div>
               </Link>
@@ -206,120 +204,38 @@ export default function PaymentCenterPage() {
           </CardContent>
         </Card>
 
-        <div className="space-y-6 lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>待办提醒</CardTitle>
-              <CardDescription>今日需优先处理的事项</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <TodoItem
-                icon={<Clock3 className="h-4 w-4" />}
-                title="28 笔待财务审核"
-                desc="含大额付款 6 笔，建议优先处理"
-              />
-              <TodoItem
-                icon={<ShieldAlert className="h-4 w-4" />}
-                title="3 笔风控复核"
-                desc="高风险国家收款方，需补充用途说明"
-              />
-              <TodoItem
-                icon={<Wallet className="h-4 w-4" />}
-                title="2 笔失败待重试"
-                desc="账号校验失败，可修正后一键重推"
-              />
-            </CardContent>
-          </Card>
-
-          <Card id="channels">
-            <CardHeader>
-              <CardTitle>通道健康度</CardTitle>
-              <CardDescription>今日各付款通道运行概况</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {channelStats.map((ch) => (
-                <div
-                  key={ch.name}
-                  className="rounded-xl border border-slate-100 px-3 py-2.5"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium text-ink-1">
-                      {ch.name}
-                    </span>
-                    <span className="text-xs text-emerald-600">{ch.success}</span>
-                  </div>
-                  <div className="mt-1 flex justify-between text-xs text-ink-4">
-                    <span>时效 {ch.latency}</span>
-                    <span>负载 {ch.load}</span>
-                  </div>
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>闭环说明</CardTitle>
+            <CardDescription>与飞书、万里汇的系统协同</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-ink-3">
+            <div className="rounded-xl bg-surface-soft px-3 py-3">
+              <div className="font-medium text-ink-1">入站：飞书审批</div>
+              <p className="mt-1 text-xs leading-relaxed">
+                审批通过后推送/拉取付款申请字段，自动生成付款单草稿或待复核单。
+              </p>
+            </div>
+            <div className="rounded-xl bg-surface-soft px-3 py-3">
+              <div className="font-medium text-ink-1">出款：万里汇接口</div>
+              <p className="mt-1 text-xs leading-relaxed">
+                复核通过后调用万里汇付款 API，异步查询出款结果。
+              </p>
+            </div>
+            <div className="rounded-xl bg-surface-soft px-3 py-3">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                <div>
+                  <div className="font-medium text-ink-1">回传：飞书附件</div>
+                  <p className="mt-1 text-xs leading-relaxed">
+                    付款成功后下载万里汇回单，上传至原审批实例，关闭业务闭环。
+                  </p>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-
-      <section id="reports" className="mt-6 grid gap-4 md:grid-cols-3">
-        <InsightCard
-          icon={<Wallet className="h-5 w-5" />}
-          title="多币种余额可用"
-          desc="USD / EUR / HKD / SGD 等结算账户余额统一展示，付款前自动校验额度。"
-        />
-        <InsightCard
-          icon={<FileSpreadsheet className="h-5 w-5" />}
-          title="批量付款模板"
-          desc="支持按商户、收款方、币种批量导入，系统自动拆单并触发审核流。"
-        />
-        <InsightCard
-          icon={<CheckCircle2 className="h-5 w-5" />}
-          title="合规材料闭环"
-          desc="合同、发票、用途说明与审批意见留痕，满足跨境出款审计要求。"
-        />
-      </section>
     </AppShell>
-  );
-}
-
-function TodoItem({
-  icon,
-  title,
-  desc,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-}) {
-  return (
-    <div className="flex gap-3 rounded-xl bg-surface-soft px-3 py-3">
-      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-500 text-white">
-        {icon}
-      </div>
-      <div>
-        <div className="text-sm font-medium text-ink-1">{title}</div>
-        <div className="mt-0.5 text-xs text-ink-3">{desc}</div>
-      </div>
-    </div>
-  );
-}
-
-function InsightCard({
-  icon,
-  title,
-  desc,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white">
-          {icon}
-        </div>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{desc}</CardDescription>
-      </CardHeader>
-    </Card>
   );
 }

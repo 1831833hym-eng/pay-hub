@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { StatusBadge } from "@/components/ui/badge";
+import { StatusBadge, Pill } from "@/components/ui/badge";
 import { getPaymentById } from "@/lib/payments-data";
 import { formatDate, formatMoney } from "@/lib/utils";
 
@@ -22,25 +22,40 @@ export default async function PaymentDetailPage({
   const payment = getPaymentById(id);
   if (!payment) notFound();
 
-  const canApprove = payment.status === "pending_review";
-  const canRetry = payment.status === "failed" || payment.status === "rejected";
+  const canReview = payment.status === "pending_review";
+  const canPay = payment.status === "ready_to_pay";
+  const canReceipt =
+    payment.status === "paid" || payment.status === "paying";
 
   return (
     <AppShell
       title={`付款详情 · ${payment.orderNo}`}
-      description={`${payment.merchantName} 向 ${payment.beneficiaryName} 付款 · ${payment.purpose}`}
+      description={`飞书审批 ${payment.feishuInstanceCode} · ${payment.purpose}`}
       actions={
         <>
           <Link href="/payments">
             <Button variant="secondary">返回列表</Button>
           </Link>
-          {canApprove ? (
-            <>
-              <Button variant="outline">驳回</Button>
-              <Button>审核通过</Button>
-            </>
+          {canReview ? (
+            <Link href="/review">
+              <Button>去复核</Button>
+            </Link>
           ) : null}
-          {canRetry ? <Button>修正后重试</Button> : null}
+          {canPay ? (
+            <Link href="/worldfirst">
+              <Button>提交万里汇</Button>
+            </Link>
+          ) : null}
+          {canReceipt ? (
+            <Link href="/receipts">
+              <Button>处理回单</Button>
+            </Link>
+          ) : null}
+          {payment.status === "receipt_synced" ? (
+            <Link href="/feishu">
+              <Button variant="outline">查看飞书承接</Button>
+            </Link>
+          ) : null}
         </>
       }
     >
@@ -53,7 +68,10 @@ export default async function PaymentDetailPage({
           label="折合人民币"
           value={formatMoney(payment.cnyEquivalent, "CNY")}
         />
-        <Metric label="付款通道" value={payment.channel} />
+        <Metric
+          label="万里汇交易号"
+          value={payment.worldfirstTxId ?? "尚未提交"}
+        />
         <div className="rounded-2xl bg-white px-5 py-4 shadow-card">
           <div className="text-xs text-ink-4">当前状态</div>
           <div className="mt-2">
@@ -68,31 +86,58 @@ export default async function PaymentDetailPage({
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-3">
           <CardHeader>
-            <CardTitle>基本信息</CardTitle>
-            <CardDescription>付款单核心字段与账户信息</CardDescription>
+            <CardTitle>付款与审批信息</CardTitle>
+            <CardDescription>
+              字段来源于飞书审批，复核后提交万里汇出款
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <dl className="grid gap-4 sm:grid-cols-2">
               <Info label="付款单号" value={payment.orderNo} />
               <Info label="申请人" value={payment.applicant} />
               <Info label="商户主体" value={payment.merchantName} />
-              <Info label="付款账户" value={payment.payerAccount} />
-              <Info label="收款方" value={payment.beneficiaryName} />
+              <Info label="飞书实例号" value={payment.feishuInstanceCode} />
+              <Info label="收款方" value={payment.payeeName} />
+              <Info
+                label="收款账户"
+                value={`${payment.payeeBank} ${payment.payeeAccountMasked}`}
+              />
               <Info label="付款用途" value={payment.purpose} />
               <Info label="创建时间" value={formatDate(payment.createdAt)} />
-              <Info
-                label="备注"
-                value={payment.remark || "—"}
-                className="sm:col-span-2"
-              />
+              {payment.reviewer ? (
+                <Info label="复核人" value={payment.reviewer} />
+              ) : null}
+              {payment.reviewComment ? (
+                <Info
+                  label="复核意见"
+                  value={payment.reviewComment}
+                  className="sm:col-span-2"
+                />
+              ) : null}
+              {payment.receiptNo ? (
+                <Info label="万里汇回单号" value={payment.receiptNo} />
+              ) : null}
+              {payment.receiptSyncedAt ? (
+                <Info
+                  label="回传飞书时间"
+                  value={formatDate(payment.receiptSyncedAt)}
+                />
+              ) : null}
             </dl>
+            {payment.worldfirstStatus ? (
+              <div className="mt-4">
+                <Pill>万里汇状态 · {payment.worldfirstStatus}</Pill>
+              </div>
+            ) : null}
           </CardContent>
         </Card>
 
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>流程轨迹</CardTitle>
-            <CardDescription>审核与出款节点留痕</CardDescription>
+            <CardDescription>
+              飞书 → 付款单 → 复核 → 万里汇 → 回单回传
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ol className="relative space-y-5 border-l border-brand-100 pl-5">
@@ -112,22 +157,6 @@ export default async function PaymentDetailPage({
           </CardContent>
         </Card>
       </div>
-
-      {canApprove ? (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>审核操作（原型）</CardTitle>
-            <CardDescription>
-              实际系统中将写入审批意见并触发下一节点通知
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-3">
-            <Button>通过并推送出款</Button>
-            <Button variant="outline">转风控复核</Button>
-            <Button variant="danger">驳回并退回申请人</Button>
-          </CardContent>
-        </Card>
-      ) : null}
     </AppShell>
   );
 }
@@ -136,7 +165,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl bg-white px-5 py-4 shadow-card">
       <div className="text-xs text-ink-4">{label}</div>
-      <div className="mt-2 font-display text-xl font-bold text-brand-600">
+      <div className="mt-2 break-all font-display text-lg font-bold text-brand-600 sm:text-xl">
         {value}
       </div>
     </div>
@@ -155,7 +184,7 @@ function Info({
   return (
     <div className={className}>
       <dt className="text-xs text-ink-4">{label}</dt>
-      <dd className="mt-1 text-sm font-medium text-ink-1">{value}</dd>
+      <dd className="mt-1 break-all text-sm font-medium text-ink-1">{value}</dd>
     </div>
   );
 }

@@ -1,9 +1,29 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { STATUS_META, type PaymentStatus } from "@/lib/payments-data";
+import {
+  FEISHU_STATUS_META,
+  ORDER_STATUS_META,
+  type FeishuApprovalStatus,
+  type PaymentOrderStatus,
+} from "@/lib/payments-data";
 
-export function StatusBadge({ status }: { status: PaymentStatus }) {
-  const meta = STATUS_META[status];
+export function StatusBadge({ status }: { status: PaymentOrderStatus }) {
+  const meta = ORDER_STATUS_META[status];
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium",
+        meta.bg,
+        meta.tone
+      )}
+    >
+      {meta.label}
+    </span>
+  );
+}
+
+export function FeishuStatusBadge({ status }: { status: FeishuApprovalStatus }) {
+  const meta = FEISHU_STATUS_META[status];
   return (
     <span
       className={cn(
