@@ -53,6 +53,9 @@ export function OrderTable({
               付款申请类型
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+              收款方式类型
+            </th>
+            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               付款事由
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
@@ -112,6 +115,11 @@ export function OrderTable({
                   <span className="inline-flex rounded-full bg-[#e8f1ff] px-2 py-0.5 text-xs text-brand-600">
                     {item.applyType}
                   </span>
+                </td>
+                <td
+                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {item.receiveMethodType}
                 </td>
                 <td
                   className={`max-w-[180px] truncate border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
@@ -178,7 +186,7 @@ export function OrderTable({
           {rows.length === 0 ? (
             <tr>
               <td
-                colSpan={showSelect ? 13 : 12}
+                colSpan={showSelect ? 14 : 13}
                 className="px-3 py-14 text-center text-ink-4"
               >
                 暂无符合条件的付款单

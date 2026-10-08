@@ -46,6 +46,11 @@ export default function QueryListPage() {
       if (q.applyType && item.applyType !== q.applyType) return false;
       if (q.purpose && !item.purpose.includes(q.purpose)) return false;
       if (q.amount && !String(item.amount).includes(q.amount)) return false;
+      if (
+        q.receiveMethodType &&
+        item.receiveMethodType !== q.receiveMethodType
+      )
+        return false;
       if (appliedStatus && item.status !== appliedStatus) return false;
       return true;
     });

@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input, Label, Select } from "@/components/ui/input";
-import { APPLY_TYPES } from "@/lib/payments-data";
+import { APPLY_TYPES, RECEIVE_METHOD_TYPES } from "@/lib/payments-data";
 
 export type QueryValues = {
   orderNo: string;
@@ -12,6 +12,7 @@ export type QueryValues = {
   applyType: string;
   purpose: string;
   amount: string;
+  receiveMethodType: string;
 };
 
 export const EMPTY_QUERY: QueryValues = {
@@ -20,6 +21,7 @@ export const EMPTY_QUERY: QueryValues = {
   applyType: "",
   purpose: "",
   amount: "",
+  receiveMethodType: "",
 };
 
 export function QueryForm({
@@ -89,6 +91,20 @@ export function QueryForm({
                 placeholder="输入..."
                 inputMode="decimal"
               />
+            </div>
+            <div>
+              <Label>收款方式类型</Label>
+              <Select
+                value={values.receiveMethodType}
+                onChange={(e) => set("receiveMethodType", e.target.value)}
+              >
+                <option value="">选择...</option>
+                {RECEIVE_METHOD_TYPES.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </Select>
             </div>
             {extraFields}
           </div>
