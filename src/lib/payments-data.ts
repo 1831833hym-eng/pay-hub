@@ -14,7 +14,7 @@ export type PaymentApplyType =
   | "仓储费用"
   | "其他";
 
-/** 付款方式类型 */
+/** 收款方式类型 */
 export type PaymentMethodType =
   | "银行转账"
   | "本地清算"
@@ -53,7 +53,7 @@ export interface PaymentOrder {
   createdAt: string;
   /** 更新时间 */
   updatedAt: string;
-  /** 付款方式类型 */
+  /** 收款方式类型 */
   paymentMethodType: PaymentMethodType;
   /** 收款人账户类型 */
   payeeAccountType: PayeeAccountType;

@@ -98,7 +98,7 @@ export function DetailForm({
             <Value>{data.currency}</Value>
           )}
         </Field>
-        <Field label="付款方式类型">
+        <Field label="收款方式类型">
           {editable ? (
             <Select
               value={data.paymentMethodType}

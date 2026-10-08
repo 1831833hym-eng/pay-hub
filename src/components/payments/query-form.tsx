@@ -93,7 +93,7 @@ export function QueryForm({
               />
             </div>
             <div>
-              <Label>付款方式类型</Label>
+              <Label>收款方式类型</Label>
               <Select
                 value={values.paymentMethodType}
                 onChange={(e) => set("paymentMethodType", e.target.value)}

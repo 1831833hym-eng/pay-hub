@@ -62,7 +62,7 @@ export function OrderTable({
               币种
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
-              付款方式类型
+              收款方式类型
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               申请人
