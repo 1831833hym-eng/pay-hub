@@ -92,22 +92,19 @@ export function AppShell({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] transition-colors",
+                  "flex items-center gap-2 rounded-md px-3 py-2 text-[13px] transition-colors",
                   isActive
                     ? "bg-[#e8f1ff] font-medium text-brand-600"
                     : "text-ink-2 hover:bg-slate-50"
                 )}
               >
-                <span
+                <Icon
                   className={cn(
-                    "flex h-6 w-6 shrink-0 items-center justify-center rounded",
-                    isActive
-                      ? "bg-brand-500 text-white"
-                      : "bg-slate-100 text-ink-3"
+                    "h-4 w-4 shrink-0",
+                    isActive ? "text-brand-600" : "text-ink-3"
                   )}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                </span>
+                  aria-hidden
+                />
                 <span className="truncate">{item.label}</span>
               </Link>
             );
