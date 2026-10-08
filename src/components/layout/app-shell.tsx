@@ -14,7 +14,6 @@ import {
   Settings,
   Store,
   UserRound,
-  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -52,12 +51,7 @@ function currentMenu(pathname: string) {
 function breadcrumb(pathname: string) {
   const menu = currentMenu(pathname);
   const isDetail = /\/(submit|review|query)\/[^/]+/.test(pathname);
-  return [
-    "Fund",
-    "付款中心",
-    menu.label,
-    ...(isDetail ? ["明细"] : []),
-  ];
+  return ["Fund", "付款中心", menu.label, ...(isDetail ? ["明细"] : [])];
 }
 
 export function AppShell({
@@ -96,8 +90,8 @@ export function AppShell({
         })}
       </aside>
 
-      {/* Module sidebar */}
-      <aside className="hidden w-[200px] shrink-0 border-r border-slate-200 bg-white md:flex md:flex-col">
+      {/* Module sidebar — sole menu entry */}
+      <aside className="flex w-[168px] shrink-0 flex-col border-r border-slate-200 bg-white sm:w-[200px]">
         <div className="flex h-12 items-center px-4 text-base font-semibold tracking-wide">
           Fund
         </div>
@@ -110,14 +104,14 @@ export function AppShell({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
+                  "flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors sm:px-3",
                   isActive
                     ? "bg-brand-50 font-medium text-brand-600"
                     : "text-ink-2 hover:bg-slate-50"
                 )}
               >
-                <Icon className="h-4 w-4" />
-                {item.label}
+                <Icon className="h-4 w-4 shrink-0" />
+                <span className="truncate">{item.label}</span>
               </Link>
             );
           })}
@@ -125,7 +119,6 @@ export function AppShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Top header */}
         <header className="flex h-12 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4">
           <div className="min-w-0 flex-1 truncate text-xs text-ink-3 sm:text-sm">
             {crumbs.map((c, i) => (
@@ -162,51 +155,6 @@ export function AppShell({
             </div>
           </div>
         </header>
-
-        {/* Tabs */}
-        <div className="flex h-10 shrink-0 items-center gap-1 border-b border-slate-200 bg-white px-3">
-          {MENUS.map((item) => {
-            const Icon = item.icon;
-            const isActive = item.match(pathname);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "group flex h-8 items-center gap-1.5 rounded-t-md border-b-2 px-3 text-xs transition-colors",
-                  isActive
-                    ? "border-brand-500 bg-brand-50/60 font-medium text-brand-600"
-                    : "border-transparent text-ink-3 hover:bg-slate-50 hover:text-ink-1"
-                )}
-              >
-                <Icon className="h-3.5 w-3.5" />
-                {item.label}
-                <X className="h-3 w-3 opacity-0 group-hover:opacity-50" />
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Mobile menu */}
-        <div className="flex gap-1 overflow-x-auto border-b border-slate-200 bg-white px-3 py-2 md:hidden">
-          {MENUS.map((item) => {
-            const isActive = item.match(pathname);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-xs whitespace-nowrap",
-                  isActive
-                    ? "bg-brand-50 font-medium text-brand-600"
-                    : "bg-slate-50 text-ink-3"
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
 
         <main className="min-h-0 flex-1 overflow-auto p-3 sm:p-4">
           <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
