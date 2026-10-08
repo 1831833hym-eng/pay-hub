@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,15 +10,14 @@ import { DetailForm } from "@/components/payments/detail-form";
 import type { PaymentOrder } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
-function SubmitDetailInner() {
+export default function SubmitDetailPage() {
   const params = useParams<{ id: string }>();
-  const searchParams = useSearchParams();
   const router = useRouter();
   const { getById, updateOrder, submitOne, markPaid, markReceiptDone } =
     usePayments();
   const order = getById(params.id);
-  const wantEdit = searchParams.get("mode") === "edit";
-  const editable = Boolean(order && wantEdit && order.status === "pending_submit");
+  // 待提交：明细可编辑（付款单编号、飞书审批编号除外）；其他状态只读
+  const editable = Boolean(order && order.status === "pending_submit");
   const [draft, setDraft] = useState<PaymentOrder | undefined>(order);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -43,21 +42,28 @@ function SubmitDetailInner() {
     );
   }
 
+  const savePatch = {
+    applyType: draft.applyType,
+    purpose: draft.purpose,
+    amount: draft.amount,
+    currency: draft.currency,
+    applicant: draft.applicant,
+    appliedAt: draft.appliedAt,
+    receiveMethodType: draft.receiveMethodType,
+    payeeAccountType: draft.payeeAccountType,
+    payeeAccountNo: draft.payeeAccountNo,
+    payeeBank: draft.payeeBank,
+    transferMemo: draft.transferMemo || draft.feishuNo,
+  };
+
   return (
     <AppShell
-      title={editable ? "编辑付款单" : "查看付款单"}
-      description="明细字段：付款单编号、飞书审批编号、付款申请类型、付款事由、付款金额、币种、申请人、申请时间、付款单状态。"
+      title={editable ? "提交付款单明细" : "查看付款单"}
+      description="付款单编号、飞书审批编号不可修改；其余字段在待提交状态下可编辑保存。"
       actions={
-        <>
-          <Link href="/submit">
-            <Button variant="secondary">返回列表</Button>
-          </Link>
-          {order.status === "pending_submit" && !editable ? (
-            <Link href={`/submit/${order.id}?mode=edit`}>
-              <Button variant="outline">编辑</Button>
-            </Link>
-          ) : null}
-        </>
+        <Link href="/submit">
+          <Button variant="secondary">返回列表</Button>
+        </Link>
       }
     >
       {toast ? (
@@ -83,40 +89,15 @@ function SubmitDetailInner() {
               <>
                 <Button
                   onClick={() => {
-                    updateOrder(order.id, {
-                      feishuNo: draft.feishuNo,
-                      applyType: draft.applyType,
-                      purpose: draft.purpose,
-                      amount: draft.amount,
-                      currency: draft.currency,
-                      applicant: draft.applicant,
-                      receiveMethodType: draft.receiveMethodType,
-                      payeeAccountType: draft.payeeAccountType,
-                      payeeAccountNo: draft.payeeAccountNo,
-                      payeeBank: draft.payeeBank,
-                      transferMemo: draft.transferMemo || draft.feishuNo,
-                    });
+                    updateOrder(order.id, savePatch);
                     setToast("保存成功");
-                    router.replace(`/submit/${order.id}`);
                   }}
                 >
                   保存
                 </Button>
                 <Button
                   onClick={() => {
-                    updateOrder(order.id, {
-                      feishuNo: draft.feishuNo,
-                      applyType: draft.applyType,
-                      purpose: draft.purpose,
-                      amount: draft.amount,
-                      currency: draft.currency,
-                      applicant: draft.applicant,
-                      receiveMethodType: draft.receiveMethodType,
-                      payeeAccountType: draft.payeeAccountType,
-                      payeeAccountNo: draft.payeeAccountNo,
-                      payeeBank: draft.payeeBank,
-                      transferMemo: draft.transferMemo || draft.feishuNo,
-                    });
+                    updateOrder(order.id, savePatch);
                     submitOne(order.id);
                     setToast("已提交，状态更新为「待复核」");
                     router.push("/submit");
@@ -124,22 +105,12 @@ function SubmitDetailInner() {
                 >
                   保存并提交
                 </Button>
-                <Link href={`/submit/${order.id}`}>
+                <Link href="/submit">
                   <Button variant="secondary">取消</Button>
                 </Link>
               </>
             ) : (
               <>
-                {order.status === "pending_submit" ? (
-                  <Button
-                    onClick={() => {
-                      submitOne(order.id);
-                      setToast("已提交，状态更新为「待复核」");
-                    }}
-                  >
-                    提交复核
-                  </Button>
-                ) : null}
                 {order.status === "pending_pay" ? (
                   <Button
                     onClick={() => {
@@ -170,19 +141,5 @@ function SubmitDetailInner() {
         </CardContent>
       </Card>
     </AppShell>
-  );
-}
-
-export default function SubmitDetailPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-page-gradient p-10 text-center text-white">
-          加载中…
-        </div>
-      }
-    >
-      <SubmitDetailInner />
-    </Suspense>
   );
 }

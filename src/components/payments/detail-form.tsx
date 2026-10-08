@@ -32,35 +32,15 @@ export function DetailForm({
     onChange({ ...data, [key]: value });
   };
 
-  const setFeishuNo = (value: string) => {
-    if (!onChange) return;
-    const next = { ...data, feishuNo: value };
-    // 转账附言仍等于原飞书编号时，跟随飞书审批编号同步
-    if (!data.transferMemo || data.transferMemo === data.feishuNo) {
-      next.transferMemo = value;
-    }
-    onChange(next);
-  };
-
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* 付款单编号、飞书审批编号：始终不可修改 */}
         <Field label="付款单编号">
-          {editable ? (
-            <Input value={data.orderNo} disabled />
-          ) : (
-            <Value>{data.orderNo}</Value>
-          )}
+          <Value>{data.orderNo}</Value>
         </Field>
         <Field label="飞书审批编号">
-          {editable ? (
-            <Input
-              value={data.feishuNo}
-              onChange={(e) => setFeishuNo(e.target.value)}
-            />
-          ) : (
-            <Value>{data.feishuNo}</Value>
-          )}
+          <Value>{data.feishuNo}</Value>
         </Field>
         <Field label="付款申请类型">
           {editable ? (
@@ -130,12 +110,25 @@ export function DetailForm({
           )}
         </Field>
         <Field label="申请时间">
-          <Value>{formatDate(data.appliedAt)}</Value>
+          {editable ? (
+            <Input
+              type="datetime-local"
+              value={toLocalInputValue(data.appliedAt)}
+              onChange={(e) =>
+                set("appliedAt", fromLocalInputValue(e.target.value))
+              }
+            />
+          ) : (
+            <Value>{formatDate(data.appliedAt)}</Value>
+          )}
         </Field>
         <Field label="付款单状态">
           <div className="pt-1">
             <StatusBadge status={data.status} />
           </div>
+          {editable ? (
+            <p className="mt-1 text-[11px] text-ink-4">状态由流程自动更新，不可手工修改</p>
+          ) : null}
         </Field>
 
         <Field label="收款方式类型">
@@ -269,6 +262,18 @@ export function DetailForm({
       ) : null}
     </div>
   );
+}
+
+function toLocalInputValue(iso: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function fromLocalInputValue(local: string) {
+  const d = new Date(local);
+  return Number.isNaN(d.getTime()) ? local : d.toISOString();
 }
 
 function Field({
