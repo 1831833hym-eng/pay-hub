@@ -48,7 +48,7 @@ export default function ReviewDetailPage() {
 
   return (
     <AppShell
-      title={canReview ? "复核付款单明细" : "查看付款单"}
+      title="付款单明细"
       actions={
         <Link href="/review">
           <Button variant="secondary">返回列表</Button>
@@ -64,7 +64,7 @@ export default function ReviewDetailPage() {
       <div className="space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{order.orderNo}</CardTitle>
+            <CardTitle className="text-base">付款单明细</CardTitle>
           </CardHeader>
           <CardContent>
             <DetailForm order={order} editable={false} />
