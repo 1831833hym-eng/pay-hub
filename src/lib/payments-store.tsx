@@ -19,6 +19,7 @@ type Store = {
   getById: (id: string) => PaymentOrder | undefined;
   updateOrder: (id: string, patch: Partial<PaymentOrder>) => void;
   batchSubmit: (ids: string[]) => number;
+  batchApprove: (ids: string[]) => number;
   submitOne: (id: string) => boolean;
   approve: (id: string) => boolean;
   reject: (id: string, remark?: string) => boolean;
@@ -63,6 +64,20 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
         if (ids.includes(o.id) && o.status === "pending_submit") {
           count += 1;
           return { ...o, ...touch({ status: "pending_review" }) };
+        }
+        return o;
+      })
+    );
+    return count;
+  }, []);
+
+  const batchApprove = useCallback((ids: string[]) => {
+    let count = 0;
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (ids.includes(o.id) && o.status === "pending_review") {
+          count += 1;
+          return { ...o, ...touch({ status: "pending_pay" }) };
         }
         return o;
       })
@@ -132,6 +147,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       getById,
       updateOrder,
       batchSubmit,
+      batchApprove,
       submitOne,
       approve,
       reject,
@@ -143,6 +159,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       getById,
       updateOrder,
       batchSubmit,
+      batchApprove,
       submitOne,
       approve,
       reject,
