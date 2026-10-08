@@ -59,7 +59,6 @@ export default function SubmitDetailPage() {
   return (
     <AppShell
       title={editable ? "提交付款单明细" : "查看付款单"}
-      description="付款单编号、飞书审批编号、状态不可编辑；其余字段在待提交状态下可编辑。"
       actions={
         <Link href="/submit">
           <Button variant="secondary">返回列表</Button>
