@@ -188,14 +188,10 @@ export function DetailForm({
             <Input
               value={data.transferMemo}
               onChange={(e) => set("transferMemo", e.target.value)}
-              placeholder="默认飞书审批编号"
             />
           ) : (
             <Value>{data.transferMemo || data.feishuNo}</Value>
           )}
-          <p className="mt-1 text-[11px] text-ink-4">
-            默认取飞书审批编号，可修改
-          </p>
         </Field>
       </div>
 
