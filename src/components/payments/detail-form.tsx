@@ -6,7 +6,6 @@ import {
   APPLY_TYPES,
   PAYEE_ACCOUNT_TYPES,
   RECEIVE_METHOD_TYPES,
-  STATUS_FLOW,
   type PayeeAccountType,
   type PaymentApplyType,
   type PaymentOrder,
@@ -123,12 +122,9 @@ export function DetailForm({
           )}
         </Field>
         <Field label="付款单状态">
-          <div className="pt-1">
+          <div className="flex h-8 items-center">
             <StatusBadge status={data.status} />
           </div>
-          {editable ? (
-            <p className="mt-1 text-[11px] text-ink-4">状态由流程自动更新，不可手工修改</p>
-          ) : null}
         </Field>
 
         <Field label="收款方式类型">
@@ -201,39 +197,6 @@ export function DetailForm({
             默认取飞书审批编号，可修改
           </p>
         </Field>
-      </div>
-
-      <div className="rounded-md border border-slate-200 bg-[#f7f8fa] p-3">
-        <div className="mb-2 text-xs font-medium text-ink-2">状态流转</div>
-        <div className="flex flex-wrap gap-2">
-          {STATUS_FLOW.map((step, idx) => {
-            const activeIdx = STATUS_FLOW.findIndex(
-              (s) => s.key === order.status
-            );
-            const done =
-              order.status === "completed"
-                ? true
-                : activeIdx >= 0 && idx <= activeIdx;
-            return (
-              <div
-                key={step.key}
-                className={`rounded px-2.5 py-1.5 text-xs ${
-                  step.key === order.status
-                    ? "bg-brand-500 text-white"
-                    : done
-                      ? "bg-brand-50 text-brand-700"
-                      : "bg-white text-ink-4 border border-slate-200"
-                }`}
-              >
-                {step.label}
-                {idx < STATUS_FLOW.length - 1 ? " →" : ""}
-              </div>
-            );
-          })}
-        </div>
-        <p className="mt-2 text-xs text-ink-4">
-          待提交 → 待复核 → 待付款 → 待回单 → 已完成
-        </p>
       </div>
 
       {!editable && order.remark ? (
