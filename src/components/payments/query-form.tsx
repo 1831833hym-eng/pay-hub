@@ -1,7 +1,8 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input, Label, Select } from "@/components/ui/input";
 import { APPLY_TYPES } from "@/lib/payments-data";
 
@@ -38,18 +39,15 @@ export function QueryForm({
     onChange({ ...values, [key]: value });
 
   return (
-    <Card className="mb-6">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base">查询条件</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    <Card className="mb-3 bg-[#f7f8fa]">
+      <CardContent className="pt-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <div>
             <Label>付款单编号</Label>
             <Input
               value={values.orderNo}
               onChange={(e) => set("orderNo", e.target.value)}
-              placeholder="请输入付款单编号"
+              placeholder="输入..."
             />
           </div>
           <div>
@@ -57,7 +55,7 @@ export function QueryForm({
             <Input
               value={values.feishuNo}
               onChange={(e) => set("feishuNo", e.target.value)}
-              placeholder="请输入飞书审批编号"
+              placeholder="输入..."
             />
           </div>
           <div>
@@ -66,7 +64,7 @@ export function QueryForm({
               value={values.applyType}
               onChange={(e) => set("applyType", e.target.value)}
             >
-              <option value="">全部类型</option>
+              <option value="">选择...</option>
               {APPLY_TYPES.map((t) => (
                 <option key={t} value={t}>
                   {t}
@@ -79,7 +77,7 @@ export function QueryForm({
             <Input
               value={values.purpose}
               onChange={(e) => set("purpose", e.target.value)}
-              placeholder="请输入付款事由"
+              placeholder="输入..."
             />
           </div>
           <div>
@@ -87,17 +85,24 @@ export function QueryForm({
             <Input
               value={values.amount}
               onChange={(e) => set("amount", e.target.value)}
-              placeholder="请输入付款金额"
+              placeholder="输入..."
               inputMode="decimal"
             />
           </div>
           {extraFields}
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
           <Button onClick={onSearch}>搜索</Button>
           <Button variant="secondary" onClick={onReset}>
             重置
           </Button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-0.5 text-xs text-ink-3 hover:text-brand-600"
+          >
+            展开
+            <ChevronDown className="h-3.5 w-3.5" />
+          </button>
         </div>
       </CardContent>
     </Card>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   EMPTY_QUERY,
   QueryForm,
@@ -19,7 +19,10 @@ export default function ReviewListPage() {
   const filtered = useMemo(() => {
     return orders.filter((item) => {
       const q = appliedQuery;
-      if (q.orderNo && !item.orderNo.toLowerCase().includes(q.orderNo.toLowerCase()))
+      if (
+        q.orderNo &&
+        !item.orderNo.toLowerCase().includes(q.orderNo.toLowerCase())
+      )
         return false;
       if (
         q.feishuNo &&
@@ -29,16 +32,12 @@ export default function ReviewListPage() {
       if (q.applyType && item.applyType !== q.applyType) return false;
       if (q.purpose && !item.purpose.includes(q.purpose)) return false;
       if (q.amount && !String(item.amount).includes(q.amount)) return false;
-      // 复核菜单重点看待复核及之后状态；也允许查看全部便于对照
       return true;
     });
   }, [orders, appliedQuery]);
 
   return (
-    <AppShell
-      title="复核付款单"
-      description="复核页面字段与提交付款单一致，但不可编辑修改。复核通过后状态更新为「待付款」，随后可走万里汇付款与回单回传。"
-    >
+    <AppShell title="复核付款单">
       <QueryForm
         values={draftQuery}
         onChange={setDraftQuery}
@@ -50,12 +49,10 @@ export default function ReviewListPage() {
       />
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            付款单列表 · {filtered.length} 笔（只读）
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
+          <div className="mb-3 text-sm text-ink-3">
+            共 {filtered.length} 笔（只读，不可编辑）
+          </div>
           <OrderTable
             rows={filtered}
             selectedIds={[]}

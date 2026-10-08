@@ -29,7 +29,7 @@ export function DetailForm({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Field label="付款单编号">
           {editable ? (
@@ -84,9 +84,7 @@ export function DetailForm({
               inputMode="decimal"
             />
           ) : (
-            <Value className="font-semibold text-brand-600">
-              {formatMoney(data.amount, data.currency)}
-            </Value>
+            <Value>{formatMoney(data.amount, data.currency)}</Value>
           )}
         </Field>
         <Field label="币种">
@@ -127,11 +125,13 @@ export function DetailForm({
         </Field>
       </div>
 
-      <div className="rounded-xl border border-slate-100 bg-surface-soft p-4">
-        <div className="mb-3 text-sm font-medium text-ink-1">状态流转</div>
+      <div className="rounded-md border border-slate-200 bg-[#f7f8fa] p-3">
+        <div className="mb-2 text-xs font-medium text-ink-2">状态流转</div>
         <div className="flex flex-wrap gap-2">
           {STATUS_FLOW.map((step, idx) => {
-            const activeIdx = STATUS_FLOW.findIndex((s) => s.key === order.status);
+            const activeIdx = STATUS_FLOW.findIndex(
+              (s) => s.key === order.status
+            );
             const done =
               order.status === "completed"
                 ? true
@@ -139,12 +139,12 @@ export function DetailForm({
             return (
               <div
                 key={step.key}
-                className={`rounded-lg px-3 py-2 text-xs ${
+                className={`rounded px-2.5 py-1.5 text-xs ${
                   step.key === order.status
                     ? "bg-brand-500 text-white"
                     : done
                       ? "bg-brand-50 text-brand-700"
-                      : "bg-white text-ink-4"
+                      : "bg-white text-ink-4 border border-slate-200"
                 }`}
               >
                 {step.label}
@@ -153,13 +153,13 @@ export function DetailForm({
             );
           })}
         </div>
-        <p className="mt-3 text-xs text-ink-4">
-          提交后：待提交 → 待复核；复核通过 → 待付款；万里汇付款成功 → 待回单；获取回单并回传飞书 → 已完成。
+        <p className="mt-2 text-xs text-ink-4">
+          待提交 → 待复核 → 待付款 → 待回单 → 已完成
         </p>
       </div>
 
       {!editable && order.remark ? (
-        <div className="rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-md border border-rose-100 bg-rose-50 px-3 py-2 text-sm text-rose-700">
           备注：{order.remark}
         </div>
       ) : null}
@@ -167,7 +167,7 @@ export function DetailForm({
       {!editable && (order.worldfirstTxId || order.receiptNo) ? (
         <div className="grid gap-3 sm:grid-cols-2 text-sm">
           {order.worldfirstTxId ? (
-            <div className="rounded-xl bg-surface-soft px-3 py-3">
+            <div className="rounded-md border border-slate-200 bg-[#f7f8fa] px-3 py-2.5">
               <div className="text-xs text-ink-4">万里汇交易号</div>
               <div className="mt-1 font-medium text-ink-1">
                 {order.worldfirstTxId}
@@ -175,7 +175,7 @@ export function DetailForm({
             </div>
           ) : null}
           {order.receiptNo ? (
-            <div className="rounded-xl bg-surface-soft px-3 py-3">
+            <div className="rounded-md border border-slate-200 bg-[#f7f8fa] px-3 py-2.5">
               <div className="text-xs text-ink-4">万里汇回单号</div>
               <div className="mt-1 font-medium text-ink-1">{order.receiptNo}</div>
             </div>
@@ -212,7 +212,7 @@ function Value({
 }) {
   return (
     <div
-      className={`rounded-xl border border-slate-100 bg-surface-soft px-3 py-2.5 text-sm text-ink-1 ${className ?? ""}`}
+      className={`rounded-md border border-slate-200 bg-[#f7f8fa] px-2.5 py-1.5 text-sm text-ink-1 ${className ?? ""}`}
     >
       {children}
     </div>

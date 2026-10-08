@@ -3,14 +3,13 @@
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   EMPTY_QUERY,
   QueryForm,
   type QueryValues,
 } from "@/components/payments/query-form";
 import { OrderTable } from "@/components/payments/order-table";
-import { STATUS_FLOW } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
@@ -23,7 +22,10 @@ export default function SubmitListPage() {
   const filtered = useMemo(() => {
     return orders.filter((item) => {
       const q = appliedQuery;
-      if (q.orderNo && !item.orderNo.toLowerCase().includes(q.orderNo.toLowerCase()))
+      if (
+        q.orderNo &&
+        !item.orderNo.toLowerCase().includes(q.orderNo.toLowerCase())
+      )
         return false;
       if (
         q.feishuNo &&
@@ -53,28 +55,12 @@ export default function SubmitListPage() {
   };
 
   return (
-    <AppShell
-      title="提交付款单"
-      description="承接飞书审批付款申请并生成付款单。待提交单据可编辑后批量提交复核；提交后状态由待提交变更为待复核。"
-    >
+    <AppShell title="提交付款单">
       {toast ? (
-        <div className="mb-4 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-700">
+        <div className="mb-3 rounded-md border border-brand-200 bg-brand-50 px-3 py-2 text-sm text-brand-700">
           {toast}
         </div>
       ) : null}
-
-      <Card className="mb-6">
-        <CardContent className="flex flex-wrap gap-2 pt-5">
-          {STATUS_FLOW.map((s) => (
-            <span
-              key={s.key}
-              className="rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700"
-            >
-              {s.label}
-            </span>
-          ))}
-        </CardContent>
-      </Card>
 
       <QueryForm
         values={draftQuery}
@@ -91,15 +77,11 @@ export default function SubmitListPage() {
       />
 
       <Card>
-        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle className="text-base">
-            付款单列表 · {filtered.length} 笔
-          </CardTitle>
-          <div className="flex flex-wrap gap-2">
+        <CardContent className="pt-4">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <div className="text-sm text-ink-3">共 {filtered.length} 笔</div>
             <Button onClick={handleBatchSubmit}>批量提交</Button>
           </div>
-        </CardHeader>
-        <CardContent>
           <OrderTable
             rows={filtered}
             selectedIds={selectedIds}
@@ -109,7 +91,9 @@ export default function SubmitListPage() {
             editBase="/submit"
             onToggle={(id) =>
               setSelectedIds((prev) =>
-                prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+                prev.includes(id)
+                  ? prev.filter((x) => x !== id)
+                  : [...prev, id]
               )
             }
             onToggleAll={(ids) => setSelectedIds(ids)}

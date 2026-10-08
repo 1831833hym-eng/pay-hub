@@ -7,7 +7,7 @@ export function StatusBadge({ status }: { status: PaymentStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap",
+        "inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-nowrap",
         meta.bg,
         meta.tone
       )}
@@ -27,7 +27,7 @@ export function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-600",
+        "inline-flex items-center rounded bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-600",
         className
       )}
     >
