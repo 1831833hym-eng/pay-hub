@@ -14,6 +14,19 @@ export type PaymentApplyType =
   | "仓储费用"
   | "其他";
 
+/** 收款方式类型 */
+export type ReceiveMethodType =
+  | "银行转账"
+  | "本地清算"
+  | "钱包付款"
+  | "其他";
+
+/** 收款人账户类型 */
+export type PayeeAccountType =
+  | "对公账户"
+  | "对私账户"
+  | "第三方支付账户";
+
 export type Currency = "USD" | "EUR" | "GBP" | "JPY" | "HKD" | "CNY" | "SGD";
 
 export interface PaymentOrder {
@@ -40,9 +53,18 @@ export interface PaymentOrder {
   createdAt: string;
   /** 更新时间 */
   updatedAt: string;
-  /** 收款方（详情补充） */
+  /** 收款方式类型 */
+  receiveMethodType: ReceiveMethodType;
+  /** 收款人账户类型 */
+  payeeAccountType: PayeeAccountType;
+  /** 收款账号 */
+  payeeAccountNo: string;
+  /** 收款银行 */
+  payeeBank: string;
+  /** 转账附言（默认飞书审批编号） */
+  transferMemo: string;
+  /** 收款方名称 */
   payeeName?: string;
-  payeeAccountMasked?: string;
   remark?: string;
   worldfirstTxId?: string;
   receiptNo?: string;
@@ -93,6 +115,19 @@ export const APPLY_TYPES: PaymentApplyType[] = [
   "其他",
 ];
 
+export const RECEIVE_METHOD_TYPES: ReceiveMethodType[] = [
+  "银行转账",
+  "本地清算",
+  "钱包付款",
+  "其他",
+];
+
+export const PAYEE_ACCOUNT_TYPES: PayeeAccountType[] = [
+  "对公账户",
+  "对私账户",
+  "第三方支付账户",
+];
+
 export const STATUS_FLOW = [
   { key: "pending_submit", label: "待提交", desc: "承接飞书审批后生成" },
   { key: "pending_review", label: "待复核", desc: "提交付款单后" },
@@ -116,8 +151,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-28T09:12:00+08:00",
     updatedAt: "2026-03-28T09:12:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "483920184821",
+    payeeBank: "JPMorgan Chase",
+    transferMemo: "FS20260328001",
     payeeName: "Amazon Fulfillment Services Inc.",
-    payeeAccountMasked: "****4821",
   },
   {
     id: "pay-002",
@@ -132,8 +171,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-28T10:25:00+08:00",
     updatedAt: "2026-03-28T10:25:00+08:00",
+    receiveMethodType: "本地清算",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "DE89370400440532011776",
+    payeeBank: "Deutsche Bank",
+    transferMemo: "FS20260328002",
     payeeName: "EuroPack Logistics GmbH",
-    payeeAccountMasked: "****1176",
   },
   {
     id: "pay-003",
@@ -148,8 +191,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-28T11:10:00+08:00",
     updatedAt: "2026-03-28T11:10:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "012875903301",
+    payeeBank: "招商银行香港分行",
+    transferMemo: "FS20260328003",
     payeeName: "Shenzhen Huaqiang Supply Co.",
-    payeeAccountMasked: "****9033",
   },
   {
     id: "pay-004",
@@ -164,8 +211,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_review",
     createdAt: "2026-03-27T16:50:00+08:00",
     updatedAt: "2026-03-28T08:30:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "072034567742",
+    payeeBank: "DBS Bank",
+    transferMemo: "FS20260327018",
     payeeName: "Singapore Ads Pte. Ltd.",
-    payeeAccountMasked: "****7742",
   },
   {
     id: "pay-005",
@@ -180,8 +231,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_review",
     createdAt: "2026-03-27T14:20:00+08:00",
     updatedAt: "2026-03-27T15:00:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "1002455201",
+    payeeBank: "MUFG Bank",
+    transferMemo: "FS20260327009",
     payeeName: "Tokyo Media Agency KK",
-    payeeAccountMasked: "****5520",
   },
   {
     id: "pay-006",
@@ -196,8 +251,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_pay",
     createdAt: "2026-03-26T09:20:00+08:00",
     updatedAt: "2026-03-26T11:00:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "483920184821",
+    payeeBank: "JPMorgan Chase",
+    transferMemo: "FS20260326011",
     payeeName: "Amazon Fulfillment Services Inc.",
-    payeeAccountMasked: "****4821",
   },
   {
     id: "pay-007",
@@ -212,8 +271,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_receipt",
     createdAt: "2026-03-25T10:15:00+08:00",
     updatedAt: "2026-03-26T16:40:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "483920184821",
+    payeeBank: "JPMorgan Chase",
+    transferMemo: "FS20260325007",
     payeeName: "Amazon Fulfillment Services Inc.",
-    payeeAccountMasked: "****4821",
     worldfirstTxId: "WF202603261640001",
   },
   {
@@ -229,8 +292,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "completed",
     createdAt: "2026-03-24T13:30:00+08:00",
     updatedAt: "2026-03-25T09:10:00+08:00",
+    receiveMethodType: "钱包付款",
+    payeeAccountType: "第三方支付账户",
+    payeeAccountNo: "META-PAY-8891",
+    payeeBank: "Meta Payments",
+    transferMemo: "FS20260324003",
     payeeName: "Meta Platforms Ireland Ltd.",
-    payeeAccountMasked: "****8891",
     worldfirstTxId: "WF202603241800002",
     receiptNo: "WFR-20260325-0002",
   },
@@ -247,8 +314,12 @@ export let paymentOrders: PaymentOrder[] = [
     status: "review_rejected",
     createdAt: "2026-03-23T11:10:00+08:00",
     updatedAt: "2026-03-23T16:20:00+08:00",
+    receiveMethodType: "银行转账",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "012875903301",
+    payeeBank: "招商银行香港分行",
+    transferMemo: "FS20260323015",
     payeeName: "Shenzhen Huaqiang Supply Co.",
-    payeeAccountMasked: "****9033",
     remark: "合同附件缺失，请补充后重新提交",
   },
 ];

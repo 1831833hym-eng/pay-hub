@@ -90,6 +90,11 @@ function SubmitDetailInner() {
                       amount: draft.amount,
                       currency: draft.currency,
                       applicant: draft.applicant,
+                      receiveMethodType: draft.receiveMethodType,
+                      payeeAccountType: draft.payeeAccountType,
+                      payeeAccountNo: draft.payeeAccountNo,
+                      payeeBank: draft.payeeBank,
+                      transferMemo: draft.transferMemo || draft.feishuNo,
                     });
                     setToast("保存成功");
                     router.replace(`/submit/${order.id}`);
@@ -106,6 +111,11 @@ function SubmitDetailInner() {
                       amount: draft.amount,
                       currency: draft.currency,
                       applicant: draft.applicant,
+                      receiveMethodType: draft.receiveMethodType,
+                      payeeAccountType: draft.payeeAccountType,
+                      payeeAccountNo: draft.payeeAccountNo,
+                      payeeBank: draft.payeeBank,
+                      transferMemo: draft.transferMemo || draft.feishuNo,
                     });
                     submitOne(order.id);
                     setToast("已提交，状态更新为「待复核」");

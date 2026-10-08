@@ -4,9 +4,13 @@ import { StatusBadge } from "@/components/ui/badge";
 import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import {
   APPLY_TYPES,
+  PAYEE_ACCOUNT_TYPES,
+  RECEIVE_METHOD_TYPES,
   STATUS_FLOW,
+  type PayeeAccountType,
   type PaymentApplyType,
   type PaymentOrder,
+  type ReceiveMethodType,
 } from "@/lib/payments-data";
 import { formatDate, formatMoney } from "@/lib/utils";
 
@@ -28,6 +32,16 @@ export function DetailForm({
     onChange({ ...data, [key]: value });
   };
 
+  const setFeishuNo = (value: string) => {
+    if (!onChange) return;
+    const next = { ...data, feishuNo: value };
+    // 转账附言仍等于原飞书编号时，跟随飞书审批编号同步
+    if (!data.transferMemo || data.transferMemo === data.feishuNo) {
+      next.transferMemo = value;
+    }
+    onChange(next);
+  };
+
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -42,7 +56,7 @@ export function DetailForm({
           {editable ? (
             <Input
               value={data.feishuNo}
-              onChange={(e) => set("feishuNo", e.target.value)}
+              onChange={(e) => setFeishuNo(e.target.value)}
             />
           ) : (
             <Value>{data.feishuNo}</Value>
@@ -122,6 +136,77 @@ export function DetailForm({
           <div className="pt-1">
             <StatusBadge status={data.status} />
           </div>
+        </Field>
+
+        <Field label="收款方式类型">
+          {editable ? (
+            <Select
+              value={data.receiveMethodType}
+              onChange={(e) =>
+                set("receiveMethodType", e.target.value as ReceiveMethodType)
+              }
+            >
+              {RECEIVE_METHOD_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <Value>{data.receiveMethodType}</Value>
+          )}
+        </Field>
+        <Field label="收款人账户类型">
+          {editable ? (
+            <Select
+              value={data.payeeAccountType}
+              onChange={(e) =>
+                set("payeeAccountType", e.target.value as PayeeAccountType)
+              }
+            >
+              {PAYEE_ACCOUNT_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <Value>{data.payeeAccountType}</Value>
+          )}
+        </Field>
+        <Field label="收款账号">
+          {editable ? (
+            <Input
+              value={data.payeeAccountNo}
+              onChange={(e) => set("payeeAccountNo", e.target.value)}
+            />
+          ) : (
+            <Value>{data.payeeAccountNo}</Value>
+          )}
+        </Field>
+        <Field label="收款银行">
+          {editable ? (
+            <Input
+              value={data.payeeBank}
+              onChange={(e) => set("payeeBank", e.target.value)}
+            />
+          ) : (
+            <Value>{data.payeeBank}</Value>
+          )}
+        </Field>
+        <Field label="转账附言" className="sm:col-span-2">
+          {editable ? (
+            <Input
+              value={data.transferMemo}
+              onChange={(e) => set("transferMemo", e.target.value)}
+              placeholder="默认飞书审批编号"
+            />
+          ) : (
+            <Value>{data.transferMemo || data.feishuNo}</Value>
+          )}
+          <p className="mt-1 text-[11px] text-ink-4">
+            默认取飞书审批编号，可修改
+          </p>
         </Field>
       </div>
 
