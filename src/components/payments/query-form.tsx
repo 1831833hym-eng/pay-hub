@@ -106,6 +106,7 @@ export function QueryForm({
                 ))}
               </Select>
             </div>
+            {/* 收款方式类型放在币种相关筛选左侧；币种筛选如需可后续补充 */}
             {extraFields}
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2 xl:pb-0.5">

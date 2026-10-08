@@ -53,13 +53,13 @@ export function OrderTable({
               付款申请类型
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
-              收款方式类型
-            </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               付款事由
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               付款金额
+            </th>
+            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+              收款方式类型
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               币种
@@ -117,11 +117,6 @@ export function OrderTable({
                   </span>
                 </td>
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
-                >
-                  {item.receiveMethodType}
-                </td>
-                <td
                   className={`max-w-[180px] truncate border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                   title={item.purpose}
                 >
@@ -131,6 +126,11 @@ export function OrderTable({
                   className={`border-b border-slate-100 px-3 py-2.5 text-ink-1 ${rowBg}`}
                 >
                   {formatMoney(item.amount, item.currency)}
+                </td>
+                <td
+                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {item.receiveMethodType}
                 </td>
                 <td
                   className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
