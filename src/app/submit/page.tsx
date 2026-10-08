@@ -36,8 +36,8 @@ export default function SubmitListPage() {
       if (q.purpose && !item.purpose.includes(q.purpose)) return false;
       if (q.amount && !String(item.amount).includes(q.amount)) return false;
       if (
-        q.receiveMethodType &&
-        item.receiveMethodType !== q.receiveMethodType
+        q.paymentMethodType &&
+        item.paymentMethodType !== q.paymentMethodType
       )
         return false;
       return true;

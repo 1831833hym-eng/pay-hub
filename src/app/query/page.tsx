@@ -47,8 +47,8 @@ export default function QueryListPage() {
       if (q.purpose && !item.purpose.includes(q.purpose)) return false;
       if (q.amount && !String(item.amount).includes(q.amount)) return false;
       if (
-        q.receiveMethodType &&
-        item.receiveMethodType !== q.receiveMethodType
+        q.paymentMethodType &&
+        item.paymentMethodType !== q.paymentMethodType
       )
         return false;
       if (appliedStatus && item.status !== appliedStatus) return false;

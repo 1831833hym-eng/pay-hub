@@ -14,6 +14,14 @@ export function formatMoney(amount: number, currency = "CNY") {
   }).format(amount);
 }
 
+/** 列表金额：仅数字，不带币种符号 */
+export function formatAmount(amount: number) {
+  return new Intl.NumberFormat("zh-CN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
 export function formatDate(value: string) {
   return new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",

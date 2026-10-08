@@ -49,7 +49,7 @@ export default function SubmitDetailPage() {
     currency: draft.currency,
     applicant: draft.applicant,
     appliedAt: draft.appliedAt,
-    receiveMethodType: draft.receiveMethodType,
+    paymentMethodType: draft.paymentMethodType,
     payeeAccountType: draft.payeeAccountType,
     payeeAccountNo: draft.payeeAccountNo,
     payeeBank: draft.payeeBank,

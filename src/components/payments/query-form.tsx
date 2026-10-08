@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input, Label, Select } from "@/components/ui/input";
-import { APPLY_TYPES, RECEIVE_METHOD_TYPES } from "@/lib/payments-data";
+import { APPLY_TYPES, PAYMENT_METHOD_TYPES } from "@/lib/payments-data";
 
 export type QueryValues = {
   orderNo: string;
@@ -12,7 +12,7 @@ export type QueryValues = {
   applyType: string;
   purpose: string;
   amount: string;
-  receiveMethodType: string;
+  paymentMethodType: string;
 };
 
 export const EMPTY_QUERY: QueryValues = {
@@ -21,7 +21,7 @@ export const EMPTY_QUERY: QueryValues = {
   applyType: "",
   purpose: "",
   amount: "",
-  receiveMethodType: "",
+  paymentMethodType: "",
 };
 
 export function QueryForm({
@@ -93,20 +93,19 @@ export function QueryForm({
               />
             </div>
             <div>
-              <Label>收款方式类型</Label>
+              <Label>付款方式类型</Label>
               <Select
-                value={values.receiveMethodType}
-                onChange={(e) => set("receiveMethodType", e.target.value)}
+                value={values.paymentMethodType}
+                onChange={(e) => set("paymentMethodType", e.target.value)}
               >
                 <option value="">选择...</option>
-                {RECEIVE_METHOD_TYPES.map((t) => (
+                {PAYMENT_METHOD_TYPES.map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
                 ))}
               </Select>
             </div>
-            {/* 收款方式类型放在币种相关筛选左侧；币种筛选如需可后续补充 */}
             {extraFields}
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2 xl:pb-0.5">

@@ -5,11 +5,11 @@ import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import {
   APPLY_TYPES,
   PAYEE_ACCOUNT_TYPES,
-  RECEIVE_METHOD_TYPES,
+  PAYMENT_METHOD_TYPES,
   type PayeeAccountType,
   type PaymentApplyType,
   type PaymentOrder,
-  type ReceiveMethodType,
+  type PaymentMethodType,
 } from "@/lib/payments-data";
 import { formatDate, formatMoney } from "@/lib/utils";
 
@@ -98,6 +98,24 @@ export function DetailForm({
             <Value>{data.currency}</Value>
           )}
         </Field>
+        <Field label="付款方式类型">
+          {editable ? (
+            <Select
+              value={data.paymentMethodType}
+              onChange={(e) =>
+                set("paymentMethodType", e.target.value as PaymentMethodType)
+              }
+            >
+              {PAYMENT_METHOD_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <Value>{data.paymentMethodType}</Value>
+          )}
+        </Field>
         <Field label="申请人">
           {editable ? (
             <Input
@@ -127,24 +145,6 @@ export function DetailForm({
           </div>
         </Field>
 
-        <Field label="收款方式类型">
-          {editable ? (
-            <Select
-              value={data.receiveMethodType}
-              onChange={(e) =>
-                set("receiveMethodType", e.target.value as ReceiveMethodType)
-              }
-            >
-              {RECEIVE_METHOD_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </Select>
-          ) : (
-            <Value>{data.receiveMethodType}</Value>
-          )}
-        </Field>
         <Field label="收款人账户类型">
           {editable ? (
             <Select
