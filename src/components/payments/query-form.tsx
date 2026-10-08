@@ -39,70 +39,72 @@ export function QueryForm({
     onChange({ ...values, [key]: value });
 
   return (
-    <Card className="mb-3 bg-[#f7f8fa]">
+    <Card className="mb-3">
       <CardContent className="pt-4">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          <div>
-            <Label>付款单编号</Label>
-            <Input
-              value={values.orderNo}
-              onChange={(e) => set("orderNo", e.target.value)}
-              placeholder="输入..."
-            />
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
+          <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            <div>
+              <Label>付款单编号</Label>
+              <Input
+                value={values.orderNo}
+                onChange={(e) => set("orderNo", e.target.value)}
+                placeholder="输入..."
+              />
+            </div>
+            <div>
+              <Label>飞书审批编号</Label>
+              <Input
+                value={values.feishuNo}
+                onChange={(e) => set("feishuNo", e.target.value)}
+                placeholder="输入..."
+              />
+            </div>
+            <div>
+              <Label>付款申请类型</Label>
+              <Select
+                value={values.applyType}
+                onChange={(e) => set("applyType", e.target.value)}
+              >
+                <option value="">选择...</option>
+                {APPLY_TYPES.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <Label>付款事由</Label>
+              <Input
+                value={values.purpose}
+                onChange={(e) => set("purpose", e.target.value)}
+                placeholder="输入..."
+              />
+            </div>
+            <div>
+              <Label>付款金额</Label>
+              <Input
+                value={values.amount}
+                onChange={(e) => set("amount", e.target.value)}
+                placeholder="输入..."
+                inputMode="decimal"
+              />
+            </div>
+            {extraFields}
           </div>
-          <div>
-            <Label>飞书审批编号</Label>
-            <Input
-              value={values.feishuNo}
-              onChange={(e) => set("feishuNo", e.target.value)}
-              placeholder="输入..."
-            />
-          </div>
-          <div>
-            <Label>付款申请类型</Label>
-            <Select
-              value={values.applyType}
-              onChange={(e) => set("applyType", e.target.value)}
+          <div className="flex shrink-0 flex-wrap items-center gap-2 xl:pb-0.5">
+            <Button onClick={onSearch}>搜索</Button>
+            <Button variant="ghost" onClick={onReset}>
+              重置
+            </Button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-0.5 text-xs text-ink-3 hover:text-brand-600"
             >
-              <option value="">选择...</option>
-              {APPLY_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </Select>
+              展开
+              <ChevronDown className="h-3.5 w-3.5" />
+            </button>
           </div>
-          <div>
-            <Label>付款事由</Label>
-            <Input
-              value={values.purpose}
-              onChange={(e) => set("purpose", e.target.value)}
-              placeholder="输入..."
-            />
-          </div>
-          <div>
-            <Label>付款金额</Label>
-            <Input
-              value={values.amount}
-              onChange={(e) => set("amount", e.target.value)}
-              placeholder="输入..."
-              inputMode="decimal"
-            />
-          </div>
-          {extraFields}
-        </div>
-        <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
-          <Button onClick={onSearch}>搜索</Button>
-          <Button variant="secondary" onClick={onReset}>
-            重置
-          </Button>
-          <button
-            type="button"
-            className="inline-flex items-center gap-0.5 text-xs text-ink-3 hover:text-brand-600"
-          >
-            展开
-            <ChevronDown className="h-3.5 w-3.5" />
-          </button>
         </div>
       </CardContent>
     </Card>

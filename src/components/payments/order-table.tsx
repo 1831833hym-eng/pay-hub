@@ -29,10 +29,10 @@ export function OrderTable({
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
 
   return (
-    <div className="overflow-x-auto rounded-md border border-slate-200">
+    <div className="overflow-x-auto">
       <table className="w-full min-w-[1180px] text-left text-sm">
         <thead>
-          <tr className="bg-[#f5f6f8] text-xs text-ink-2">
+          <tr className="border-b border-slate-200 bg-[#f5f6f8] text-xs text-ink-2">
             {showSelect ? (
               <th className="px-3 py-2.5 font-medium">
                 <input
@@ -58,10 +58,14 @@ export function OrderTable({
           </tr>
         </thead>
         <tbody>
-          {rows.map((item) => (
+          {rows.map((item, idx) => (
             <tr
               key={item.id}
-              className="border-t border-slate-100 bg-white hover:bg-slate-50/70"
+              className={
+                idx % 2 === 1
+                  ? "border-b border-slate-100 bg-[#fafbfc]"
+                  : "border-b border-slate-100 bg-white"
+              }
             >
               {showSelect ? (
                 <td className="px-3 py-2.5">
@@ -77,7 +81,11 @@ export function OrderTable({
                 {item.orderNo}
               </td>
               <td className="px-3 py-2.5 text-ink-2">{item.feishuNo}</td>
-              <td className="px-3 py-2.5 text-ink-2">{item.applyType}</td>
+              <td className="px-3 py-2.5">
+                <span className="inline-flex rounded-full bg-[#e8f1ff] px-2 py-0.5 text-xs text-brand-600">
+                  {item.applyType}
+                </span>
+              </td>
               <td
                 className="max-w-[180px] truncate px-3 py-2.5 text-ink-2"
                 title={item.purpose}

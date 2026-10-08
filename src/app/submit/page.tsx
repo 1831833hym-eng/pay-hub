@@ -78,8 +78,7 @@ export default function SubmitListPage() {
 
       <Card>
         <CardContent className="pt-4">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <div className="text-sm text-ink-3">共 {filtered.length} 笔</div>
+          <div className="mb-3 flex items-center justify-end">
             <Button onClick={handleBatchSubmit}>批量提交</Button>
           </div>
           <OrderTable

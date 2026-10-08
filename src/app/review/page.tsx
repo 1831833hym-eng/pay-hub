@@ -50,9 +50,6 @@ export default function ReviewListPage() {
 
       <Card>
         <CardContent className="pt-4">
-          <div className="mb-3 text-sm text-ink-3">
-            共 {filtered.length} 笔（只读，不可编辑）
-          </div>
           <OrderTable
             rows={filtered}
             selectedIds={[]}

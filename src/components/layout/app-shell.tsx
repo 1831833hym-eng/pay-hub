@@ -10,10 +10,12 @@ import {
   Fullscreen,
   LayoutDashboard,
   Moon,
+  Package,
   Search,
   Settings,
   Store,
   UserRound,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +43,8 @@ const MENUS = [
 const RAIL = [
   { label: "工作台", icon: LayoutDashboard },
   { label: "站点", icon: Store },
-  { label: "B2B", icon: Store },
+  { label: "B2B", icon: Package },
+  { label: "OMS", icon: Store },
 ];
 
 function currentMenu(pathname: string) {
@@ -66,23 +69,30 @@ export function AppShell({
   actions?: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const menu = currentMenu(pathname);
   const crumbs = breadcrumb(pathname);
+  const MenuIcon = menu.icon;
+  const isDetail = /\/(submit|review|query)\/[^/]+/.test(pathname);
+  const tabLabel = isDetail ? `${menu.label}明细` : menu.label;
 
   return (
-    <div className="flex min-h-screen bg-page text-ink-1">
+    <div className="flex min-h-screen bg-[#f5f6f8] text-ink-1">
       {/* Far-left icon rail */}
-      <aside className="hidden w-14 shrink-0 flex-col items-center gap-2 bg-rail py-3 text-white/80 lg:flex">
+      <aside className="hidden w-14 shrink-0 flex-col items-center gap-1 border-r border-slate-200 bg-white py-3 lg:flex">
         <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500 text-xs font-bold text-white">
           F
         </div>
-        {RAIL.map((item) => {
+        {RAIL.map((item, idx) => {
           const Icon = item.icon;
           return (
             <button
               key={item.label}
               type="button"
               title={item.label}
-              className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10"
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-lg text-ink-3 hover:bg-slate-100 hover:text-ink-1",
+                idx === 0 && "bg-brand-50 text-brand-600"
+              )}
             >
               <Icon className="h-4 w-4" />
             </button>
@@ -90,12 +100,12 @@ export function AppShell({
         })}
       </aside>
 
-      {/* Module sidebar — sole menu entry */}
-      <aside className="flex w-[168px] shrink-0 flex-col border-r border-slate-200 bg-white sm:w-[200px]">
-        <div className="flex h-12 items-center px-4 text-base font-semibold tracking-wide">
+      {/* Fund module sidebar — menu entry only here */}
+      <aside className="flex w-[180px] shrink-0 flex-col border-r border-slate-200 bg-white sm:w-[208px]">
+        <div className="flex h-12 items-center px-4 text-[15px] font-semibold">
           Fund
         </div>
-        <nav className="flex-1 space-y-0.5 px-2 py-2">
+        <nav className="flex-1 space-y-0.5 px-2 py-1">
           {MENUS.map((item) => {
             const Icon = item.icon;
             const isActive = item.match(pathname);
@@ -104,9 +114,9 @@ export function AppShell({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors sm:px-3",
+                  "flex items-center gap-2 rounded-md px-3 py-2 text-[13px] transition-colors",
                   isActive
-                    ? "bg-brand-50 font-medium text-brand-600"
+                    ? "bg-[#e8f1ff] font-medium text-brand-600"
                     : "text-ink-2 hover:bg-slate-50"
                 )}
               >
@@ -119,8 +129,9 @@ export function AppShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* Header */}
         <header className="flex h-12 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4">
-          <div className="min-w-0 flex-1 truncate text-xs text-ink-3 sm:text-sm">
+          <div className="min-w-0 flex-1 truncate text-xs text-ink-3 sm:text-[13px]">
             {crumbs.map((c, i) => (
               <span key={`${c}-${i}`}>
                 {i > 0 ? <span className="mx-1.5 text-ink-4">&gt;</span> : null}
@@ -130,14 +141,14 @@ export function AppShell({
               </span>
             ))}
           </div>
-          <div className="hidden items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-ink-4 md:flex">
+          <div className="hidden items-center gap-2 rounded-md border border-slate-200 bg-[#f5f6f8] px-2.5 py-1.5 text-xs text-ink-4 md:flex">
             <Search className="h-3.5 w-3.5" />
             <span>搜索</span>
             <kbd className="rounded border border-slate-200 bg-white px-1 text-[10px]">
               ⌘K
             </kbd>
           </div>
-          <div className="flex items-center gap-1 text-ink-3">
+          <div className="flex items-center gap-0.5 text-ink-3">
             <IconBtn>
               <Settings className="h-4 w-4" />
             </IconBtn>
@@ -156,16 +167,36 @@ export function AppShell({
           </div>
         </header>
 
+        {/* Open page tabs (not menu entry) */}
+        <div className="flex h-10 shrink-0 items-end gap-1 border-b border-slate-200 bg-[#eef0f3] px-3">
+          <div className="flex h-8 items-center gap-1.5 rounded-t-md bg-brand-500 px-3 text-xs font-medium text-white shadow-sm">
+            <MenuIcon className="h-3.5 w-3.5" />
+            <span>{tabLabel}</span>
+            <button
+              type="button"
+              className="ml-1 rounded p-0.5 hover:bg-white/20"
+              aria-label="关闭"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+
         <main className="min-h-0 flex-1 overflow-auto p-3 sm:p-4">
-          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-base font-semibold text-ink-1">{title}</h1>
+          {(description || actions) && (
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               {description ? (
-                <p className="mt-0.5 text-xs text-ink-3">{description}</p>
+                <p className="text-xs text-ink-3">{description}</p>
+              ) : (
+                <span />
+              )}
+              {actions ? (
+                <div className="flex flex-wrap gap-2">{actions}</div>
               ) : null}
             </div>
-            {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
-          </div>
+          )}
+          {/* title used by pages for a11y; visually covered by tab */}
+          <h1 className="sr-only">{title}</h1>
           {children}
         </main>
       </div>
