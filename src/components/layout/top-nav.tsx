@@ -9,12 +9,18 @@ const NAV_ITEMS = [
   { href: "/", label: "付款中心", match: (p: string) => p === "/" },
   {
     href: "/payments",
-    label: "付款单",
-    match: (p: string) => p.startsWith("/payments"),
+    label: "付款单管理",
+    match: (p: string) =>
+      p.startsWith("/payments") && !p.startsWith("/payments/create"),
+  },
+  {
+    href: "/payments/create",
+    label: "发起付款",
+    match: (p: string) => p.startsWith("/payments/create"),
   },
   {
     href: "/beneficiaries",
-    label: "收款方",
+    label: "收款方管理",
     match: (p: string) => p.startsWith("/beneficiaries"),
   },
   { href: "/#channels", label: "付款通道", match: () => false },

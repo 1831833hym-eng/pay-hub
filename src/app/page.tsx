@@ -1,7 +1,9 @@
 import Link from "next/link";
 import {
+  ArrowRight,
   ArrowUpRight,
-  Banknote,
+  BarChart3,
+  Building2,
   CheckCircle2,
   Clock3,
   FileSpreadsheet,
@@ -22,11 +24,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
-import {
-  overviewStats,
-  payments,
-  quickActions,
-} from "@/lib/payments-data";
+import { overviewStats, payments, quickActions } from "@/lib/payments-data";
 import { formatMoney } from "@/lib/utils";
 
 const iconMap = {
@@ -35,6 +33,33 @@ const iconMap = {
   users: Users,
   list: ListOrdered,
 } as const;
+
+const moduleCards = [
+  {
+    title: "发起付款",
+    desc: "单笔或批量提交跨境付款申请，自动校验账户额度与收款方认证状态。",
+    href: "/payments/create",
+    icon: Send,
+  },
+  {
+    title: "付款审核",
+    desc: "财务与风控双节点审核，大额与高风险国家付款优先排队处理。",
+    href: "/payments",
+    icon: ShieldAlert,
+  },
+  {
+    title: "出款追踪",
+    desc: "按通道查看付款中与失败单据，支持修正账号后一键重推出款。",
+    href: "/payments",
+    icon: BarChart3,
+  },
+  {
+    title: "收款方管理",
+    desc: "维护供应商、物流商与服务商海外账户，完成 KYC 后可出款。",
+    href: "/beneficiaries",
+    icon: Building2,
+  },
+];
 
 const channelStats = [
   { name: "SWIFT 合作通道", success: "98.2%", latency: "T+1~T+2", load: "高" },
@@ -49,7 +74,7 @@ export default function PaymentCenterPage() {
   return (
     <AppShell
       title="付款中心"
-      description="统一管理跨境付款申请、审核、出款与失败重试，覆盖多币种结算账户与海外收款方。"
+      description="付款中心统一管理跨境电商资金出款：发起申请、合规审核、通道出款与失败重试，覆盖多币种结算账户与海外收款方。"
       actions={
         <>
           <Link href="/payments">
@@ -64,28 +89,60 @@ export default function PaymentCenterPage() {
         </>
       }
     >
-      <section className="mb-8 overflow-hidden rounded-2xl bg-white/10 px-6 py-8 text-center text-white shadow-soft backdrop-blur-sm sm:px-10">
-        <p className="text-sm text-white/80">跨境电商 · 资金中台</p>
-        <h2 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+      {/* Hero — mirrors 资金中台管理系统 title block on gradient */}
+      <section className="mb-8 px-2 py-6 text-center text-white sm:py-10">
+        <h2 className="font-display text-3xl font-bold tracking-tight drop-shadow-sm sm:text-5xl">
           付款中心管理系统
         </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
-          从付款发起、合规审核到通道出款全链路可视，帮助财务与运营高效完成多主体、多币种付款。
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base">
+          统一管理各子业务跨境付款，提供高效的付款申请、审核与出款服务
         </p>
       </section>
 
-      <section className="mb-6 rounded-2xl bg-white px-4 py-5 shadow-card sm:px-6">
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:divide-x lg:divide-slate-100">
+      {/* KPI strip — matches reference white metric bar */}
+      <section className="mb-6 rounded-2xl bg-white px-4 py-6 shadow-card sm:px-8 sm:py-7">
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4 lg:divide-x lg:divide-slate-100">
           {overviewStats.map((stat) => (
-            <div key={stat.label} className="px-2 py-1 text-center lg:px-4">
-              <div className="font-display text-2xl font-bold text-brand-500 sm:text-3xl">
+            <div key={stat.label} className="px-2 text-center lg:px-4">
+              <div className="font-display text-3xl font-bold text-brand-500 sm:text-4xl">
                 {stat.value}
               </div>
-              <div className="mt-1 text-sm text-ink-2">{stat.label}</div>
+              <div className="mt-2 text-sm text-ink-2">{stat.label}</div>
               <div className="mt-1 text-xs text-ink-4">{stat.hint}</div>
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Module cards — blue square icons like reference */}
+      <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {moduleCards.map((mod) => {
+          const Icon = mod.icon;
+          return (
+            <Link key={mod.title} href={mod.href} className="group">
+              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-soft">
+                <CardHeader>
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-white shadow-soft">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <CardTitle className="flex items-center gap-1 text-[15px] group-hover:text-brand-600">
+                    {mod.title}
+                    <ArrowUpRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
+                  </CardTitle>
+                  <CardDescription className="leading-relaxed">
+                    {mod.desc}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-brand-500">
+                    进入模块
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
+          );
+        })}
       </section>
 
       <section className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -93,18 +150,15 @@ export default function PaymentCenterPage() {
           const Icon = iconMap[action.icon as keyof typeof iconMap];
           return (
             <Link key={action.title} href={action.href} className="group">
-              <Card className="h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-soft">
-                <CardHeader>
-                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white shadow-soft">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="flex items-center gap-1 group-hover:text-brand-600">
-                    {action.title}
-                    <ArrowUpRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
-                  </CardTitle>
-                  <CardDescription>{action.desc}</CardDescription>
-                </CardHeader>
-              </Card>
+              <div className="flex h-full items-center gap-3 rounded-2xl border border-white/40 bg-white/15 px-4 py-3 text-white backdrop-blur-sm transition hover:bg-white/25">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-brand-500">
+                  <Icon className="h-4 w-4" />
+                </span>
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-medium">{action.title}</div>
+                  <div className="truncate text-xs text-white/75">{action.desc}</div>
+                </div>
+              </div>
             </Link>
           );
         })}
@@ -170,7 +224,7 @@ export default function PaymentCenterPage() {
                 desc="高风险国家收款方，需补充用途说明"
               />
               <TodoItem
-                icon={<Banknote className="h-4 w-4" />}
+                icon={<Wallet className="h-4 w-4" />}
                 title="2 笔失败待重试"
                 desc="账号校验失败，可修正后一键重推"
               />
