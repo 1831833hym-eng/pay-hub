@@ -4,9 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
-  CheckSquare,
-  ClipboardList,
-  FileSearch,
+  ClipboardCheck,
+  FileInput,
   Fullscreen,
   Moon,
   Search,
@@ -21,19 +20,19 @@ const MENUS = [
   {
     href: "/submit",
     label: "提交付款单",
-    icon: ClipboardList,
+    icon: FileInput,
     match: (p: string) => p === "/" || p.startsWith("/submit"),
   },
   {
     href: "/review",
     label: "复核付款单",
-    icon: CheckSquare,
+    icon: ClipboardCheck,
     match: (p: string) => p.startsWith("/review"),
   },
   {
     href: "/query",
     label: "查询付款单",
-    icon: FileSearch,
+    icon: Search,
     match: (p: string) => p.startsWith("/query"),
   },
 ];
