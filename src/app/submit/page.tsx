@@ -19,8 +19,10 @@ export default function SubmitListPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
 
+  /** 提交菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
     return orders.filter((item) => {
+      if (item.status !== "pending_submit") return false;
       const q = appliedQuery;
       if (
         q.orderNo &&
@@ -44,17 +46,12 @@ export default function SubmitListPage() {
     });
   }, [orders, appliedQuery]);
 
-  const selectable = filtered.filter((o) => o.status === "pending_submit");
-
   const handleBatchSubmit = () => {
-    const ids = selectedIds.filter((id) =>
-      selectable.some((o) => o.id === id)
-    );
-    if (ids.length === 0) {
-      setToast("请先勾选状态为「待提交」的付款单");
+    if (selectedIds.length === 0) {
+      setToast("请先勾选待提交的付款单");
       return;
     }
-    const count = batchSubmit(ids);
+    const count = batchSubmit(selectedIds);
     setSelectedIds([]);
     setToast(`已批量提交 ${count} 笔付款单，状态更新为「待复核」`);
   };

@@ -19,8 +19,10 @@ export default function ReviewListPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
 
+  /** 复核菜单仅展示待复核单据 */
   const filtered = useMemo(() => {
     return orders.filter((item) => {
+      if (item.status !== "pending_review") return false;
       const q = appliedQuery;
       if (
         q.orderNo &&
@@ -44,17 +46,12 @@ export default function ReviewListPage() {
     });
   }, [orders, appliedQuery]);
 
-  const selectable = filtered.filter((o) => o.status === "pending_review");
-
   const handleBatchApprove = () => {
-    const ids = selectedIds.filter((id) =>
-      selectable.some((o) => o.id === id)
-    );
-    if (ids.length === 0) {
-      setToast("请先勾选状态为「待复核」的付款单");
+    if (selectedIds.length === 0) {
+      setToast("请先勾选待复核的付款单");
       return;
     }
-    const count = batchApprove(ids);
+    const count = batchApprove(selectedIds);
     setSelectedIds([]);
     setToast(`已批量复核通过 ${count} 笔付款单，状态更新为「待付款」`);
   };
@@ -96,14 +93,7 @@ export default function ReviewListPage() {
                   : [...prev, id]
               )
             }
-            onToggleAll={(ids) => {
-              const reviewIds = ids.filter((id) =>
-                filtered.some(
-                  (o) => o.id === id && o.status === "pending_review"
-                )
-              );
-              setSelectedIds(reviewIds.length ? reviewIds : ids);
-            }}
+            onToggleAll={(ids) => setSelectedIds(ids)}
             viewBase="/review"
             showEdit={false}
             showReview

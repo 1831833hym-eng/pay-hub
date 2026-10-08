@@ -311,7 +311,7 @@ export let paymentOrders: PaymentOrder[] = [
     currency: "HKD",
     applicant: "王晓雯",
     appliedAt: "2026-03-23T11:00:00+08:00",
-    status: "review_rejected",
+    status: "pending_submit",
     createdAt: "2026-03-23T11:10:00+08:00",
     updatedAt: "2026-03-23T16:20:00+08:00",
     paymentMethodType: "银行转账",
@@ -320,7 +320,7 @@ export let paymentOrders: PaymentOrder[] = [
     payeeBank: "招商银行香港分行",
     transferMemo: "FS20260323015",
     payeeName: "Shenzhen Huaqiang Supply Co.",
-    remark: "合同附件缺失，请补充后重新提交",
+    remark: "复核退回：合同附件缺失，请补充后重新提交",
   },
 ];
 
