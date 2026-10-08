@@ -3,9 +3,9 @@ import { PaymentsProvider } from "@/lib/payments-store";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "付款中心 · 资金中台",
+  title: "付款中心",
   description:
-    "承接飞书审批付款申请，生成付款单，复核后经万里汇出款，并将回单回传飞书审批流。",
+    "付款中心：承接飞书审批付款申请，生成付款单，复核后经万里汇出款，并将回单回传飞书审批流。",
 };
 
 export default function RootLayout({
