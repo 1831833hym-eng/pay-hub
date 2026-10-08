@@ -17,6 +17,22 @@ export type PaymentOrderStatus =
 
 export type Currency = "USD" | "EUR" | "GBP" | "JPY" | "HKD" | "CNY" | "SGD";
 
+/** 付款申请类型 */
+export type PaymentApplicationType =
+  | "供应商货款"
+  | "物流仓储费"
+  | "广告投放费"
+  | "服务费"
+  | "其他";
+
+export const APPLICATION_TYPES: PaymentApplicationType[] = [
+  "供应商货款",
+  "物流仓储费",
+  "广告投放费",
+  "服务费",
+  "其他",
+];
+
 export interface FeishuApproval {
   id: string;
   instanceCode: string;
@@ -29,6 +45,7 @@ export interface FeishuApproval {
   payeeBank: string;
   payeeAccountMasked: string;
   purpose: string;
+  applicationType: PaymentApplicationType;
   approvedAt: string;
   status: FeishuApprovalStatus;
   linkedOrderId?: string;
@@ -37,21 +54,34 @@ export interface FeishuApproval {
 
 export interface PaymentOrder {
   id: string;
+  /** 付款单编号 */
   orderNo: string;
   feishuId: string;
+  /** 飞书审批编号 */
   feishuInstanceCode: string;
-  merchantName: string;
+  /** 付款申请类型 */
+  applicationType: PaymentApplicationType;
+  /** 付款事由 */
+  purpose: string;
+  /** 付款金额 */
+  amount: number;
+  /** 币种 */
+  currency: Currency;
+  /** 申请人 */
   applicant: string;
+  /** 申请时间（飞书侧申请时间） */
+  appliedAt: string;
+  /** 付款单状态 */
+  status: PaymentOrderStatus;
+  /** 创建时间 */
+  createdAt: string;
+  /** 更新时间 */
+  updatedAt: string;
+  merchantName: string;
   payeeName: string;
   payeeBank: string;
   payeeAccountMasked: string;
-  amount: number;
-  currency: Currency;
   cnyEquivalent: number;
-  purpose: string;
-  status: PaymentOrderStatus;
-  createdAt: string;
-  updatedAt: string;
   reviewer?: string;
   reviewComment?: string;
   worldfirstTxId?: string;
@@ -110,7 +140,7 @@ export type PaymentStatus = PaymentOrderStatus;
 export const feishuApprovals: FeishuApproval[] = [
   {
     id: "fs-001",
-    instanceCode: "A30B8C2D-FEISHU-20260328-001",
+    instanceCode: "FS20260328001",
     title: "FBA仓储尾程费用付款申请",
     applicant: "王晓雯",
     department: "跨境运营一部",
@@ -120,6 +150,7 @@ export const feishuApprovals: FeishuApproval[] = [
     payeeBank: "JPMorgan Chase",
     payeeAccountMasked: "****4821",
     purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
+    applicationType: "物流仓储费",
     approvedAt: "2026-03-28T09:05:00+08:00",
     status: "approved",
     linkedOrderId: "pay-1001",
@@ -127,7 +158,7 @@ export const feishuApprovals: FeishuApproval[] = [
   },
   {
     id: "fs-002",
-    instanceCode: "A30B8C2D-FEISHU-20260328-002",
+    instanceCode: "FS20260328002",
     title: "欧洲仓代发服务费",
     applicant: "李明轩",
     department: "供应链中心",
@@ -137,6 +168,7 @@ export const feishuApprovals: FeishuApproval[] = [
     payeeBank: "Deutsche Bank",
     payeeAccountMasked: "****1176",
     purpose: "欧洲仓一件代发服务费",
+    applicationType: "物流仓储费",
     approvedAt: "2026-03-28T10:20:00+08:00",
     status: "approved",
     linkedOrderId: "pay-1002",
@@ -144,7 +176,7 @@ export const feishuApprovals: FeishuApproval[] = [
   },
   {
     id: "fs-003",
-    instanceCode: "A30B8C2D-FEISHU-20260328-003",
+    instanceCode: "FS20260327018",
     title: "东南亚广告投放结算",
     applicant: "赵一诺",
     department: "增长市场部",
@@ -154,6 +186,7 @@ export const feishuApprovals: FeishuApproval[] = [
     payeeBank: "DBS Bank",
     payeeAccountMasked: "****7742",
     purpose: "东南亚广告投放结算",
+    applicationType: "广告投放费",
     approvedAt: "2026-03-27T16:40:00+08:00",
     status: "approved",
     linkedOrderId: "pay-1003",
@@ -161,7 +194,7 @@ export const feishuApprovals: FeishuApproval[] = [
   },
   {
     id: "fs-004",
-    instanceCode: "A30B8C2D-FEISHU-20260328-004",
+    instanceCode: "FS20260328004",
     title: "采购货款-3月批次",
     applicant: "王晓雯",
     department: "跨境运营一部",
@@ -171,13 +204,14 @@ export const feishuApprovals: FeishuApproval[] = [
     payeeBank: "招商银行香港分行",
     payeeAccountMasked: "****9033",
     purpose: "采购货款-3月批次",
+    applicationType: "供应商货款",
     approvedAt: "2026-03-28T11:00:00+08:00",
     status: "approved",
     attachmentCount: 5,
   },
   {
     id: "fs-005",
-    instanceCode: "A30B8C2D-FEISHU-20260328-005",
+    instanceCode: "FS20260328005",
     title: "日本站内容营销服务费",
     applicant: "孙可",
     department: "品牌市场部",
@@ -187,13 +221,14 @@ export const feishuApprovals: FeishuApproval[] = [
     payeeBank: "MUFG Bank",
     payeeAccountMasked: "****5520",
     purpose: "日本站内容营销服务费",
+    applicationType: "服务费",
     approvedAt: "2026-03-28T11:30:00+08:00",
     status: "approving",
     attachmentCount: 2,
   },
   {
     id: "fs-006",
-    instanceCode: "A30B8C2D-FEISHU-20260326-018",
+    instanceCode: "FS20260326018",
     title: "仓储超期费补缴",
     applicant: "李明轩",
     department: "供应链中心",
@@ -203,6 +238,7 @@ export const feishuApprovals: FeishuApproval[] = [
     payeeBank: "JPMorgan Chase",
     payeeAccountMasked: "****4821",
     purpose: "仓储超期费补缴",
+    applicationType: "物流仓储费",
     approvedAt: "2026-03-26T09:10:00+08:00",
     status: "approved",
     linkedOrderId: "pay-1006",
@@ -215,24 +251,26 @@ export const payments: PaymentOrder[] = [
     id: "pay-1001",
     orderNo: "PAY20260328001",
     feishuId: "fs-001",
-    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-001",
-    merchantName: "星辰跨境旗舰店",
-    applicant: "王晓雯",
-    payeeName: "Amazon Fulfillment Services Inc.",
-    payeeBank: "JPMorgan Chase",
-    payeeAccountMasked: "****4821",
+    feishuInstanceCode: "FS20260328001",
+    applicationType: "物流仓储费",
+    purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
     amount: 12850,
     currency: "USD",
-    cnyEquivalent: 93212.5,
-    purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
+    applicant: "王晓雯",
+    appliedAt: "2026-03-28T08:40:00+08:00",
     status: "pending_review",
     createdAt: "2026-03-28T09:12:00+08:00",
     updatedAt: "2026-03-28T09:12:00+08:00",
+    merchantName: "星辰跨境旗舰店",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    payeeBank: "JPMorgan Chase",
+    payeeAccountMasked: "****4821",
+    cnyEquivalent: 93212.5,
     timeline: [
       {
         time: "2026-03-28 09:05",
         title: "飞书审批通过",
-        desc: "审批实例 A30B8C2D-FEISHU-20260328-001 已通过，付款中心已承接申请信息",
+        desc: "审批实例 FS20260328001 已通过，付款中心已承接申请信息",
         actor: "飞书审批",
       },
       {
@@ -247,19 +285,21 @@ export const payments: PaymentOrder[] = [
     id: "pay-1002",
     orderNo: "PAY20260328002",
     feishuId: "fs-002",
-    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-002",
-    merchantName: "蓝海数贸",
-    applicant: "李明轩",
-    payeeName: "EuroPack Logistics GmbH",
-    payeeBank: "Deutsche Bank",
-    payeeAccountMasked: "****1176",
+    feishuInstanceCode: "FS20260328002",
+    applicationType: "物流仓储费",
+    purpose: "欧洲仓一件代发服务费",
     amount: 6420.5,
     currency: "EUR",
-    cnyEquivalent: 50248.3,
-    purpose: "欧洲仓一件代发服务费",
+    applicant: "李明轩",
+    appliedAt: "2026-03-28T09:50:00+08:00",
     status: "paying",
     createdAt: "2026-03-28T10:25:00+08:00",
     updatedAt: "2026-03-28T11:05:00+08:00",
+    merchantName: "蓝海数贸",
+    payeeName: "EuroPack Logistics GmbH",
+    payeeBank: "Deutsche Bank",
+    payeeAccountMasked: "****1176",
+    cnyEquivalent: 50248.3,
     reviewer: "财务-陈静",
     reviewComment: "材料齐全，额度校验通过",
     worldfirstTxId: "WF20260328110500981",
@@ -295,19 +335,21 @@ export const payments: PaymentOrder[] = [
     id: "pay-1003",
     orderNo: "PAY20260327018",
     feishuId: "fs-003",
-    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-003",
-    merchantName: "北极光品牌",
-    applicant: "赵一诺",
-    payeeName: "Singapore Ads Pte. Ltd.",
-    payeeBank: "DBS Bank",
-    payeeAccountMasked: "****7742",
+    feishuInstanceCode: "FS20260327018",
+    applicationType: "广告投放费",
+    purpose: "东南亚广告投放结算",
     amount: 9800,
     currency: "SGD",
-    cnyEquivalent: 53116,
-    purpose: "东南亚广告投放结算",
+    applicant: "赵一诺",
+    appliedAt: "2026-03-27T15:20:00+08:00",
     status: "receipt_synced",
     createdAt: "2026-03-27T16:50:00+08:00",
     updatedAt: "2026-03-28T09:40:00+08:00",
+    merchantName: "北极光品牌",
+    payeeName: "Singapore Ads Pte. Ltd.",
+    payeeBank: "DBS Bank",
+    payeeAccountMasked: "****7742",
+    cnyEquivalent: 53116,
     reviewer: "财务-陈静",
     worldfirstTxId: "WF20260327172000412",
     worldfirstStatus: "SUCCESS",
@@ -356,19 +398,21 @@ export const payments: PaymentOrder[] = [
     id: "pay-1006",
     orderNo: "PAY20260326011",
     feishuId: "fs-006",
-    feishuInstanceCode: "A30B8C2D-FEISHU-20260326-018",
-    merchantName: "蓝海数贸",
-    applicant: "李明轩",
-    payeeName: "Amazon Fulfillment Services Inc.",
-    payeeBank: "JPMorgan Chase",
-    payeeAccountMasked: "****4821",
+    feishuInstanceCode: "FS20260326018",
+    applicationType: "物流仓储费",
+    purpose: "仓储超期费补缴",
     amount: 5200,
     currency: "USD",
-    cnyEquivalent: 37700,
-    purpose: "仓储超期费补缴",
+    applicant: "李明轩",
+    appliedAt: "2026-03-26T08:30:00+08:00",
     status: "pay_failed",
     createdAt: "2026-03-26T09:20:00+08:00",
     updatedAt: "2026-03-26T17:20:00+08:00",
+    merchantName: "蓝海数贸",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    payeeBank: "JPMorgan Chase",
+    payeeAccountMasked: "****4821",
+    cnyEquivalent: 37700,
     reviewer: "财务-陈静",
     worldfirstTxId: "WF20260326140000771",
     worldfirstStatus: "FAILED",
@@ -398,19 +442,21 @@ export const payments: PaymentOrder[] = [
     id: "pay-1004",
     orderNo: "PAY20260328004",
     feishuId: "fs-004",
-    feishuInstanceCode: "A30B8C2D-FEISHU-20260328-004",
-    merchantName: "星辰跨境旗舰店",
-    applicant: "王晓雯",
-    payeeName: "Shenzhen Huaqiang Supply Co.",
-    payeeBank: "招商银行香港分行",
-    payeeAccountMasked: "****9033",
+    feishuInstanceCode: "FS20260328004",
+    applicationType: "供应商货款",
+    purpose: "采购货款-3月批次",
     amount: 186000,
     currency: "HKD",
-    cnyEquivalent: 170220,
-    purpose: "采购货款-3月批次",
+    applicant: "王晓雯",
+    appliedAt: "2026-03-28T10:15:00+08:00",
     status: "ready_to_pay",
     createdAt: "2026-03-28T11:10:00+08:00",
     updatedAt: "2026-03-28T11:45:00+08:00",
+    merchantName: "星辰跨境旗舰店",
+    payeeName: "Shenzhen Huaqiang Supply Co.",
+    payeeBank: "招商银行香港分行",
+    payeeAccountMasked: "****9033",
+    cnyEquivalent: 170220,
     reviewer: "财务-陈静",
     reviewComment: "大额付款已二次核对合同与发票",
     timeline: [

@@ -6,16 +6,15 @@ import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { href: "/", label: "付款中心", match: (p: string) => p === "/" },
+  {
+    href: "/",
+    label: "付款中心",
+    match: (p: string) => p === "/" || p.startsWith("/payments"),
+  },
   {
     href: "/feishu",
     label: "飞书审批承接",
     match: (p: string) => p.startsWith("/feishu"),
-  },
-  {
-    href: "/payments",
-    label: "付款单",
-    match: (p: string) => p.startsWith("/payments"),
   },
   {
     href: "/review",
