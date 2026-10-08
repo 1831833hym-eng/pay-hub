@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { StatusBadge } from "@/components/ui/badge";
-import type { PaymentOrder } from "@/lib/payments-data";
+import {
+  paymentMethodTypeLabel,
+  type PaymentOrder,
+} from "@/lib/payments-data";
 import { formatAmount, formatDate } from "@/lib/utils";
 
 export function OrderTable({
@@ -138,7 +141,7 @@ export function OrderTable({
                 <td
                   className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
-                  {item.paymentMethodType}
+                  {paymentMethodTypeLabel(item.paymentMethodType)}
                 </td>
                 <td
                   className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}

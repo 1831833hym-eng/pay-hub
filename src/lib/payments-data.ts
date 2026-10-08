@@ -14,12 +14,8 @@ export type PaymentApplyType =
   | "仓储费用"
   | "其他";
 
-/** 收款方式类型 */
-export type PaymentMethodType =
-  | "银行转账"
-  | "本地清算"
-  | "钱包付款"
-  | "其他";
+/** 收款方式类型编码：1 银行卡、2 支付宝 */
+export type PaymentMethodType = "1" | "2";
 
 /** 收款人账户类型 */
 export type PayeeAccountType =
@@ -115,12 +111,21 @@ export const APPLY_TYPES: PaymentApplyType[] = [
   "其他",
 ];
 
-export const PAYMENT_METHOD_TYPES: PaymentMethodType[] = [
-  "银行转账",
-  "本地清算",
-  "钱包付款",
-  "其他",
-];
+export const PAYMENT_METHOD_TYPES: PaymentMethodType[] = ["1", "2"];
+
+export const PAYMENT_METHOD_TYPE_META: Record<
+  PaymentMethodType,
+  { code: PaymentMethodType; label: string }
+> = {
+  "1": { code: "1", label: "银行卡" },
+  "2": { code: "2", label: "支付宝" },
+};
+
+export function paymentMethodTypeLabel(code: PaymentMethodType | string) {
+  return (
+    PAYMENT_METHOD_TYPE_META[code as PaymentMethodType]?.label ?? code
+  );
+}
 
 export const PAYEE_ACCOUNT_TYPES: PayeeAccountType[] = [
   "对公账户",
@@ -151,7 +156,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-28T09:12:00+08:00",
     updatedAt: "2026-03-28T09:12:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
@@ -171,7 +176,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-28T10:25:00+08:00",
     updatedAt: "2026-03-28T10:25:00+08:00",
-    paymentMethodType: "本地清算",
+    paymentMethodType: "2",
     payeeAccountType: "对公账户",
     payeeAccountNo: "DE89370400440532011776",
     payeeBank: "Deutsche Bank",
@@ -191,7 +196,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-28T11:10:00+08:00",
     updatedAt: "2026-03-28T11:10:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "012875903301",
     payeeBank: "招商银行香港分行",
@@ -211,7 +216,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_review",
     createdAt: "2026-03-27T16:50:00+08:00",
     updatedAt: "2026-03-28T08:30:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "072034567742",
     payeeBank: "DBS Bank",
@@ -231,7 +236,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_review",
     createdAt: "2026-03-27T14:20:00+08:00",
     updatedAt: "2026-03-27T15:00:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "1002455201",
     payeeBank: "MUFG Bank",
@@ -251,7 +256,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_pay",
     createdAt: "2026-03-26T09:20:00+08:00",
     updatedAt: "2026-03-26T11:00:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
@@ -271,7 +276,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_receipt",
     createdAt: "2026-03-25T10:15:00+08:00",
     updatedAt: "2026-03-26T16:40:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
@@ -292,7 +297,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "completed",
     createdAt: "2026-03-24T13:30:00+08:00",
     updatedAt: "2026-03-25T09:10:00+08:00",
-    paymentMethodType: "钱包付款",
+    paymentMethodType: "2",
     payeeAccountType: "第三方支付账户",
     payeeAccountNo: "META-PAY-8891",
     payeeBank: "Meta Payments",
@@ -314,7 +319,7 @@ export let paymentOrders: PaymentOrder[] = [
     status: "pending_submit",
     createdAt: "2026-03-23T11:10:00+08:00",
     updatedAt: "2026-03-23T16:20:00+08:00",
-    paymentMethodType: "银行转账",
+    paymentMethodType: "1",
     payeeAccountType: "对公账户",
     payeeAccountNo: "012875903301",
     payeeBank: "招商银行香港分行",

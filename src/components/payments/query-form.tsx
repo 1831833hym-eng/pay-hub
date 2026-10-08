@@ -4,7 +4,11 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input, Label, Select } from "@/components/ui/input";
-import { APPLY_TYPES, PAYMENT_METHOD_TYPES } from "@/lib/payments-data";
+import {
+  APPLY_TYPES,
+  PAYMENT_METHOD_TYPES,
+  PAYMENT_METHOD_TYPE_META,
+} from "@/lib/payments-data";
 
 export type QueryValues = {
   orderNo: string;
@@ -101,7 +105,7 @@ export function QueryForm({
                 <option value="">选择...</option>
                 {PAYMENT_METHOD_TYPES.map((t) => (
                   <option key={t} value={t}>
-                    {t}
+                    {PAYMENT_METHOD_TYPE_META[t].label}
                   </option>
                 ))}
               </Select>

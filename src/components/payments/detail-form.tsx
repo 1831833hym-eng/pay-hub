@@ -6,6 +6,8 @@ import {
   APPLY_TYPES,
   PAYEE_ACCOUNT_TYPES,
   PAYMENT_METHOD_TYPES,
+  PAYMENT_METHOD_TYPE_META,
+  paymentMethodTypeLabel,
   type PayeeAccountType,
   type PaymentApplyType,
   type PaymentOrder,
@@ -108,12 +110,12 @@ export function DetailForm({
             >
               {PAYMENT_METHOD_TYPES.map((t) => (
                 <option key={t} value={t}>
-                  {t}
+                  {PAYMENT_METHOD_TYPE_META[t].label}
                 </option>
               ))}
             </Select>
           ) : (
-            <Value>{data.paymentMethodType}</Value>
+            <Value>{paymentMethodTypeLabel(data.paymentMethodType)}</Value>
           )}
         </Field>
         <Field label="申请人">
