@@ -17,6 +17,9 @@ export type PaymentApplyType =
 /** 收款方式类型编码：1 银行卡、2 支付宝 */
 export type PaymentMethodType = "1" | "2";
 
+/** 付款渠道（复核时选择，默认万里汇） */
+export type PaymentChannel = "万里汇" | "连连国际" | "PingPong" | "银行直连";
+
 /** 收款人账户类型 */
 export type PayeeAccountType =
   | "对公账户"
@@ -24,6 +27,15 @@ export type PayeeAccountType =
   | "第三方支付账户";
 
 export type Currency = "USD" | "EUR" | "GBP" | "JPY" | "HKD" | "CNY" | "SGD";
+
+export const DEFAULT_PAYMENT_CHANNEL: PaymentChannel = "万里汇";
+
+export const PAYMENT_CHANNELS: PaymentChannel[] = [
+  "万里汇",
+  "连连国际",
+  "PingPong",
+  "银行直连",
+];
 
 export interface PaymentOrder {
   id: string;
@@ -59,6 +71,8 @@ export interface PaymentOrder {
   payeeBank: string;
   /** 转账附言（默认飞书审批编号） */
   transferMemo: string;
+  /** 付款渠道（复核确认时选择） */
+  paymentChannel?: PaymentChannel;
   /** 收款方名称 */
   payeeName?: string;
   remark?: string;
@@ -261,6 +275,7 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
     transferMemo: "FS20260326011",
+    paymentChannel: "万里汇",
     payeeName: "Amazon Fulfillment Services Inc.",
   },
   {
@@ -281,6 +296,7 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
     transferMemo: "FS20260325007",
+    paymentChannel: "万里汇",
     payeeName: "Amazon Fulfillment Services Inc.",
     worldfirstTxId: "WF202603261640001",
   },
@@ -302,6 +318,7 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountNo: "META-PAY-8891",
     payeeBank: "Meta Payments",
     transferMemo: "FS20260324003",
+    paymentChannel: "万里汇",
     payeeName: "Meta Platforms Ireland Ltd.",
     worldfirstTxId: "WF202603241800002",
     receiptNo: "WFR-20260325-0002",

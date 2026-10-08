@@ -9,7 +9,9 @@ import {
   type ReactNode,
 } from "react";
 import {
+  DEFAULT_PAYMENT_CHANNEL,
   paymentOrders as seed,
+  type PaymentChannel,
   type PaymentOrder,
   type PaymentStatus,
 } from "@/lib/payments-data";
@@ -19,9 +21,9 @@ type Store = {
   getById: (id: string) => PaymentOrder | undefined;
   updateOrder: (id: string, patch: Partial<PaymentOrder>) => void;
   batchSubmit: (ids: string[]) => number;
-  batchApprove: (ids: string[]) => number;
+  batchApprove: (ids: string[], channel?: PaymentChannel) => number;
   submitOne: (id: string) => boolean;
-  approve: (id: string) => boolean;
+  approve: (id: string, channel?: PaymentChannel) => boolean;
   reject: (id: string, remark?: string) => boolean;
   markPaid: (id: string) => boolean;
   markReceiptDone: (id: string) => boolean;
@@ -71,19 +73,25 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     return count;
   }, []);
 
-  const batchApprove = useCallback((ids: string[]) => {
-    let count = 0;
-    setOrders((prev) =>
-      prev.map((o) => {
-        if (ids.includes(o.id) && o.status === "pending_review") {
-          count += 1;
-          return { ...o, ...touch({ status: "pending_pay" }) };
-        }
-        return o;
-      })
-    );
-    return count;
-  }, []);
+  const batchApprove = useCallback(
+    (ids: string[], channel: PaymentChannel = DEFAULT_PAYMENT_CHANNEL) => {
+      let count = 0;
+      setOrders((prev) =>
+        prev.map((o) => {
+          if (ids.includes(o.id) && o.status === "pending_review") {
+            count += 1;
+            return {
+              ...o,
+              ...touch({ status: "pending_pay", paymentChannel: channel }),
+            };
+          }
+          return o;
+        })
+      );
+      return count;
+    },
+    []
+  );
 
   const submitOne = useCallback(
     (id: string) => {
@@ -96,10 +104,10 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
   );
 
   const approve = useCallback(
-    (id: string) => {
+    (id: string, channel: PaymentChannel = DEFAULT_PAYMENT_CHANNEL) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_review") return false;
-      setStatus(id, "pending_pay");
+      setStatus(id, "pending_pay", { paymentChannel: channel });
       return true;
     },
     [orders, setStatus]
@@ -112,6 +120,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       if (!target || target.status !== "pending_review") return false;
       setStatus(id, "pending_submit", {
         remark: remark || "复核退回，请修正后重新提交",
+        paymentChannel: undefined,
       });
       return true;
     },

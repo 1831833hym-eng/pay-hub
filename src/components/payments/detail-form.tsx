@@ -146,6 +146,11 @@ export function DetailForm({
             <StatusBadge status={data.status} />
           </div>
         </Field>
+        {data.paymentChannel ? (
+          <Field label="付款渠道">
+            <Value>{data.paymentChannel}</Value>
+          </Field>
+        ) : null}
 
         <Field label="收款人账户类型">
           {editable ? (
