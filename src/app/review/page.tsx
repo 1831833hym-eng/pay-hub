@@ -106,6 +106,7 @@ export default function ReviewListPage() {
             }}
             viewBase="/review"
             showEdit={false}
+            showReview
             showSelect
           />
         </CardContent>

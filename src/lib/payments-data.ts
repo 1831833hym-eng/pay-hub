@@ -357,7 +357,7 @@ export function approveReview(id: string) {
 
 export function rejectReview(id: string, remark?: string) {
   return updatePayment(id, {
-    status: "review_rejected",
-    remark: remark || "复核驳回",
+    status: "pending_submit",
+    remark: remark || "复核退回，请修正后重新提交",
   });
 }

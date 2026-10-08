@@ -105,12 +105,13 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
+  /** 退回：状态回退为待提交，便于提交人重新编辑后再次提交 */
   const reject = useCallback(
     (id: string, remark?: string) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_review") return false;
-      setStatus(id, "review_rejected", {
-        remark: remark || "复核驳回，请修正后重新提交",
+      setStatus(id, "pending_submit", {
+        remark: remark || "复核退回，请修正后重新提交",
       });
       return true;
     },

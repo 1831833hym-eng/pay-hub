@@ -1,25 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailForm } from "@/components/payments/detail-form";
-import { Textarea, Label } from "@/components/ui/input";
 import { usePayments } from "@/lib/payments-store";
 
 export default function ReviewDetailPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const { getById, approve, reject, markPaid, markReceiptDone } = usePayments();
   const order = getById(params.id);
-  const [remark, setRemark] = useState("");
   const [toast, setToast] = useState<string | null>(null);
 
   if (!order) {
     return (
-      <AppShell title="复核付款单详情" description="未找到该付款单">
+      <AppShell title="复核付款单明细" description="未找到该付款单">
         <Card>
           <CardContent className="py-16 text-center text-ink-4">
             付款单不存在
@@ -34,10 +33,12 @@ export default function ReviewDetailPage() {
     );
   }
 
+  const canReview = order.status === "pending_review";
+
   return (
     <AppShell
-      title="复核付款单详情"
-      description="明细字段与提交付款单一致；本页不可编辑修改，仅可进行复核通过/驳回及后续出款、回单操作。"
+      title={canReview ? "复核付款单明细" : "查看付款单"}
+      description="明细字段只读，不可编辑修改。"
       actions={
         <Link href="/review">
           <Button variant="secondary">返回列表</Button>
@@ -52,40 +53,35 @@ export default function ReviewDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{order.orderNo}（只读）</CardTitle>
+          <CardTitle className="text-base">{order.orderNo}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <DetailForm order={order} editable={false} />
 
-          {order.status === "pending_review" ? (
-            <div className="space-y-3 border-t border-slate-100 pt-4">
-              <div>
-                <Label>复核意见</Label>
-                <Textarea
-                  value={remark}
-                  onChange={(e) => setRemark(e.target.value)}
-                  placeholder="可选填写复核意见"
-                />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  onClick={() => {
-                    approve(order.id);
-                    setToast("复核通过，状态更新为「待付款」");
-                  }}
-                >
-                  复核通过
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => {
-                    reject(order.id, remark || undefined);
-                    setToast("已驳回，状态更新为「复核驳回」");
-                  }}
-                >
-                  复核驳回
-                </Button>
-              </div>
+          {canReview ? (
+            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+              <Button
+                onClick={() => {
+                  approve(order.id);
+                  setToast("已确认，状态更新为「待付款」");
+                  router.push("/review");
+                }}
+              >
+                确认
+              </Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  reject(order.id);
+                  setToast("已退回，状态更新为「待提交」");
+                  router.push("/review");
+                }}
+              >
+                退回
+              </Button>
+              <Link href="/review">
+                <Button variant="secondary">取消</Button>
+              </Link>
             </div>
           ) : null}
 

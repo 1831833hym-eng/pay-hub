@@ -13,6 +13,7 @@ export function OrderTable({
   viewBase,
   editBase,
   showEdit,
+  showReview,
   showSelect,
 }: {
   rows: PaymentOrder[];
@@ -22,6 +23,8 @@ export function OrderTable({
   viewBase: string;
   editBase?: string;
   showEdit?: boolean;
+  /** 复核引导页：待复核单据显示【复核】入口 */
+  showReview?: boolean;
   showSelect?: boolean;
 }) {
   const allIds = rows.map((r) => r.id);
@@ -170,6 +173,14 @@ export function OrderTable({
                         className="inline-flex h-7 items-center rounded border border-slate-200 bg-white px-2.5 text-xs text-ink-2 hover:border-brand-200 hover:text-brand-600"
                       >
                         编辑
+                      </Link>
+                    ) : null}
+                    {showReview && item.status === "pending_review" ? (
+                      <Link
+                        href={`${viewBase}/${item.id}?mode=review`}
+                        className="inline-flex h-7 items-center rounded border border-brand-200 bg-white px-2.5 text-xs font-medium text-brand-600 hover:bg-brand-50"
+                      >
+                        复核
                       </Link>
                     ) : null}
                     <Link
