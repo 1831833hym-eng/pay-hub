@@ -26,11 +26,13 @@ export function QueryForm({
   onChange,
   onSearch,
   onReset,
+  extraFields,
 }: {
   values: QueryValues;
   onChange: (next: QueryValues) => void;
   onSearch: () => void;
   onReset: () => void;
+  extraFields?: React.ReactNode;
 }) {
   const set = (key: keyof QueryValues, value: string) =>
     onChange({ ...values, [key]: value });
@@ -89,6 +91,7 @@ export function QueryForm({
               inputMode="decimal"
             />
           </div>
+          {extraFields}
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button onClick={onSearch}>搜索</Button>

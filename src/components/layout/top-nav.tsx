@@ -16,6 +16,11 @@ const NAV_ITEMS = [
     label: "复核付款单",
     match: (p: string) => p.startsWith("/review"),
   },
+  {
+    href: "/query",
+    label: "查询付款单",
+    match: (p: string) => p.startsWith("/query"),
+  },
 ];
 
 export function TopNav() {
