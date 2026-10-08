@@ -61,15 +61,22 @@ export default function ReviewDetailPage() {
         </div>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{order.orderNo}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <DetailForm order={order} editable={false} />
+      <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">{order.orderNo}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DetailForm order={order} editable={false} />
+          </CardContent>
+        </Card>
 
-          {canReview ? (
-            <div className="space-y-4 border-t border-slate-100 pt-4">
+        {canReview ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">复核操作</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div className="max-w-xs">
                 <Label>付款渠道</Label>
                 <Select
@@ -111,11 +118,16 @@ export default function ReviewDetailPage() {
                   <Button variant="secondary">取消</Button>
                 </Link>
               </div>
-            </div>
-          ) : null}
+            </CardContent>
+          </Card>
+        ) : null}
 
-          {order.status === "pending_pay" ? (
-            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+        {order.status === "pending_pay" ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">出款操作</CardTitle>
+            </CardHeader>
+            <CardContent>
               <Button
                 onClick={() => {
                   markPaid(order.id);
@@ -126,11 +138,16 @@ export default function ReviewDetailPage() {
               >
                 调用{channelLabel}付款接口
               </Button>
-            </div>
-          ) : null}
+            </CardContent>
+          </Card>
+        ) : null}
 
-          {order.status === "pending_receipt" ? (
-            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+        {order.status === "pending_receipt" ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">回单操作</CardTitle>
+            </CardHeader>
+            <CardContent>
               <Button
                 onClick={() => {
                   markReceiptDone(order.id);
@@ -139,10 +156,10 @@ export default function ReviewDetailPage() {
               >
                 获取回单并回传飞书
               </Button>
-            </div>
-          ) : null}
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        ) : null}
+      </div>
     </AppShell>
   );
 }
