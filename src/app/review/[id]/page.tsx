@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,10 +16,11 @@ import {
 } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
-export default function ReviewDetailPage() {
+function ReviewDetailInner() {
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const { getById, approve, reject, markPaid, markReceiptDone } = usePayments();
+  const { getById, approve, reject } = usePayments();
   const order = getById(params.id);
   const [toast, setToast] = useState<string | null>(null);
   const [paymentChannel, setPaymentChannel] = useState<PaymentChannel>(
@@ -43,13 +44,8 @@ export default function ReviewDetailPage() {
     );
   }
 
-  const canReview = order.status === "pending_review";
-  const channelLabel =
-    order.paymentChannel ?? paymentChannel ?? DEFAULT_PAYMENT_CHANNEL;
-  const showActions =
-    canReview ||
-    order.status === "pending_pay" ||
-    order.status === "pending_receipt";
+  const isReviewMode =
+    searchParams.get("mode") === "review" && order.status === "pending_review";
 
   return (
     <AppShell
@@ -73,7 +69,7 @@ export default function ReviewDetailPage() {
         <CardContent className="space-y-6">
           <DetailForm order={order} editable={false} />
 
-          {canReview ? (
+          {isReviewMode ? (
             <div className="max-w-xs border-t border-slate-100 pt-4">
               <Label>付款渠道</Label>
               <Select
@@ -93,62 +89,54 @@ export default function ReviewDetailPage() {
         </CardContent>
       </Card>
 
-      {showActions ? (
-        <DetailActions>
-          {canReview ? (
-            <>
-              <Button
-                onClick={() => {
-                  approve(order.id, paymentChannel);
-                  setToast(
-                    `已确认（付款渠道：${paymentChannel}），状态更新为「待付款」`
-                  );
-                  router.push("/review");
-                }}
-              >
-                确认
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => {
-                  reject(order.id);
-                  setToast("已退回，状态更新为「待提交」");
-                  router.push("/review");
-                }}
-              >
-                退回
-              </Button>
-              <Link href="/review">
-                <Button variant="secondary">关闭</Button>
-              </Link>
-            </>
-          ) : null}
-
-          {order.status === "pending_pay" ? (
+      <DetailActions>
+        {isReviewMode ? (
+          <>
             <Button
               onClick={() => {
-                markPaid(order.id);
+                approve(order.id, paymentChannel);
                 setToast(
-                  `${channelLabel}付款接口调用成功，状态更新为「待回单」`
+                  `已确认（付款渠道：${paymentChannel}），状态更新为「待付款」`
                 );
+                router.push("/review");
               }}
             >
-              调用{channelLabel}付款接口
+              确认
             </Button>
-          ) : null}
-
-          {order.status === "pending_receipt" ? (
             <Button
+              variant="danger"
               onClick={() => {
-                markReceiptDone(order.id);
-                setToast("已获取回单并上传飞书审批流，状态更新为「已完成」");
+                reject(order.id);
+                setToast("已退回，状态更新为「待提交」");
+                router.push("/review");
               }}
             >
-              获取回单并回传飞书
+              退回
             </Button>
-          ) : null}
-        </DetailActions>
-      ) : null}
+          </>
+        ) : null}
+        <Link href="/review">
+          <Button variant="secondary">关闭</Button>
+        </Link>
+      </DetailActions>
     </AppShell>
+  );
+}
+
+export default function ReviewDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <AppShell title="付款单明细">
+          <Card>
+            <CardContent className="py-16 text-center text-ink-4">
+              加载中…
+            </CardContent>
+          </Card>
+        </AppShell>
+      }
+    >
+      <ReviewDetailInner />
+    </Suspense>
   );
 }
