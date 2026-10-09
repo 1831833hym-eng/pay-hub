@@ -119,7 +119,7 @@ export default function ReviewDetailPage() {
                 退回
               </Button>
               <Link href="/review">
-                <Button variant="secondary">取消</Button>
+                <Button variant="secondary">关闭</Button>
               </Link>
             </>
           ) : null}
