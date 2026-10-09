@@ -43,6 +43,8 @@ export interface PaymentOrder {
   orderNo: string;
   /** 飞书审批编号 */
   feishuNo: string;
+  /** 审批流程名称 */
+  approvalFlowName: string;
   /** 付款申请类型 */
   applyType: PaymentApplyType;
   /** 付款事由 */

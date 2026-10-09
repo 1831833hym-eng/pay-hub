@@ -36,7 +36,7 @@ export function OrderTable({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[1180px] border-separate border-spacing-0 text-left text-sm">
+      <table className="w-full min-w-[1280px] border-separate border-spacing-0 text-left text-sm">
         <thead>
           <tr className="bg-[#f5f6f8] text-xs text-ink-2">
             {showSelect ? (
@@ -54,6 +54,9 @@ export function OrderTable({
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               飞书审批编号
+            </th>
+            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+              审批流程名称
             </th>
             <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
               付款申请类型
@@ -116,6 +119,12 @@ export function OrderTable({
                   className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {item.feishuNo}
+                </td>
+                <td
+                  className={`max-w-[160px] truncate border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  title={item.approvalFlowName}
+                >
+                  {item.approvalFlowName}
                 </td>
                 <td className={`border-b border-slate-100 px-3 py-2.5 ${rowBg}`}>
                   <span className="inline-flex rounded-full bg-[#e8f1ff] px-2 py-0.5 text-xs text-brand-600">
@@ -200,7 +209,7 @@ export function OrderTable({
           {rows.length === 0 ? (
             <tr>
               <td
-                colSpan={showSelect ? 14 : 13}
+                colSpan={showSelect ? 15 : 14}
                 className="px-3 py-14 text-center text-ink-4"
               >
                 暂无符合条件的付款单
