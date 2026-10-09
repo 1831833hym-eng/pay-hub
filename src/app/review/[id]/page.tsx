@@ -27,7 +27,7 @@ export default function ReviewDetailPage() {
 
   if (!order) {
     return (
-      <AppShell title="复核付款单明细" description="未找到该付款单">
+      <AppShell title="付款单明细" description="未找到该付款单">
         <Card>
           <CardContent className="py-16 text-center text-ink-4">
             付款单不存在
@@ -61,75 +61,61 @@ export default function ReviewDetailPage() {
         </div>
       ) : null}
 
-      <div className="space-y-4">
-        <div>
-          <Card className={canReview ? "rounded-b-none border-b-0 shadow-none" : undefined}>
-            <CardHeader>
-              <CardTitle className="text-base">付款单明细</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <DetailForm order={order} editable={false} />
-            </CardContent>
-          </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">付款单明细</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <DetailForm order={order} editable={false} />
 
           {canReview ? (
-            <Card className="rounded-t-none">
-              <CardHeader className="border-t border-slate-100">
-                <CardTitle className="text-base">复核操作</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="max-w-xs">
-                  <Label>付款渠道</Label>
-                  <Select
-                    value={paymentChannel}
-                    onChange={(e) =>
-                      setPaymentChannel(e.target.value as PaymentChannel)
-                    }
-                  >
-                    {PAYMENT_CHANNELS.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    onClick={() => {
-                      approve(order.id, paymentChannel);
-                      setToast(
-                        `已确认（付款渠道：${paymentChannel}），状态更新为「待付款」`
-                      );
-                      router.push("/review");
-                    }}
-                  >
-                    确认
-                  </Button>
-                  <Button
-                    variant="danger"
-                    onClick={() => {
-                      reject(order.id);
-                      setToast("已退回，状态更新为「待提交」");
-                      router.push("/review");
-                    }}
-                  >
-                    退回
-                  </Button>
-                  <Link href="/review">
-                    <Button variant="secondary">取消</Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-4 border-t border-slate-100 pt-4">
+              <div className="max-w-xs">
+                <Label>付款渠道</Label>
+                <Select
+                  value={paymentChannel}
+                  onChange={(e) =>
+                    setPaymentChannel(e.target.value as PaymentChannel)
+                  }
+                >
+                  {PAYMENT_CHANNELS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  onClick={() => {
+                    approve(order.id, paymentChannel);
+                    setToast(
+                      `已确认（付款渠道：${paymentChannel}），状态更新为「待付款」`
+                    );
+                    router.push("/review");
+                  }}
+                >
+                  确认
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    reject(order.id);
+                    setToast("已退回，状态更新为「待提交」");
+                    router.push("/review");
+                  }}
+                >
+                  退回
+                </Button>
+                <Link href="/review">
+                  <Button variant="secondary">取消</Button>
+                </Link>
+              </div>
+            </div>
           ) : null}
-        </div>
 
-        {order.status === "pending_pay" ? (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">出款操作</CardTitle>
-            </CardHeader>
-            <CardContent>
+          {order.status === "pending_pay" ? (
+            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
               <Button
                 onClick={() => {
                   markPaid(order.id);
@@ -140,16 +126,11 @@ export default function ReviewDetailPage() {
               >
                 调用{channelLabel}付款接口
               </Button>
-            </CardContent>
-          </Card>
-        ) : null}
+            </div>
+          ) : null}
 
-        {order.status === "pending_receipt" ? (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">回单操作</CardTitle>
-            </CardHeader>
-            <CardContent>
+          {order.status === "pending_receipt" ? (
+            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
               <Button
                 onClick={() => {
                   markReceiptDone(order.id);
@@ -158,10 +139,10 @@ export default function ReviewDetailPage() {
               >
                 获取回单并回传飞书
               </Button>
-            </CardContent>
-          </Card>
-        ) : null}
-      </div>
+            </div>
+          ) : null}
+        </CardContent>
+      </Card>
     </AppShell>
   );
 }
