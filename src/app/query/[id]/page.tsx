@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
 import { usePayments } from "@/lib/payments-store";
 
@@ -33,7 +34,6 @@ export default function QueryDetailPage() {
   return (
     <AppShell
       title="查询付款单详情"
-      description="明细字段：付款单编号、飞书审批编号、付款申请类型、付款事由、付款金额、币种、申请人、申请时间、付款单状态。本页只读。"
       actions={
         <Link href="/query">
           <Button variant="secondary">返回列表</Button>
@@ -48,6 +48,12 @@ export default function QueryDetailPage() {
           <DetailForm order={order} editable={false} />
         </CardContent>
       </Card>
+
+      <DetailActions>
+        <Link href="/query">
+          <Button variant="secondary">关闭</Button>
+        </Link>
+      </DetailActions>
     </AppShell>
   );
 }
