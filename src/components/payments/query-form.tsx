@@ -80,20 +80,20 @@ export function QueryForm({
               </Select>
             </div>
             <div>
-              <Label>付款事由</Label>
-              <Input
-                value={values.purpose}
-                onChange={(e) => set("purpose", e.target.value)}
-                placeholder="输入..."
-              />
-            </div>
-            <div>
               <Label>付款金额</Label>
               <Input
                 value={values.amount}
                 onChange={(e) => set("amount", e.target.value)}
                 placeholder="输入..."
                 inputMode="decimal"
+              />
+            </div>
+            <div>
+              <Label>付款事由</Label>
+              <Input
+                value={values.purpose}
+                onChange={(e) => set("purpose", e.target.value)}
+                placeholder="输入..."
               />
             </div>
             <div>
