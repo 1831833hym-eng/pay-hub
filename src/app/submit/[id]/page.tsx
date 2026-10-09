@@ -114,7 +114,7 @@ export default function SubmitDetailPage() {
                 保存并提交
               </Button>
               <Link href="/submit">
-                <Button variant="secondary">取消</Button>
+                <Button variant="secondary">关闭</Button>
               </Link>
             </>
           ) : (
