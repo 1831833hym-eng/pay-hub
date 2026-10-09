@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
 import type { PaymentOrder } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
@@ -56,6 +57,11 @@ export default function SubmitDetailPage() {
     transferMemo: draft.transferMemo || draft.feishuNo,
   };
 
+  const showActions =
+    editable ||
+    order.status === "pending_pay" ||
+    order.status === "pending_receipt";
+
   return (
     <AppShell
       title={editable ? "提交付款单明细" : "查看付款单"}
@@ -75,70 +81,72 @@ export default function SubmitDetailPage() {
         <CardHeader>
           <CardTitle className="text-base">{order.orderNo}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent>
           <DetailForm
             order={order}
             editable={editable}
             draft={draft}
             onChange={setDraft}
           />
-
-          <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4">
-            {editable ? (
-              <>
-                <Button
-                  onClick={() => {
-                    updateOrder(order.id, savePatch);
-                    setToast("保存成功");
-                  }}
-                >
-                  保存
-                </Button>
-                <Button
-                  onClick={() => {
-                    updateOrder(order.id, savePatch);
-                    submitOne(order.id);
-                    setToast("已提交，状态更新为「待复核」");
-                    router.push("/submit");
-                  }}
-                >
-                  保存并提交
-                </Button>
-                <Link href="/submit">
-                  <Button variant="secondary">取消</Button>
-                </Link>
-              </>
-            ) : (
-              <>
-                {order.status === "pending_pay" ? (
-                  <Button
-                    onClick={() => {
-                      markPaid(order.id);
-                      setToast(
-                        "已调用万里汇付款接口成功，状态更新为「待回单」"
-                      );
-                    }}
-                  >
-                    调用万里汇付款
-                  </Button>
-                ) : null}
-                {order.status === "pending_receipt" ? (
-                  <Button
-                    onClick={() => {
-                      markReceiptDone(order.id);
-                      setToast(
-                        "已获取万里汇回单并上传飞书审批流，状态更新为「已完成」"
-                      );
-                    }}
-                  >
-                    获取回单并回传飞书
-                  </Button>
-                ) : null}
-              </>
-            )}
-          </div>
         </CardContent>
       </Card>
+
+      {showActions ? (
+        <DetailActions>
+          {editable ? (
+            <>
+              <Button
+                onClick={() => {
+                  updateOrder(order.id, savePatch);
+                  setToast("保存成功");
+                }}
+              >
+                保存
+              </Button>
+              <Button
+                onClick={() => {
+                  updateOrder(order.id, savePatch);
+                  submitOne(order.id);
+                  setToast("已提交，状态更新为「待复核」");
+                  router.push("/submit");
+                }}
+              >
+                保存并提交
+              </Button>
+              <Link href="/submit">
+                <Button variant="secondary">取消</Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              {order.status === "pending_pay" ? (
+                <Button
+                  onClick={() => {
+                    markPaid(order.id);
+                    setToast(
+                      "已调用万里汇付款接口成功，状态更新为「待回单」"
+                    );
+                  }}
+                >
+                  调用万里汇付款
+                </Button>
+              ) : null}
+              {order.status === "pending_receipt" ? (
+                <Button
+                  onClick={() => {
+                    markReceiptDone(order.id);
+                    setToast(
+                      "已获取万里汇回单并上传飞书审批流，状态更新为「已完成」"
+                    );
+                  }}
+                >
+                  获取回单并回传飞书
+                </Button>
+              ) : null}
+            </>
+          )}
+        </DetailActions>
+      ) : null}
     </AppShell>
   );
 }
