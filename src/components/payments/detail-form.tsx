@@ -205,12 +205,6 @@ export function DetailForm({
         </Field>
       </div>
 
-      {!editable && order.remark ? (
-        <div className="rounded-md border border-rose-100 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-          备注：{order.remark}
-        </div>
-      ) : null}
-
       {!editable && (order.worldfirstTxId || order.receiptNo) ? (
         <div className="grid gap-3 sm:grid-cols-2 text-sm">
           {order.worldfirstTxId ? (
