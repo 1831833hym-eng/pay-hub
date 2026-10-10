@@ -202,7 +202,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
-  /** 退回：状态回退为待提交 */
+  /** 退回：状态回退为待初审 */
   const reject = useCallback(
     (id: string, remark?: string) => {
       const target = orders.find((o) => o.id === id);

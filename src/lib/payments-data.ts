@@ -112,7 +112,7 @@ export const STATUS_META: Record<
   { label: string; tone: string; bg: string }
 > = {
   pending_submit: {
-    label: "待提交",
+    label: "待初审",
     tone: "text-slate-700",
     bg: "bg-slate-100",
   },
@@ -180,7 +180,7 @@ export const PAYEE_ACCOUNT_TYPES: PayeeAccountType[] = [
 ];
 
 export const STATUS_FLOW = [
-  { key: "pending_submit", label: "待提交", desc: "承接飞书审批后生成" },
+  { key: "pending_submit", label: "待初审", desc: "承接飞书审批后生成" },
   { key: "pending_review", label: "待复核", desc: "初审提交后" },
   { key: "pending_pay", label: "待付款", desc: "复核通过后" },
   { key: "pending_receipt", label: "待回单", desc: "万里汇付款成功后" },

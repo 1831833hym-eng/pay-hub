@@ -32,7 +32,7 @@ export function OrderTable({
   showEdit?: boolean;
   /** 复核引导页：待复核单据显示【复核】入口 */
   showReview?: boolean;
-  /** 初审引导页：待提交单据显示【作废】 */
+  /** 初审引导页：待初审单据显示【作废】 */
   showVoid?: boolean;
   showSelect?: boolean;
   onVoid?: (id: string) => void;

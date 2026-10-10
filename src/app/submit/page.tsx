@@ -22,7 +22,7 @@ export default function SubmitListPage() {
   const voidIdsRef = useRef<string[] | null>(null);
   voidIdsRef.current = voidIds;
 
-  /** 初审菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
+  /** 初审菜单仅展示待初审单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
     return orders.filter((item) => {
       if (item.status !== "pending_submit") return false;
