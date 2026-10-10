@@ -36,11 +36,11 @@ export function OrderTable({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[1280px] border-separate border-spacing-0 text-left text-sm">
+      <table className="w-full min-w-max border-separate border-spacing-0 text-left text-sm">
         <thead>
           <tr className="bg-[#f5f6f8] text-xs text-ink-2">
             {showSelect ? (
-              <th className="sticky left-0 z-20 border-b border-slate-200 bg-[#f5f6f8] px-3 py-2.5 font-medium">
+              <th className="sticky left-0 z-20 whitespace-nowrap border-b border-slate-200 bg-[#f5f6f8] px-3 py-2.5 font-medium">
                 <input
                   type="checkbox"
                   checked={allSelected}
@@ -49,46 +49,46 @@ export function OrderTable({
                 />
               </th>
             ) : null}
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款单编号
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               飞书审批编号
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               审批流程名称
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款申请类型
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款金额
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款事由
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               币种
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               收款方式类型
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               申请人
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               申请时间
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款单状态
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               创建时间
             </th>
-            <th className="border-b border-slate-200 px-3 py-2.5 font-medium">
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               更新时间
             </th>
-            <th className="sticky right-0 z-20 border-b border-l border-slate-200 bg-[#f5f6f8] px-3 py-2.5 text-right font-medium shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)]">
+            <th className="sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-200 bg-[#f5f6f8] px-3 py-2.5 text-right font-medium shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)]">
               操作
             </th>
           </tr>
@@ -100,7 +100,7 @@ export function OrderTable({
               <tr key={item.id}>
                 {showSelect ? (
                   <td
-                    className={`sticky left-0 z-10 border-b border-slate-100 px-3 py-2.5 ${rowBg}`}
+                    className={`sticky left-0 z-10 whitespace-nowrap border-b border-slate-100 px-3 py-2.5 ${rowBg}`}
                   >
                     <input
                       type="checkbox"
@@ -111,49 +111,51 @@ export function OrderTable({
                   </td>
                 ) : null}
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 font-medium text-ink-1 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 font-medium text-ink-1 ${rowBg}`}
                 >
                   {item.orderNo}
                 </td>
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {item.feishuNo}
                 </td>
                 <td
-                  className={`max-w-[160px] truncate border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                   title={item.approvalFlowName}
                 >
                   {item.approvalFlowName}
                 </td>
-                <td className={`border-b border-slate-100 px-3 py-2.5 ${rowBg}`}>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 ${rowBg}`}
+                >
                   <span className="inline-flex rounded-full bg-[#e8f1ff] px-2 py-0.5 text-xs text-brand-600">
                     {item.applyType}
                   </span>
                 </td>
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-1 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-1 ${rowBg}`}
                 >
                   {formatAmount(item.amount)}
                 </td>
                 <td
-                  className={`max-w-[180px] truncate border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                   title={item.purpose}
                 >
                   {item.purpose}
                 </td>
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {item.currency}
                 </td>
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {paymentMethodTypeLabel(item.paymentMethodType)}
                 </td>
                 <td
-                  className={`border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {item.applicant}
                 </td>
@@ -162,7 +164,9 @@ export function OrderTable({
                 >
                   {formatDate(item.appliedAt)}
                 </td>
-                <td className={`border-b border-slate-100 px-3 py-2.5 ${rowBg}`}>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 ${rowBg}`}
+                >
                   <StatusBadge status={item.status} />
                 </td>
                 <td
@@ -176,9 +180,9 @@ export function OrderTable({
                   {formatDate(item.updatedAt)}
                 </td>
                 <td
-                  className={`sticky right-0 z-10 border-b border-l border-slate-100 px-3 py-2.5 text-right shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)] ${rowBg}`}
+                  className={`sticky right-0 z-10 whitespace-nowrap border-b border-l border-slate-100 px-3 py-2.5 text-right shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)] ${rowBg}`}
                 >
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex flex-nowrap items-center justify-end gap-2">
                     {showEdit && item.status === "pending_submit" ? (
                       <Link
                         href={`${editBase ?? viewBase}/${item.id}?mode=edit`}
