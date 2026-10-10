@@ -47,8 +47,8 @@ export function QueryForm({
   return (
     <Card className="mb-3">
       <CardContent className="pt-4">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-end">
-          <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="flex flex-col gap-3">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <Label>付款单编号</Label>
               <Input
@@ -112,7 +112,7 @@ export function QueryForm({
             </div>
             {extraFields}
           </div>
-          <div className="flex shrink-0 flex-wrap items-center gap-2 xl:pb-0.5">
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
             <Button onClick={onSearch}>搜索</Button>
             <Button variant="ghost" onClick={onReset}>
               重置
