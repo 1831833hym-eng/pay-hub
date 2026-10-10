@@ -309,6 +309,18 @@ export let paymentOrders: PaymentOrder[] = [
     transferMemo: "FS20260326011",
     paymentChannel: "万里汇",
     payeeName: "Amazon Fulfillment Services Inc.",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "超期费与账单一致，提交复核。",
+        at: "2026-03-26T09:40:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "确认出款，付款渠道万里汇。",
+        at: "2026-03-26T11:00:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-007",
@@ -332,6 +344,18 @@ export let paymentOrders: PaymentOrder[] = [
     paymentChannel: "万里汇",
     payeeName: "Amazon Fulfillment Services Inc.",
     worldfirstTxId: "WF202603261640001",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "尾程账单核对通过，提交复核。",
+        at: "2026-03-25T10:40:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "确认付款。",
+        at: "2026-03-25T14:20:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-008",
@@ -356,6 +380,18 @@ export let paymentOrders: PaymentOrder[] = [
     payeeName: "Meta Platforms Ireland Ltd.",
     worldfirstTxId: "WF202603241800002",
     receiptNo: "WFR-20260325-0002",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "投放月结金额无误，提交复核。",
+        at: "2026-03-24T13:50:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "确认出款。",
+        at: "2026-03-24T16:10:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-009",

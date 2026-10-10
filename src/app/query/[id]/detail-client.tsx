@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
-import { OpinionSection } from "@/components/payments/opinion-section";
+import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { usePayments } from "@/lib/payments-store";
 
 export default function QueryDetailClient() {
@@ -47,9 +47,10 @@ export default function QueryDetailClient() {
         </CardHeader>
         <CardContent>
           <DetailForm order={order} editable={false} />
-          <OpinionSection history={order.handleOpinions} />
         </CardContent>
       </Card>
+
+      <HandleHistoryPanel history={order.handleOpinions} />
 
       <DetailActions>
         <Link href="/query">

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
+import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { OpinionSection } from "@/components/payments/opinion-section";
 import type { PaymentOrder } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
@@ -68,14 +69,17 @@ function SubmitDetailInner() {
         </CardHeader>
         <CardContent>
           <DetailForm order={order} editable={false} />
-          <OpinionSection
-            history={order.handleOpinions}
-            value={opinion}
-            onChange={setOpinion}
-            editable={isEditMode}
-          />
+          {isEditMode ? (
+            <OpinionSection
+              value={opinion}
+              onChange={setOpinion}
+              className="mt-4 space-y-3 border-t border-slate-100 pt-4"
+            />
+          ) : null}
         </CardContent>
       </Card>
+
+      <HandleHistoryPanel history={order.handleOpinions} />
 
       <DetailActions>
         {isEditMode ? (

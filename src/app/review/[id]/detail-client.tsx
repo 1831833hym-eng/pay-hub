@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
+import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { OpinionSection } from "@/components/payments/opinion-section";
 import { Label, Select } from "@/components/ui/input";
 import {
@@ -90,19 +91,16 @@ function ReviewDetailInner() {
                 </Select>
               </div>
               <OpinionSection
-                history={order.handleOpinions}
                 value={opinion}
                 onChange={setOpinion}
-                editable
-                showHistory={false}
                 className="space-y-3"
               />
             </div>
-          ) : (
-            <OpinionSection history={order.handleOpinions} />
-          )}
+          ) : null}
         </CardContent>
       </Card>
+
+      <HandleHistoryPanel history={order.handleOpinions} />
 
       <DetailActions>
         {isReviewMode ? (
