@@ -10,14 +10,16 @@ export function OpinionSection({
   onChange,
   editable,
   className,
+  showHistory = true,
 }: {
   history?: HandleOpinion[];
   value?: string;
   onChange?: (next: string) => void;
   editable?: boolean;
   className?: string;
+  showHistory?: boolean;
 }) {
-  const records = history ?? [];
+  const records = showHistory ? (history ?? []) : [];
 
   return (
     <div className={className ?? "space-y-3 border-t border-slate-100 pt-4"}>

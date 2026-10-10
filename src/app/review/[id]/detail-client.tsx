@@ -94,6 +94,7 @@ function ReviewDetailInner() {
                 value={opinion}
                 onChange={setOpinion}
                 editable
+                showHistory={false}
                 className="space-y-3"
               />
             </div>
