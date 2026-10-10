@@ -34,14 +34,35 @@ export function ConfirmDialog({
         if (!next) onCancel();
       }}
     >
-      <DialogContent>
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
         <div className="mt-5 flex justify-end gap-2">
-          <Button variant="secondary" onClick={onCancel}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onCancel();
+            }}
+          >
             {cancelText}
           </Button>
-          <Button variant={confirmVariant} onClick={onConfirm}>
+          <Button
+            type="button"
+            variant={confirmVariant}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onConfirm();
+            }}
+          >
             {confirmText}
           </Button>
         </div>

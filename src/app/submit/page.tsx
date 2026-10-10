@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +19,8 @@ export default function SubmitListPage() {
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [voidIds, setVoidIds] = useState<string[] | null>(null);
+  const voidIdsRef = useRef<string[] | null>(null);
+  voidIdsRef.current = voidIds;
 
   /** 初审菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
@@ -63,13 +65,14 @@ export default function SubmitListPage() {
   };
 
   const confirmVoid = () => {
-    if (!voidIds || voidIds.length === 0) return;
-    if (voidIds.length === 1) {
-      voidOne(voidIds[0]);
+    const ids = voidIdsRef.current;
+    if (!ids || ids.length === 0) return;
+    if (ids.length === 1) {
+      voidOne(ids[0]);
     } else {
-      batchVoid(voidIds);
+      batchVoid(ids);
     }
-    setSelectedIds((prev) => prev.filter((id) => !voidIds.includes(id)));
+    setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
     setVoidIds(null);
   };
 

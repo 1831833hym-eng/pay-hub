@@ -131,18 +131,26 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
   );
 
   /** 作废：仅将状态改为已作废（逻辑删除），不从列表数据中移除单据 */
-  const voidOne = useCallback(
-    (id: string) => {
-      const target = orders.find((o) => o.id === id);
-      if (!target || target.status !== "pending_submit") return false;
-      setStatus(id, "voided", {
-        remark: "初审作废",
-        handleOpinions: withOpinion(target, "作废", "作废"),
-      });
-      return true;
-    },
-    [orders, setStatus]
-  );
+  const voidOne = useCallback((id: string) => {
+    let ok = false;
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (o.id === id && o.status === "pending_submit") {
+          ok = true;
+          return {
+            ...o,
+            ...touch({
+              status: "voided",
+              remark: "初审作废",
+              handleOpinions: withOpinion(o, "作废", "作废"),
+            }),
+          };
+        }
+        return o;
+      })
+    );
+    return ok;
+  }, []);
 
   const batchVoid = useCallback((ids: string[]) => {
     let count = 0;
