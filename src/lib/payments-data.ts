@@ -357,6 +357,11 @@ export let paymentOrders: PaymentOrder[] = [
   },
 ];
 
+/** 静态导出用：预生成明细页路径 */
+export function paymentIdStaticParams() {
+  return paymentOrders.map((o) => ({ id: o.id }));
+}
+
 export function getPaymentById(id: string) {
   return paymentOrders.find((item) => item.id === id);
 }

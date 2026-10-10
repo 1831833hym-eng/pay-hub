@@ -41,3 +41,11 @@ npm run dev -- -p 43123
 ```
 
 打开 [http://127.0.0.1:43123](http://127.0.0.1:43123)
+
+## GitHub Pages
+
+本仓库已配置静态导出（`output: "export"`）与 Actions 部署工作流（`.github/workflows/deploy-pages.yml`）。
+
+1. 将代码推送到 GitHub 仓库的 `main` 分支  
+2. 仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**  
+3. 推送后自动构建并发布；站点地址一般为 `https://<用户名>.github.io/<仓库名>/`  
