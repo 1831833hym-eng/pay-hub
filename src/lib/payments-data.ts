@@ -78,8 +78,18 @@ export interface PaymentOrder {
   /** 收款方名称 */
   payeeName?: string;
   remark?: string;
+  /** 初审/复核处理意见记录 */
+  handleOpinions?: HandleOpinion[];
   worldfirstTxId?: string;
   receiptNo?: string;
+}
+
+export type HandleStage = "初审" | "复核";
+
+export interface HandleOpinion {
+  stage: HandleStage;
+  content: string;
+  at: string;
 }
 
 export const STATUS_META: Record<
@@ -354,6 +364,18 @@ export let paymentOrders: PaymentOrder[] = [
     transferMemo: "FS20260323015",
     payeeName: "Shenzhen Huaqiang Supply Co.",
     remark: "复核退回：合同附件缺失，请补充后重新提交",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "金额与合同一致，提交复核。",
+        at: "2026-03-23T11:30:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "合同附件缺失，请补充后重新提交。",
+        at: "2026-03-23T16:20:00+08:00",
+      },
+    ],
   },
 ];
 

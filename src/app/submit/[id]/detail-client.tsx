@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
+import { OpinionSection } from "@/components/payments/opinion-section";
 import type { PaymentOrder } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
@@ -15,12 +16,13 @@ function SubmitDetailInner() {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { getById, updateOrder, submitOne } = usePayments();
+  const { getById, submitOne, resyncOne } = usePayments();
   const order = getById(params.id);
   const isEditMode =
     searchParams.get("mode") === "edit" && order?.status === "pending_submit";
   const [draft, setDraft] = useState<PaymentOrder | undefined>(order);
   const [toast, setToast] = useState<string | null>(null);
+  const [opinion, setOpinion] = useState("");
 
   useEffect(() => {
     setDraft(order);
@@ -42,20 +44,6 @@ function SubmitDetailInner() {
       </AppShell>
     );
   }
-
-  const savePatch = {
-    applyType: draft.applyType,
-    purpose: draft.purpose,
-    amount: draft.amount,
-    currency: draft.currency,
-    applicant: draft.applicant,
-    appliedAt: draft.appliedAt,
-    paymentMethodType: draft.paymentMethodType,
-    payeeAccountType: draft.payeeAccountType,
-    payeeAccountNo: draft.payeeAccountNo,
-    payeeBank: draft.payeeBank,
-    transferMemo: draft.transferMemo || draft.feishuNo,
-  };
 
   return (
     <AppShell
@@ -80,6 +68,12 @@ function SubmitDetailInner() {
         </CardHeader>
         <CardContent>
           <DetailForm order={order} editable={false} />
+          <OpinionSection
+            history={order.handleOpinions}
+            value={opinion}
+            onChange={setOpinion}
+            editable={isEditMode}
+          />
         </CardContent>
       </Card>
 
@@ -87,28 +81,32 @@ function SubmitDetailInner() {
         {isEditMode ? (
           <>
             <Button
+              variant="secondary"
               onClick={() => {
-                updateOrder(order.id, savePatch);
-                setToast("保存成功");
+                resyncOne(order.id);
+                setToast("已重新同步审批单信息");
               }}
             >
-              保存
+              重新同步
             </Button>
             <Button
               onClick={() => {
-                updateOrder(order.id, savePatch);
-                submitOne(order.id);
+                submitOne(order.id, opinion);
                 setToast("已提交，状态更新为「待复核」");
                 router.push("/submit");
               }}
             >
-              保存并提交
+              提交
             </Button>
+            <Link href="/submit">
+              <Button variant="secondary">取消</Button>
+            </Link>
           </>
-        ) : null}
-        <Link href="/submit">
-          <Button variant="secondary">关闭</Button>
-        </Link>
+        ) : (
+          <Link href="/submit">
+            <Button variant="secondary">关闭</Button>
+          </Link>
+        )}
       </DetailActions>
     </AppShell>
   );

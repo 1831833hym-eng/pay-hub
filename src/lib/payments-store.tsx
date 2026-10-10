@@ -11,6 +11,8 @@ import {
 import {
   DEFAULT_PAYMENT_CHANNEL,
   paymentOrders as seed,
+  type HandleOpinion,
+  type HandleStage,
   type PaymentChannel,
   type PaymentOrder,
   type PaymentStatus,
@@ -22,8 +24,9 @@ type Store = {
   updateOrder: (id: string, patch: Partial<PaymentOrder>) => void;
   batchSubmit: (ids: string[]) => number;
   batchApprove: (ids: string[], channel?: PaymentChannel) => number;
-  submitOne: (id: string) => boolean;
-  approve: (id: string, channel?: PaymentChannel) => boolean;
+  submitOne: (id: string, opinion?: string) => boolean;
+  resyncOne: (id: string) => boolean;
+  approve: (id: string, channel?: PaymentChannel, opinion?: string) => boolean;
   reject: (id: string, remark?: string) => boolean;
   markPaid: (id: string) => boolean;
   markReceiptDone: (id: string) => boolean;
@@ -33,6 +36,20 @@ const PaymentsContext = createContext<Store | null>(null);
 
 function touch(patch: Partial<PaymentOrder> = {}): Partial<PaymentOrder> {
   return { ...patch, updatedAt: new Date().toISOString() };
+}
+
+function withOpinion(
+  order: PaymentOrder,
+  stage: HandleStage,
+  content?: string
+): HandleOpinion[] {
+  const prev = order.handleOpinions ?? [];
+  const text = content?.trim();
+  if (!text) return prev;
+  return [
+    ...prev,
+    { stage, content: text, at: new Date().toISOString() },
+  ];
 }
 
 export function PaymentsProvider({ children }: { children: ReactNode }) {
@@ -94,26 +111,47 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
   );
 
   const submitOne = useCallback(
-    (id: string) => {
+    (id: string, opinion?: string) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_submit") return false;
-      setStatus(id, "pending_review");
+      setStatus(id, "pending_review", {
+        handleOpinions: withOpinion(target, "初审", opinion),
+      });
       return true;
     },
     [orders, setStatus]
+  );
+
+  const resyncOne = useCallback(
+    (id: string) => {
+      const target = orders.find((o) => o.id === id);
+      if (!target) return false;
+      setOrders((prev) =>
+        prev.map((o) => (o.id === id ? { ...o, ...touch() } : o))
+      );
+      return true;
+    },
+    []
   );
 
   const approve = useCallback(
-    (id: string, channel: PaymentChannel = DEFAULT_PAYMENT_CHANNEL) => {
+    (
+      id: string,
+      channel: PaymentChannel = DEFAULT_PAYMENT_CHANNEL,
+      opinion?: string
+    ) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_review") return false;
-      setStatus(id, "pending_pay", { paymentChannel: channel });
+      setStatus(id, "pending_pay", {
+        paymentChannel: channel,
+        handleOpinions: withOpinion(target, "复核", opinion),
+      });
       return true;
     },
     [orders, setStatus]
   );
 
-  /** 退回：状态回退为待提交，便于提交人重新编辑后再次提交 */
+  /** 退回：状态回退为待提交 */
   const reject = useCallback(
     (id: string, remark?: string) => {
       const target = orders.find((o) => o.id === id);
@@ -121,6 +159,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       setStatus(id, "pending_submit", {
         remark: remark || "复核退回，请修正后重新提交",
         paymentChannel: undefined,
+        handleOpinions: withOpinion(target, "复核", remark),
       });
       return true;
     },
@@ -159,6 +198,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchSubmit,
       batchApprove,
       submitOne,
+      resyncOne,
       approve,
       reject,
       markPaid,
@@ -171,6 +211,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchSubmit,
       batchApprove,
       submitOne,
+      resyncOne,
       approve,
       reject,
       markPaid,

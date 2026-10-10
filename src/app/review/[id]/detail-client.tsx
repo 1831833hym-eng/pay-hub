@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
+import { OpinionSection } from "@/components/payments/opinion-section";
 import { Label, Select } from "@/components/ui/input";
 import {
   DEFAULT_PAYMENT_CHANNEL,
@@ -23,6 +24,7 @@ function ReviewDetailInner() {
   const { getById, approve, reject } = usePayments();
   const order = getById(params.id);
   const [toast, setToast] = useState<string | null>(null);
+  const [opinion, setOpinion] = useState("");
   const [paymentChannel, setPaymentChannel] = useState<PaymentChannel>(
     order?.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL
   );
@@ -70,6 +72,12 @@ function ReviewDetailInner() {
         </CardHeader>
         <CardContent className="space-y-6">
           <DetailForm order={order} editable={false} />
+          <OpinionSection
+            history={order.handleOpinions}
+            value={opinion}
+            onChange={setOpinion}
+            editable={isReviewMode}
+          />
 
           {isReviewMode ? (
             <div className="max-w-xs border-t border-slate-100 pt-4">
@@ -96,7 +104,7 @@ function ReviewDetailInner() {
           <>
             <Button
               onClick={() => {
-                approve(order.id, paymentChannel);
+                approve(order.id, paymentChannel, opinion);
                 setToast(
                   `已确认（付款渠道：${paymentChannel}），状态更新为「待付款」`
                 );
@@ -108,7 +116,7 @@ function ReviewDetailInner() {
             <Button
               variant="danger"
               onClick={() => {
-                reject(order.id);
+                reject(order.id, opinion);
                 setToast("已退回，状态更新为「待提交」");
                 router.push("/review");
               }}
