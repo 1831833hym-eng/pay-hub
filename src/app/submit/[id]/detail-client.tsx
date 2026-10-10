@@ -74,7 +74,7 @@ function SubmitDetailInner() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{order.orderNo}</CardTitle>
+          <CardTitle className="text-base">初审付款单详情</CardTitle>
         </CardHeader>
         <CardContent>
           <DetailForm
