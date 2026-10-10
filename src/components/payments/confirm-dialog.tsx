@@ -1,0 +1,51 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+export function ConfirmDialog({
+  open,
+  title = "提示",
+  description,
+  confirmText = "确认",
+  cancelText = "取消",
+  confirmVariant = "default",
+  onConfirm,
+  onCancel,
+}: {
+  open: boolean;
+  title?: string;
+  description: string;
+  confirmText?: string;
+  cancelText?: string;
+  confirmVariant?: "default" | "danger";
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onCancel();
+      }}
+    >
+      <DialogContent>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>{description}</DialogDescription>
+        <div className="mt-5 flex justify-end gap-2">
+          <Button variant="secondary" onClick={onCancel}>
+            {cancelText}
+          </Button>
+          <Button variant={confirmVariant} onClick={onConfirm}>
+            {confirmText}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

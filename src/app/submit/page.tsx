@@ -9,6 +9,7 @@ import {
   QueryForm,
   type QueryValues,
 } from "@/components/payments/query-form";
+import { ConfirmDialog } from "@/components/payments/confirm-dialog";
 import { OrderTable } from "@/components/payments/order-table";
 import { usePayments } from "@/lib/payments-store";
 
@@ -18,6 +19,7 @@ export default function SubmitListPage() {
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
+  const [voidIds, setVoidIds] = useState<string[] | null>(null);
 
   /** 初审菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
@@ -61,15 +63,30 @@ export default function SubmitListPage() {
       setToast("请先勾选待作废的付款单");
       return;
     }
-    const count = batchVoid(selectedIds);
-    setSelectedIds([]);
-    setToast(`已作废 ${count} 笔付款单`);
+    setVoidIds(selectedIds);
   };
 
   const handleVoidOne = (id: string) => {
-    if (!voidOne(id)) return;
-    setSelectedIds((prev) => prev.filter((x) => x !== id));
-    setToast("已作废，状态更新为「已作废」");
+    setVoidIds([id]);
+  };
+
+  const confirmVoid = () => {
+    if (!voidIds || voidIds.length === 0) return;
+    const count =
+      voidIds.length === 1
+        ? voidOne(voidIds[0])
+          ? 1
+          : 0
+        : batchVoid(voidIds);
+    setSelectedIds((prev) => prev.filter((id) => !voidIds.includes(id)));
+    setVoidIds(null);
+    if (count > 0) {
+      setToast(
+        count === 1
+          ? "已作废，状态更新为「已作废」"
+          : `已作废 ${count} 笔付款单，状态更新为「已作废」`
+      );
+    }
   };
 
   return (
@@ -122,6 +139,15 @@ export default function SubmitListPage() {
           />
         </CardContent>
       </Card>
+
+      <ConfirmDialog
+        open={voidIds !== null}
+        description="将作废付款单，请确认审批单是否已作废。"
+        confirmText="确认"
+        confirmVariant="danger"
+        onConfirm={confirmVoid}
+        onCancel={() => setVoidIds(null)}
+      />
     </AppShell>
   );
 }
