@@ -79,12 +79,7 @@ function SubmitDetailInner() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <DetailForm
-            order={order}
-            editable={isEditMode}
-            draft={draft}
-            onChange={setDraft}
-          />
+          <DetailForm order={order} editable={false} />
         </CardContent>
       </Card>
 
