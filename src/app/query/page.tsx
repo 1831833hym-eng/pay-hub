@@ -20,6 +20,7 @@ const STATUS_OPTIONS: Array<PaymentStatus | ""> = [
   "pending_pay",
   "pending_receipt",
   "completed",
+  "voided",
 ];
 
 export default function QueryListPage() {

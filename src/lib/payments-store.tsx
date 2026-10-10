@@ -25,6 +25,8 @@ type Store = {
   batchSubmit: (ids: string[]) => number;
   batchApprove: (ids: string[], channel?: PaymentChannel) => number;
   submitOne: (id: string, opinion?: string) => boolean;
+  voidOne: (id: string) => boolean;
+  batchVoid: (ids: string[]) => number;
   resyncOne: (id: string) => boolean;
   approve: (id: string, channel?: PaymentChannel, opinion?: string) => boolean;
   reject: (id: string, remark?: string) => boolean;
@@ -122,6 +124,40 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
+  const voidOne = useCallback(
+    (id: string) => {
+      const target = orders.find((o) => o.id === id);
+      if (!target || target.status !== "pending_submit") return false;
+      setStatus(id, "voided", {
+        remark: "初审作废",
+        handleOpinions: withOpinion(target, "作废", "单据已作废"),
+      });
+      return true;
+    },
+    [orders, setStatus]
+  );
+
+  const batchVoid = useCallback((ids: string[]) => {
+    let count = 0;
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (ids.includes(o.id) && o.status === "pending_submit") {
+          count += 1;
+          return {
+            ...o,
+            ...touch({
+              status: "voided",
+              remark: "初审作废",
+              handleOpinions: withOpinion(o, "作废", "单据已作废"),
+            }),
+          };
+        }
+        return o;
+      })
+    );
+    return count;
+  }, []);
+
   const resyncOne = useCallback(
     (id: string) => {
       const target = orders.find((o) => o.id === id);
@@ -198,6 +234,8 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchSubmit,
       batchApprove,
       submitOne,
+      voidOne,
+      batchVoid,
       resyncOne,
       approve,
       reject,
@@ -211,6 +249,8 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchSubmit,
       batchApprove,
       submitOne,
+      voidOne,
+      batchVoid,
       resyncOne,
       approve,
       reject,

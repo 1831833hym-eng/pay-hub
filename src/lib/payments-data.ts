@@ -4,7 +4,8 @@ export type PaymentStatus =
   | "pending_pay"
   | "pending_receipt"
   | "completed"
-  | "review_rejected";
+  | "review_rejected"
+  | "voided";
 
 export type PaymentApplyType =
   | "物流费用"
@@ -84,13 +85,27 @@ export interface PaymentOrder {
   receiptNo?: string;
 }
 
-export type HandleStage = "初审" | "复核";
+export type HandleStage = "初审" | "复核" | "作废";
 
 export interface HandleOpinion {
   stage: HandleStage;
   content: string;
   at: string;
 }
+
+/** 处理历史示例：环节为初审、复核 */
+export const SAMPLE_HANDLE_HISTORY: HandleOpinion[] = [
+  {
+    stage: "初审",
+    content: "材料齐全、金额核对无误，提交复核。",
+    at: "2026-03-28T09:00:00+08:00",
+  },
+  {
+    stage: "复核",
+    content: "确认处理结果，同意进入下一环节。",
+    at: "2026-03-28T11:00:00+08:00",
+  },
+];
 
 export const STATUS_META: Record<
   PaymentStatus,
@@ -123,6 +138,11 @@ export const STATUS_META: Record<
   },
   review_rejected: {
     label: "复核驳回",
+    tone: "text-rose-700",
+    bg: "bg-rose-50",
+  },
+  voided: {
+    label: "已作废",
     tone: "text-rose-700",
     bg: "bg-rose-50",
   },
@@ -189,6 +209,19 @@ export let paymentOrders: PaymentOrder[] = [
     payeeBank: "JPMorgan Chase",
     transferMemo: "FS20260328001",
     payeeName: "Amazon Fulfillment Services Inc.",
+    remark: "复核退回：请补充尾程费用明细后重新提交",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "仓储费用与账单一致，提交复核。",
+        at: "2026-03-28T09:20:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "尾程费用明细缺失，退回补充后重新提交。",
+        at: "2026-03-28T10:05:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-002",
@@ -256,6 +289,16 @@ export let paymentOrders: PaymentOrder[] = [
       {
         stage: "初审",
         content: "投放账单核对无误，提交复核。",
+        at: "2026-03-27T18:10:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "收款账号位数有误，退回修改。",
+        at: "2026-03-27T20:15:00+08:00",
+      },
+      {
+        stage: "初审",
+        content: "已更正收款账号，重新提交复核。",
         at: "2026-03-28T08:30:00+08:00",
       },
     ],
@@ -284,7 +327,17 @@ export let paymentOrders: PaymentOrder[] = [
       {
         stage: "初审",
         content: "服务费按合同结算，提交复核。",
-        at: "2026-03-27T15:00:00+08:00",
+        at: "2026-03-27T14:40:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "请补充服务验收单后重新提交。",
+        at: "2026-03-27T16:20:00+08:00",
+      },
+      {
+        stage: "初审",
+        content: "已附验收单，重新提交复核。",
+        at: "2026-03-27T17:05:00+08:00",
       },
     ],
   },

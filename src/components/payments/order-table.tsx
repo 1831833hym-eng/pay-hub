@@ -17,7 +17,9 @@ export function OrderTable({
   editBase,
   showEdit,
   showReview,
+  showVoid,
   showSelect,
+  onVoid,
 }: {
   rows: PaymentOrder[];
   selectedIds: string[];
@@ -28,7 +30,10 @@ export function OrderTable({
   showEdit?: boolean;
   /** 复核引导页：待复核单据显示【复核】入口 */
   showReview?: boolean;
+  /** 初审引导页：待提交单据显示【作废】 */
+  showVoid?: boolean;
   showSelect?: boolean;
+  onVoid?: (id: string) => void;
 }) {
   const allIds = rows.map((r) => r.id);
   const allSelected =
@@ -190,6 +195,15 @@ export function OrderTable({
                       >
                         提交
                       </Link>
+                    ) : null}
+                    {showVoid && item.status === "pending_submit" ? (
+                      <button
+                        type="button"
+                        onClick={() => onVoid?.(item.id)}
+                        className="inline-flex h-7 items-center rounded border border-rose-200 bg-white px-2.5 text-xs text-rose-600 hover:bg-rose-50"
+                      >
+                        作废
+                      </button>
                     ) : null}
                     {showReview && item.status === "pending_review" ? (
                       <Link

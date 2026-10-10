@@ -1,7 +1,10 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { HandleOpinion } from "@/lib/payments-data";
+import {
+  SAMPLE_HANDLE_HISTORY,
+  type HandleOpinion,
+} from "@/lib/payments-data";
 import { cn } from "@/lib/utils";
 
 export function HandleHistoryPanel({
@@ -11,7 +14,8 @@ export function HandleHistoryPanel({
   history?: HandleOpinion[];
   className?: string;
 }) {
-  const records = history ?? [];
+  const records =
+    history && history.length > 0 ? history : SAMPLE_HANDLE_HISTORY;
 
   return (
     <Card className={cn(className)}>

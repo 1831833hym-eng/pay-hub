@@ -13,7 +13,7 @@ import { OrderTable } from "@/components/payments/order-table";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
-  const { orders, batchSubmit } = usePayments();
+  const { orders, batchSubmit, batchVoid, voidOne } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -56,6 +56,22 @@ export default function SubmitListPage() {
     setToast(`已批量提交 ${count} 笔付款单，状态更新为「待复核」`);
   };
 
+  const handleBatchVoid = () => {
+    if (selectedIds.length === 0) {
+      setToast("请先勾选待作废的付款单");
+      return;
+    }
+    const count = batchVoid(selectedIds);
+    setSelectedIds([]);
+    setToast(`已作废 ${count} 笔付款单`);
+  };
+
+  const handleVoidOne = (id: string) => {
+    if (!voidOne(id)) return;
+    setSelectedIds((prev) => prev.filter((x) => x !== id));
+    setToast("已作废，状态更新为「已作废」");
+  };
+
   return (
     <AppShell title="初审付款单">
       {toast ? (
@@ -80,7 +96,10 @@ export default function SubmitListPage() {
 
       <Card>
         <CardContent className="pt-4">
-          <div className="mb-3 flex items-center justify-end">
+          <div className="mb-3 flex items-center justify-end gap-2">
+            <Button variant="danger" onClick={handleBatchVoid}>
+              作废
+            </Button>
             <Button onClick={handleBatchSubmit}>批量提交</Button>
           </div>
           <OrderTable
@@ -88,8 +107,10 @@ export default function SubmitListPage() {
             selectedIds={selectedIds}
             showSelect
             showEdit
+            showVoid
             viewBase="/submit"
             editBase="/submit"
+            onVoid={handleVoidOne}
             onToggle={(id) =>
               setSelectedIds((prev) =>
                 prev.includes(id)
