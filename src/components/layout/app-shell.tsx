@@ -8,6 +8,7 @@ import {
   FileInput,
   Fullscreen,
   Moon,
+  GitCompare,
   Search,
   Settings,
   UserRound,
@@ -34,6 +35,12 @@ const MENUS = [
     label: "查询付款单",
     icon: Search,
     match: (p: string) => p.startsWith("/query"),
+  },
+  {
+    href: "/compare",
+    label: "查询单据比对结果",
+    icon: GitCompare,
+    match: (p: string) => p.startsWith("/compare"),
   },
 ];
 
