@@ -97,12 +97,12 @@ export interface HandleOpinion {
 export const SAMPLE_HANDLE_HISTORY: HandleOpinion[] = [
   {
     stage: "初审",
-    content: "材料齐全、金额核对无误，提交复核。",
+    content: "初审提交",
     at: "2026-03-28T09:00:00+08:00",
   },
   {
     stage: "复核",
-    content: "确认处理结果，同意进入下一环节。",
+    content: "复核确认",
     at: "2026-03-28T11:00:00+08:00",
   },
 ];
@@ -213,12 +213,12 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "仓储费用与账单一致，提交复核。",
+        content: "初审提交",
         at: "2026-03-28T09:20:00+08:00",
       },
       {
         stage: "复核",
-        content: "尾程费用明细缺失，退回补充后重新提交。",
+        content: "复核退回",
         at: "2026-03-28T10:05:00+08:00",
       },
     ],
@@ -243,6 +243,18 @@ export let paymentOrders: PaymentOrder[] = [
     payeeBank: "Deutsche Bank",
     transferMemo: "FS20260328002",
     payeeName: "EuroPack Logistics GmbH",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "初审提交",
+        at: "2026-03-28T10:30:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "复核确认",
+        at: "2026-03-28T11:10:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-003",
@@ -264,6 +276,18 @@ export let paymentOrders: PaymentOrder[] = [
     payeeBank: "招商银行香港分行",
     transferMemo: "FS20260328003",
     payeeName: "Shenzhen Huaqiang Supply Co.",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "初审提交",
+        at: "2026-03-28T11:20:00+08:00",
+      },
+      {
+        stage: "复核",
+        content: "复核确认",
+        at: "2026-03-28T14:00:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-004",
@@ -288,17 +312,17 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "投放账单核对无误，提交复核。",
+        content: "初审提交",
         at: "2026-03-27T18:10:00+08:00",
       },
       {
         stage: "复核",
-        content: "收款账号位数有误，退回修改。",
+        content: "复核退回",
         at: "2026-03-27T20:15:00+08:00",
       },
       {
         stage: "初审",
-        content: "已更正收款账号，重新提交复核。",
+        content: "初审提交",
         at: "2026-03-28T08:30:00+08:00",
       },
     ],
@@ -326,17 +350,17 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "服务费按合同结算，提交复核。",
+        content: "初审提交",
         at: "2026-03-27T14:40:00+08:00",
       },
       {
         stage: "复核",
-        content: "请补充服务验收单后重新提交。",
+        content: "复核退回",
         at: "2026-03-27T16:20:00+08:00",
       },
       {
         stage: "初审",
-        content: "已附验收单，重新提交复核。",
+        content: "初审提交",
         at: "2026-03-27T17:05:00+08:00",
       },
     ],
@@ -365,12 +389,12 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "超期费与账单一致，提交复核。",
+        content: "初审提交",
         at: "2026-03-26T09:40:00+08:00",
       },
       {
         stage: "复核",
-        content: "确认出款，付款渠道万里汇。",
+        content: "复核确认",
         at: "2026-03-26T11:00:00+08:00",
       },
     ],
@@ -400,12 +424,12 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "尾程账单核对通过，提交复核。",
+        content: "初审提交",
         at: "2026-03-25T10:40:00+08:00",
       },
       {
         stage: "复核",
-        content: "确认付款。",
+        content: "复核确认",
         at: "2026-03-25T14:20:00+08:00",
       },
     ],
@@ -436,12 +460,12 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "投放月结金额无误，提交复核。",
+        content: "初审提交",
         at: "2026-03-24T13:50:00+08:00",
       },
       {
         stage: "复核",
-        content: "确认出款。",
+        content: "复核确认",
         at: "2026-03-24T16:10:00+08:00",
       },
     ],
@@ -470,12 +494,12 @@ export let paymentOrders: PaymentOrder[] = [
     handleOpinions: [
       {
         stage: "初审",
-        content: "金额与合同一致，提交复核。",
+        content: "初审提交",
         at: "2026-03-23T11:30:00+08:00",
       },
       {
         stage: "复核",
-        content: "合同附件缺失，请补充后重新提交。",
+        content: "复核退回",
         at: "2026-03-23T16:20:00+08:00",
       },
     ],

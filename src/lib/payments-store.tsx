@@ -84,7 +84,13 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       prev.map((o) => {
         if (ids.includes(o.id) && o.status === "pending_submit") {
           count += 1;
-          return { ...o, ...touch({ status: "pending_review" }) };
+          return {
+            ...o,
+            ...touch({
+              status: "pending_review",
+              handleOpinions: withOpinion(o, "初审", "初审提交"),
+            }),
+          };
         }
         return o;
       })
@@ -117,7 +123,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_submit") return false;
       setStatus(id, "pending_review", {
-        handleOpinions: withOpinion(target, "初审", opinion),
+        handleOpinions: withOpinion(target, "初审", opinion || "初审提交"),
       });
       return true;
     },
@@ -180,7 +186,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       if (!target || target.status !== "pending_review") return false;
       setStatus(id, "pending_pay", {
         paymentChannel: channel,
-        handleOpinions: withOpinion(target, "复核", opinion),
+        handleOpinions: withOpinion(target, "复核", opinion || "复核确认"),
       });
       return true;
     },
@@ -195,7 +201,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       setStatus(id, "pending_submit", {
         remark: remark || "复核退回，请修正后重新提交",
         paymentChannel: undefined,
-        handleOpinions: withOpinion(target, "复核", remark),
+        handleOpinions: withOpinion(target, "复核", remark || "复核退回"),
       });
       return true;
     },
