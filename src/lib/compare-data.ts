@@ -23,24 +23,26 @@ const APPROVAL_DIFFS: Record<string, Partial<CompareSide>> = {
 };
 
 export function toCompareResults(orders: PaymentOrder[]): CompareResult[] {
-  return orders.map((order) => {
-    const payment: CompareSide = {
-      docNo: order.orderNo,
-      amount: order.amount,
-      currency: order.currency,
-      payeeName: order.payeeName ?? "—",
-      payeeAccountNo: order.payeeAccountNo,
-    };
-    const approval: CompareSide = {
-      docNo: order.feishuNo,
-      amount: order.amount,
-      currency: order.currency,
-      payeeName: order.payeeName ?? "—",
-      payeeAccountNo: order.payeeAccountNo,
-      ...APPROVAL_DIFFS[order.id],
-    };
-    return { id: order.id, payment, approval };
-  });
+  return orders
+    .filter((order) => order.status !== "voided")
+    .map((order) => {
+      const payment: CompareSide = {
+        docNo: order.orderNo,
+        amount: order.amount,
+        currency: order.currency,
+        payeeName: order.payeeName ?? "—",
+        payeeAccountNo: order.payeeAccountNo,
+      };
+      const approval: CompareSide = {
+        docNo: order.feishuNo,
+        amount: order.amount,
+        currency: order.currency,
+        payeeName: order.payeeName ?? "—",
+        payeeAccountNo: order.payeeAccountNo,
+        ...APPROVAL_DIFFS[order.id],
+      };
+      return { id: order.id, payment, approval };
+    });
 }
 
 export function compareMismatch(left: CompareSide, right: CompareSide) {
