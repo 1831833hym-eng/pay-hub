@@ -73,6 +73,12 @@ export function OrderTable({
               付款金额
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              收款人/户名
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              收款账户
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               币种
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
@@ -148,6 +154,17 @@ export function OrderTable({
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-1 ${rowBg}`}
                 >
                   {formatAmount(item.amount)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                  title={item.payeeName}
+                >
+                  {item.payeeName || "—"}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {item.payeeAccountNo}
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
@@ -227,7 +244,7 @@ export function OrderTable({
           {rows.length === 0 ? (
             <tr>
               <td
-                colSpan={showSelect ? 15 : 14}
+                colSpan={showSelect ? 17 : 16}
                 className="px-3 py-14 text-center text-ink-4"
               >
                 暂无符合条件的付款单
