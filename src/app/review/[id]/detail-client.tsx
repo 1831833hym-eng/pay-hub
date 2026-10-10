@@ -76,8 +76,15 @@ function ReviewDetailInner() {
           <Card>
             <CardContent className="space-y-3 pt-4">
               <div className="max-w-xs">
-                <Label>付款渠道</Label>
+                <Label>
+                  付款渠道
+                  <span className="ml-0.5 text-rose-500" aria-hidden>
+                    *
+                  </span>
+                </Label>
                 <Select
+                  required
+                  aria-required="true"
                   value={paymentChannel}
                   onChange={(e) =>
                     setPaymentChannel(e.target.value as PaymentChannel)
