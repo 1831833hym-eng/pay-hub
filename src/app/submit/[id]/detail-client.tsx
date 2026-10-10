@@ -99,7 +99,7 @@ function SubmitDetailInner() {
                 router.push("/submit");
               }}
             >
-              初审
+              提交复核
             </Button>
             <Link href="/submit">
               <Button variant="secondary">关闭</Button>
