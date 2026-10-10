@@ -62,9 +62,7 @@ function ReviewDetailInner() {
       <div className="space-y-1">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
-              {isReviewMode ? "复核付款单详情" : "查看付款单详情"}
-            </CardTitle>
+            <CardTitle className="text-base">付款单基础信息</CardTitle>
           </CardHeader>
           <CardContent>
             <DetailForm order={order} editable={false} />

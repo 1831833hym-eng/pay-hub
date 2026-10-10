@@ -58,9 +58,7 @@ function SubmitDetailInner() {
       <div className="space-y-1">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
-              {isEditMode ? "初审付款单详情" : "查看付款单详情"}
-            </CardTitle>
+            <CardTitle className="text-base">付款单基础信息</CardTitle>
           </CardHeader>
           <CardContent>
             <DetailForm order={order} editable={false} />
