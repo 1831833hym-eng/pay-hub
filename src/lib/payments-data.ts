@@ -71,7 +71,7 @@ export interface PaymentOrder {
   payeeAccountNo: string;
   /** 收款银行 */
   payeeBank: string;
-  /** 转账附言（默认飞书审批编号） */
+  /** 转账附言（默认审批单编号） */
   transferMemo: string;
   /** 付款渠道（复核确认时选择） */
   paymentChannel?: PaymentChannel;
