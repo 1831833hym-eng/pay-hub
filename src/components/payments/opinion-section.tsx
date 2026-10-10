@@ -9,16 +9,18 @@ export function OpinionSection({
   value,
   onChange,
   editable,
+  className,
 }: {
   history?: HandleOpinion[];
   value?: string;
   onChange?: (next: string) => void;
   editable?: boolean;
+  className?: string;
 }) {
   const records = history ?? [];
 
   return (
-    <div className="space-y-3 border-t border-slate-100 pt-4">
+    <div className={className ?? "space-y-3 border-t border-slate-100 pt-4"}>
       <Label>处理意见</Label>
       {records.length > 0 ? (
         <div className="space-y-2">

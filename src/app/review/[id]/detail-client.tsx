@@ -73,28 +73,33 @@ function ReviewDetailInner() {
         <CardContent>
           <DetailForm order={order} editable={false} />
           {isReviewMode ? (
-            <div className="max-w-xs border-t border-slate-100 pt-4">
-              <Label>付款渠道</Label>
-              <Select
-                value={paymentChannel}
-                onChange={(e) =>
-                  setPaymentChannel(e.target.value as PaymentChannel)
-                }
-              >
-                {PAYMENT_CHANNELS.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </Select>
+            <div className="mt-4 space-y-4 border-t border-slate-100 pt-4">
+              <div className="max-w-xs">
+                <Label>付款渠道</Label>
+                <Select
+                  value={paymentChannel}
+                  onChange={(e) =>
+                    setPaymentChannel(e.target.value as PaymentChannel)
+                  }
+                >
+                  {PAYMENT_CHANNELS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <OpinionSection
+                history={order.handleOpinions}
+                value={opinion}
+                onChange={setOpinion}
+                editable
+                className="space-y-3"
+              />
             </div>
-          ) : null}
-          <OpinionSection
-            history={order.handleOpinions}
-            value={opinion}
-            onChange={setOpinion}
-            editable={isReviewMode}
-          />
+          ) : (
+            <OpinionSection history={order.handleOpinions} />
+          )}
         </CardContent>
       </Card>
 
