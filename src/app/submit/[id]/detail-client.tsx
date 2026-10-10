@@ -74,7 +74,9 @@ function SubmitDetailInner() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">初审付款单详情</CardTitle>
+          <CardTitle className="text-base">
+            {isEditMode ? "初审付款单详情" : "查看付款单详情"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <DetailForm
