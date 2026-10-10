@@ -44,8 +44,8 @@ export default function CompareListPage() {
     <AppShell title="查询比对结果">
       <Card className="mb-3">
         <CardContent className="pt-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-            <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col gap-3">
+            <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <Label>付款单编号</Label>
                 <Input
@@ -76,7 +76,7 @@ export default function CompareListPage() {
                 </Select>
               </div>
             </div>
-            <div className="flex shrink-0 gap-2">
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
               <Button
                 onClick={() => {
                   setOrderNo(draftOrderNo);
