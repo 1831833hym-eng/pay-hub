@@ -536,6 +536,54 @@ export let paymentOrders: PaymentOrder[] = [
   },
 ];
 
+appendListDemoOrders();
+
+function appendListDemoOrders() {
+  const base = paymentOrders.slice();
+  const extras: PaymentOrder[] = [];
+  let seq = 11;
+
+  const push = (status: PaymentStatus, count: number) => {
+    for (let i = 0; i < count; i += 1) {
+      const src = base[i % base.length];
+      const n = seq;
+      seq += 1;
+      extras.push({
+        ...src,
+        id: `pay-${String(n).padStart(3, "0")}`,
+        orderNo: `PAY202604${String(n).padStart(5, "0")}`,
+        feishuNo: `FS202604${String(n).padStart(5, "0")}`,
+        transferMemo: `FS202604${String(n).padStart(5, "0")}`,
+        status,
+        amount: Math.round((src.amount + i * 37.5) * 100) / 100,
+        remark: undefined,
+        worldfirstTxId: undefined,
+        receiptNo: undefined,
+        paymentChannel:
+          status === "pending_submit" || status === "pending_review"
+            ? undefined
+            : (src.paymentChannel ?? "万里汇"),
+        handleOpinions: [
+          { stage: "初审", content: "初审提交", at: src.createdAt },
+          ...(status === "pending_submit"
+            ? []
+            : [
+                {
+                  stage: "复核" as const,
+                  content: "复核确认",
+                  at: src.updatedAt,
+                },
+              ]),
+        ],
+      });
+    }
+  };
+
+  push("pending_submit", 20);
+  push("pending_review", 20);
+  paymentOrders = paymentOrders.concat(extras);
+}
+
 /** 静态导出用：预生成明细页路径 */
 export function paymentIdStaticParams() {
   return paymentOrders.map((o) => ({ id: o.id }));

@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { StatusBadge } from "@/components/ui/badge";
+import { TablePagination } from "@/components/ui/pagination";
 import {
   paymentMethodTypeLabel,
   type PaymentOrder,
@@ -35,12 +37,26 @@ export function OrderTable({
   showSelect?: boolean;
   onVoid?: (id: string) => void;
 }) {
-  const allIds = rows.map((r) => r.id);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize) || 1);
+  const safePage = Math.min(page, pageCount);
+
+  useEffect(() => {
+    if (page !== safePage) setPage(safePage);
+  }, [page, safePage]);
+
+  const pagedRows = useMemo(
+    () => rows.slice((safePage - 1) * pageSize, safePage * pageSize),
+    [rows, safePage, pageSize]
+  );
+  const allIds = pagedRows.map((r) => r.id);
   const allSelected =
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
   const amountTotal = rows.reduce((sum, item) => sum + item.amount, 0);
 
   return (
+    <div>
     <div className="overflow-x-auto">
       <table className="w-full min-w-max border-separate border-spacing-0 text-left text-sm">
         <thead>
@@ -135,7 +151,7 @@ export function OrderTable({
           </tr>
         </thead>
         <tbody>
-          {rows.map((item, idx) => {
+          {pagedRows.map((item, idx) => {
             const rowBg = idx % 2 === 1 ? "bg-[#fafbfc]" : "bg-white";
             return (
               <tr key={item.id}>
@@ -288,6 +304,18 @@ export function OrderTable({
           ) : null}
         </tbody>
       </table>
+    </div>
+    <TablePagination
+      className="mt-3"
+      total={rows.length}
+      page={safePage}
+      pageSize={pageSize}
+      onPageChange={setPage}
+      onPageSizeChange={(size) => {
+        setPageSize(size);
+        setPage(1);
+      }}
+    />
     </div>
   );
 }
