@@ -24,7 +24,6 @@ function ReviewDetailInner() {
   const router = useRouter();
   const { getById, approve, reject } = usePayments();
   const order = getById(params.id);
-  const [toast, setToast] = useState<string | null>(null);
   const [opinion, setOpinion] = useState("");
   const [paymentChannel, setPaymentChannel] = useState<PaymentChannel>(
     order?.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL
@@ -59,12 +58,6 @@ function ReviewDetailInner() {
         </Link>
       }
     >
-      {toast ? (
-        <div className="mb-4 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-700">
-          {toast}
-        </div>
-      ) : null}
-
       <div className="space-y-1">
         <Card>
           <CardHeader>
@@ -113,9 +106,6 @@ function ReviewDetailInner() {
             <Button
               onClick={() => {
                 approve(order.id, paymentChannel, opinion);
-                setToast(
-                  `已确认（付款渠道：${paymentChannel}），状态更新为「待付款」`
-                );
                 router.push("/review");
               }}
             >
@@ -125,7 +115,6 @@ function ReviewDetailInner() {
               variant="danger"
               onClick={() => {
                 reject(order.id, opinion);
-                setToast("已退回，状态更新为「待提交」");
                 router.push("/review");
               }}
             >

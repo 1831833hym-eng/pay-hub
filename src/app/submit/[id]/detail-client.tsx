@@ -22,7 +22,6 @@ function SubmitDetailInner() {
   const isEditMode =
     searchParams.get("mode") === "edit" && order?.status === "pending_submit";
   const [draft, setDraft] = useState<PaymentOrder | undefined>(order);
-  const [toast, setToast] = useState<string | null>(null);
   const [opinion, setOpinion] = useState("");
 
   useEffect(() => {
@@ -55,12 +54,6 @@ function SubmitDetailInner() {
         </Link>
       }
     >
-      {toast ? (
-        <div className="mb-4 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-700">
-          {toast}
-        </div>
-      ) : null}
-
       <div className="space-y-1">
         <Card>
           <CardHeader>
@@ -95,7 +88,6 @@ function SubmitDetailInner() {
               variant="secondary"
               onClick={() => {
                 resyncOne(order.id);
-                setToast("已重新同步审批单信息");
               }}
             >
               重新同步
@@ -103,7 +95,6 @@ function SubmitDetailInner() {
             <Button
               onClick={() => {
                 submitOne(order.id, opinion);
-                setToast("已提交，状态更新为「待复核」");
                 router.push("/submit");
               }}
             >

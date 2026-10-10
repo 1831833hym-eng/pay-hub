@@ -18,7 +18,6 @@ export default function SubmitListPage() {
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [toast, setToast] = useState<string | null>(null);
   const [voidIds, setVoidIds] = useState<string[] | null>(null);
 
   /** 初审菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
@@ -49,20 +48,13 @@ export default function SubmitListPage() {
   }, [orders, appliedQuery]);
 
   const handleBatchSubmit = () => {
-    if (selectedIds.length === 0) {
-      setToast("请先勾选待提交的付款单");
-      return;
-    }
-    const count = batchSubmit(selectedIds);
+    if (selectedIds.length === 0) return;
+    batchSubmit(selectedIds);
     setSelectedIds([]);
-    setToast(`已批量提交 ${count} 笔付款单，状态更新为「待复核」`);
   };
 
   const handleBatchVoid = () => {
-    if (selectedIds.length === 0) {
-      setToast("请先勾选待作废的付款单");
-      return;
-    }
+    if (selectedIds.length === 0) return;
     setVoidIds(selectedIds);
   };
 
@@ -72,42 +64,26 @@ export default function SubmitListPage() {
 
   const confirmVoid = () => {
     if (!voidIds || voidIds.length === 0) return;
-    const count =
-      voidIds.length === 1
-        ? voidOne(voidIds[0])
-          ? 1
-          : 0
-        : batchVoid(voidIds);
+    if (voidIds.length === 1) {
+      voidOne(voidIds[0]);
+    } else {
+      batchVoid(voidIds);
+    }
     setSelectedIds((prev) => prev.filter((id) => !voidIds.includes(id)));
     setVoidIds(null);
-    if (count > 0) {
-      setToast(
-        count === 1
-          ? "已作废，状态更新为「已作废」。单据已保留，可在查询付款单中查看"
-          : `已作废 ${count} 笔付款单，状态更新为「已作废」。单据已保留，可在查询付款单中查看`
-      );
-    }
   };
 
   return (
     <AppShell title="初审付款单">
-      {toast ? (
-        <div className="mb-3 rounded-md border border-brand-200 bg-brand-50 px-3 py-2 text-sm text-brand-700">
-          {toast}
-        </div>
-      ) : null}
-
       <QueryForm
         values={draftQuery}
         onChange={setDraftQuery}
         onSearch={() => {
           setAppliedQuery(draftQuery);
-          setToast(null);
         }}
         onReset={() => {
           setDraftQuery(EMPTY_QUERY);
           setAppliedQuery(EMPTY_QUERY);
-          setToast(null);
         }}
       />
 
