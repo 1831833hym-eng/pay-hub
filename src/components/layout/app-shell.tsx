@@ -38,7 +38,7 @@ const MENUS = [
   },
   {
     href: "/compare",
-    label: "查询单据比对结果",
+    label: "查询比对结果",
     icon: GitCompare,
     match: (p: string) => p.startsWith("/compare"),
   },

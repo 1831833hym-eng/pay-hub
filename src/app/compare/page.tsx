@@ -41,7 +41,7 @@ export default function CompareListPage() {
   }, [orders, orderNo, approvalNo, outcome]);
 
   return (
-    <AppShell title="查询单据比对结果">
+    <AppShell title="查询比对结果">
       <Card className="mb-3">
         <CardContent className="pt-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end">

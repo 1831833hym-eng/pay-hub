@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
+import { TablePagination } from "@/components/ui/pagination";
 import {
   compareMismatch,
   compareOutcome,
@@ -13,7 +15,22 @@ const HEAD =
   "whitespace-nowrap border-b border-slate-200 px-3 py-2 font-medium";
 
 export function CompareTable({ rows }: { rows: CompareResult[] }) {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize) || 1);
+  const safePage = Math.min(page, pageCount);
+
+  useEffect(() => {
+    if (page !== safePage) setPage(safePage);
+  }, [page, safePage]);
+
+  const pagedRows = useMemo(
+    () => rows.slice((safePage - 1) * pageSize, safePage * pageSize),
+    [rows, safePage, pageSize]
+  );
+
   return (
+    <div>
     <div className="overflow-x-auto">
       <table className="w-full min-w-max border-separate border-spacing-0 text-left text-sm">
         <thead>
@@ -51,7 +68,7 @@ export function CompareTable({ rows }: { rows: CompareResult[] }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((item, idx) => {
+          {pagedRows.map((item, idx) => {
             const rowBg = idx % 2 === 1 ? "bg-[#fafbfc]" : "bg-white";
             const miss = compareMismatch(item.payment, item.approval);
             const outcome = compareOutcome(item.payment, item.approval);
@@ -125,6 +142,18 @@ export function CompareTable({ rows }: { rows: CompareResult[] }) {
           ) : null}
         </tbody>
       </table>
+    </div>
+    <TablePagination
+      className="mt-3"
+      total={rows.length}
+      page={safePage}
+      pageSize={pageSize}
+      onPageChange={setPage}
+      onPageSizeChange={(size) => {
+        setPageSize(size);
+        setPage(1);
+      }}
+    />
     </div>
   );
 }
