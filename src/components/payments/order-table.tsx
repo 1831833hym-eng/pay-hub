@@ -38,6 +38,7 @@ export function OrderTable({
   const allIds = rows.map((r) => r.id);
   const allSelected =
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
+  const amountTotal = rows.reduce((sum, item) => sum + item.amount, 0);
 
   return (
     <div className="overflow-x-auto">
@@ -45,10 +46,7 @@ export function OrderTable({
         <thead>
           <tr className="bg-[#f5f6f8] text-xs text-ink-2">
             {showSelect ? (
-              <th
-                rowSpan={2}
-                className="sticky left-0 z-20 whitespace-nowrap border-b border-slate-200 bg-[#f5f6f8] px-3 py-2.5 font-medium align-middle"
-              >
+              <th className="sticky left-0 z-20 whitespace-nowrap border-b border-slate-200 bg-[#f5f6f8] px-3 py-2.5 font-medium">
                 <input
                   type="checkbox"
                   checked={allSelected}
@@ -57,92 +55,21 @@ export function OrderTable({
                 />
               </th>
             ) : null}
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款单编号
             </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               审批单编号
             </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               审批单名称
             </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款申请类型
             </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款事由
             </th>
-            <th
-              colSpan={4}
-              className="whitespace-nowrap border-b border-x border-slate-200 bg-[#e8f1ff] px-3 py-2 text-center text-xs font-semibold text-brand-700"
-            >
-              付款信息
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              币种
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              收款方式类型
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              申请人
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              申请时间
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              付款单状态
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              创建时间
-            </th>
-            <th
-              rowSpan={2}
-              className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium align-middle"
-            >
-              更新时间
-            </th>
-            <th
-              rowSpan={2}
-              className="sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-200 bg-[#f5f6f8] px-3 py-2.5 text-right font-medium align-middle shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)]"
-            >
-              操作
-            </th>
-          </tr>
-          <tr className="bg-[#f5f6f8] text-xs text-ink-2">
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款金额
             </th>
@@ -155,6 +82,56 @@ export function OrderTable({
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               收款银行
             </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              币种
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              收款方式类型
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              申请人
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              申请时间
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              付款单状态
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              创建时间
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              更新时间
+            </th>
+            <th className="sticky right-0 z-20 whitespace-nowrap border-b border-l border-slate-200 bg-[#f5f6f8] px-3 py-2.5 text-right font-medium shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)]">
+              操作
+            </th>
+          </tr>
+          <tr className="bg-[#eef4ff] text-xs text-brand-700">
+            {showSelect ? (
+              <th className="sticky left-0 z-20 whitespace-nowrap border-b border-slate-200 bg-[#eef4ff] px-3 py-2 font-medium" />
+            ) : null}
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2 font-medium">
+              合计
+            </th>
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2 font-semibold text-ink-1">
+              {formatAmount(amountTotal)}
+            </th>
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="sticky right-0 z-20 border-b border-l border-slate-200 bg-[#eef4ff] px-3 py-2 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)]" />
           </tr>
         </thead>
         <tbody>
