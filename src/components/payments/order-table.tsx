@@ -79,6 +79,9 @@ export function OrderTable({
               收款账户
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
+              收款银行
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               币种
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
@@ -169,6 +172,11 @@ export function OrderTable({
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
+                  {item.payeeBank || "—"}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
                   {item.currency}
                 </td>
                 <td
@@ -244,7 +252,7 @@ export function OrderTable({
           {rows.length === 0 ? (
             <tr>
               <td
-                colSpan={showSelect ? 17 : 16}
+                colSpan={showSelect ? 18 : 17}
                 className="px-3 py-14 text-center text-ink-4"
               >
                 暂无符合条件的付款单
