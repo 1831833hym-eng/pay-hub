@@ -53,10 +53,10 @@ export function OrderTable({
               付款单编号
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
-              飞书审批编号
+              审批单编号
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
-              审批流程名称
+              审批单名称
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 font-medium">
               付款申请类型

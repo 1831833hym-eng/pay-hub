@@ -58,7 +58,7 @@ export function QueryForm({
               />
             </div>
             <div>
-              <Label>飞书审批编号</Label>
+              <Label>审批单编号</Label>
               <Input
                 value={values.feishuNo}
                 onChange={(e) => set("feishuNo", e.target.value)}

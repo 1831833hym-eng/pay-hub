@@ -36,14 +36,14 @@ export function DetailForm({
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {/* 付款单编号、飞书审批编号、审批流程名称：始终不可修改 */}
+        {/* 付款单编号、审批单编号、审批单名称：始终不可修改 */}
         <Field label="付款单编号">
           <Value>{data.orderNo}</Value>
         </Field>
-        <Field label="飞书审批编号">
+        <Field label="审批单编号">
           <Value>{data.feishuNo}</Value>
         </Field>
-        <Field label="审批流程名称">
+        <Field label="审批单名称">
           <Value>{data.approvalFlowName}</Value>
         </Field>
         <Field label="付款申请类型">
