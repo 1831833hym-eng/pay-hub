@@ -185,6 +185,7 @@ export const STATUS_FLOW = [
   { key: "pending_pay", label: "待付款", desc: "复核通过后" },
   { key: "pending_receipt", label: "待回单", desc: "万里汇付款成功后" },
   { key: "completed", label: "已完成", desc: "获取回单并回传飞书" },
+  { key: "voided", label: "已作废", desc: "初审作废（逻辑删除，单据保留）" },
 ] as const;
 
 /** 可变内存数据，供原型交互更新状态 */
@@ -501,6 +502,35 @@ export let paymentOrders: PaymentOrder[] = [
         stage: "复核",
         content: "复核退回",
         at: "2026-03-23T16:20:00+08:00",
+      },
+    ],
+  },
+  {
+    id: "pay-010",
+    orderNo: "PAY20260322008",
+    feishuNo: "FS20260322008",
+    approvalFlowName: "仓储费用付款审批",
+    applyType: "仓储费用",
+    purpose: "海外仓月结费用重复申请，已作废",
+    amount: 2800,
+    currency: "USD",
+    applicant: "周然",
+    appliedAt: "2026-03-22T09:30:00+08:00",
+    status: "voided",
+    createdAt: "2026-03-22T09:40:00+08:00",
+    updatedAt: "2026-03-22T11:00:00+08:00",
+    paymentMethodType: "1",
+    payeeAccountType: "对公账户",
+    payeeAccountNo: "483920184821",
+    payeeBank: "JPMorgan Chase",
+    transferMemo: "FS20260322008",
+    payeeName: "Amazon Fulfillment Services Inc.",
+    remark: "初审作废",
+    handleOpinions: [
+      {
+        stage: "作废",
+        content: "作废",
+        at: "2026-03-22T11:00:00+08:00",
       },
     ],
   },
