@@ -99,7 +99,7 @@ function SubmitDetailInner() {
               提交
             </Button>
             <Link href="/submit">
-              <Button variant="secondary">取消</Button>
+              <Button variant="secondary">关闭</Button>
             </Link>
           </>
         ) : (
