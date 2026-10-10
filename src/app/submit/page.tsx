@@ -14,7 +14,7 @@ import { OrderTable } from "@/components/payments/order-table";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
-  const { orders, batchSubmit, batchVoid, voidOne } = usePayments();
+  const { orders, batchSubmit, voidOne } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -55,11 +55,6 @@ export default function SubmitListPage() {
     setSelectedIds([]);
   };
 
-  const handleBatchVoid = () => {
-    if (selectedIds.length === 0) return;
-    setVoidIds(selectedIds);
-  };
-
   const handleVoidOne = (id: string) => {
     setVoidIds([id]);
   };
@@ -67,11 +62,7 @@ export default function SubmitListPage() {
   const confirmVoid = () => {
     const ids = voidIdsRef.current;
     if (!ids || ids.length === 0) return;
-    if (ids.length === 1) {
-      voidOne(ids[0]);
-    } else {
-      batchVoid(ids);
-    }
+    voidOne(ids[0]);
     setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
     setVoidIds(null);
   };
@@ -93,9 +84,6 @@ export default function SubmitListPage() {
       <Card>
         <CardContent className="pt-4">
           <div className="mb-3 flex items-center justify-end gap-2">
-            <Button variant="danger" onClick={handleBatchVoid}>
-              作废
-            </Button>
             <Button onClick={handleBatchSubmit}>批量初审</Button>
           </div>
           <OrderTable
