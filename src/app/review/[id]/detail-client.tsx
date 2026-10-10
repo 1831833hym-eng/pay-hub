@@ -65,16 +65,23 @@ function ReviewDetailInner() {
         </div>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            {isReviewMode ? "复核付款单详情" : "查看付款单详情"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DetailForm order={order} editable={false} />
-          {isReviewMode ? (
-            <div className="mt-4 space-y-4 border-t border-slate-100 pt-4">
+      <div className="space-y-1">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              {isReviewMode ? "复核付款单详情" : "查看付款单详情"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DetailForm order={order} editable={false} />
+          </CardContent>
+        </Card>
+
+        <HandleHistoryPanel history={order.handleOpinions} />
+
+        {isReviewMode ? (
+          <Card>
+            <CardContent className="space-y-3 pt-4">
               <div className="max-w-xs">
                 <Label>付款渠道</Label>
                 <Select
@@ -93,14 +100,12 @@ function ReviewDetailInner() {
               <OpinionSection
                 value={opinion}
                 onChange={setOpinion}
-                className="space-y-3"
+                className="space-y-2"
               />
-            </div>
-          ) : null}
-        </CardContent>
-      </Card>
-
-      <HandleHistoryPanel history={order.handleOpinions} />
+            </CardContent>
+          </Card>
+        ) : null}
+      </div>
 
       <DetailActions>
         {isReviewMode ? (

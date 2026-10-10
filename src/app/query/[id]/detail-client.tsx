@@ -41,16 +41,18 @@ export default function QueryDetailClient() {
         </Link>
       }
     >
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">查看付款单详情</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DetailForm order={order} editable={false} />
-        </CardContent>
-      </Card>
+      <div className="space-y-1">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">查看付款单详情</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DetailForm order={order} editable={false} />
+          </CardContent>
+        </Card>
 
-      <HandleHistoryPanel history={order.handleOpinions} />
+        <HandleHistoryPanel history={order.handleOpinions} />
+      </div>
 
       <DetailActions>
         <Link href="/query">

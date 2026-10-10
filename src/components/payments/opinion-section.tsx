@@ -12,7 +12,7 @@ export function OpinionSection({
   className?: string;
 }) {
   return (
-    <div className={className ?? "space-y-3"}>
+    <div className={className ?? "space-y-2"}>
       <Label>处理意见</Label>
       <Textarea
         value={value}

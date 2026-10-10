@@ -61,25 +61,32 @@ function SubmitDetailInner() {
         </div>
       ) : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">
-            {isEditMode ? "初审付款单详情" : "查看付款单详情"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DetailForm order={order} editable={false} />
-          {isEditMode ? (
-            <OpinionSection
-              value={opinion}
-              onChange={setOpinion}
-              className="mt-4 space-y-3 border-t border-slate-100 pt-4"
-            />
-          ) : null}
-        </CardContent>
-      </Card>
+      <div className="space-y-1">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              {isEditMode ? "初审付款单详情" : "查看付款单详情"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DetailForm order={order} editable={false} />
+          </CardContent>
+        </Card>
 
-      <HandleHistoryPanel history={order.handleOpinions} />
+        <HandleHistoryPanel history={order.handleOpinions} />
+
+        {isEditMode ? (
+          <Card>
+            <CardContent className="pt-4">
+              <OpinionSection
+                value={opinion}
+                onChange={setOpinion}
+                className="space-y-2"
+              />
+            </CardContent>
+          </Card>
+        ) : null}
+      </div>
 
       <DetailActions>
         {isEditMode ? (

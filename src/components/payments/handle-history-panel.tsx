@@ -2,17 +2,20 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { HandleOpinion } from "@/lib/payments-data";
+import { cn } from "@/lib/utils";
 
 export function HandleHistoryPanel({
   history,
+  className,
 }: {
   history?: HandleOpinion[];
+  className?: string;
 }) {
   const records = history ?? [];
 
   return (
-    <Card className="mt-3 sm:mt-4">
-      <CardHeader>
+    <Card className={cn(className)}>
+      <CardHeader className="py-2.5">
         <CardTitle className="text-base">处理历史</CardTitle>
       </CardHeader>
       <CardContent>
@@ -33,7 +36,7 @@ export function HandleHistoryPanel({
                 <tr>
                   <td
                     colSpan={2}
-                    className="px-3 py-10 text-center text-sm text-ink-4"
+                    className="px-3 py-6 text-center text-sm text-ink-4"
                   >
                     暂无处理历史
                   </td>
