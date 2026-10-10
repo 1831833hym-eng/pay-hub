@@ -96,7 +96,7 @@ export default function SubmitListPage() {
             <Button variant="danger" onClick={handleBatchVoid}>
               作废
             </Button>
-            <Button onClick={handleBatchSubmit}>批量提交</Button>
+            <Button onClick={handleBatchSubmit}>批量初审</Button>
           </div>
           <OrderTable
             rows={filtered}

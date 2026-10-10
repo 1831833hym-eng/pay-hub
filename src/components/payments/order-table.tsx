@@ -193,7 +193,7 @@ export function OrderTable({
                         href={`${editBase ?? viewBase}/${item.id}?mode=edit`}
                         className="inline-flex h-7 items-center rounded border border-slate-200 bg-white px-2.5 text-xs text-ink-2 hover:border-brand-200 hover:text-brand-600"
                       >
-                        提交
+                        初审
                       </Link>
                     ) : null}
                     {showVoid && item.status === "pending_submit" ? (
