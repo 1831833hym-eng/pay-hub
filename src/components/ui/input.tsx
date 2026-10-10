@@ -8,7 +8,7 @@ export const Input = React.forwardRef<
   <input
     ref={ref}
     className={cn(
-      "flex h-8 w-full rounded-md border border-slate-200 bg-white px-2.5 text-sm text-ink-1 placeholder:text-ink-4 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-200",
+      "flex h-8 w-full rounded-md border border-slate-200 bg-white px-2.5 text-sm text-ink-1 placeholder:text-ink-4 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-200 overflow-hidden text-clip",
       className
     )}
     {...props}
@@ -48,10 +48,12 @@ export function Select({
   children,
   ...props
 }: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  const empty = props.value === "" || props.value === undefined;
   return (
     <select
       className={cn(
-        "flex h-8 w-full rounded-md border border-slate-200 bg-white px-2.5 text-sm text-ink-1 outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-200",
+        "flex h-8 w-full rounded-md border border-slate-200 bg-white px-2.5 text-sm outline-none transition focus:border-brand-400 focus:ring-1 focus:ring-brand-200 overflow-hidden text-clip",
+        empty ? "text-ink-4" : "text-ink-1",
         className
       )}
       {...props}
