@@ -42,7 +42,7 @@ export default function QueryDetailClient() {
     >
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{order.orderNo}（只读）</CardTitle>
+          <CardTitle className="text-base">查询付款单详情</CardTitle>
         </CardHeader>
         <CardContent>
           <DetailForm order={order} editable={false} />
