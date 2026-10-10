@@ -252,6 +252,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeBank: "DBS Bank",
     transferMemo: "FS20260327018",
     payeeName: "Singapore Ads Pte. Ltd.",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "投放账单核对无误，提交复核。",
+        at: "2026-03-28T08:30:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-005",
@@ -273,6 +280,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeBank: "MUFG Bank",
     transferMemo: "FS20260327009",
     payeeName: "Tokyo Media Agency KK",
+    handleOpinions: [
+      {
+        stage: "初审",
+        content: "服务费按合同结算，提交复核。",
+        at: "2026-03-27T15:00:00+08:00",
+      },
+    ],
   },
   {
     id: "pay-006",

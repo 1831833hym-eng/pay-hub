@@ -70,15 +70,8 @@ function ReviewDetailInner() {
             {isReviewMode ? "复核付款单详情" : "查看付款单详情"}
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent>
           <DetailForm order={order} editable={false} />
-          <OpinionSection
-            history={order.handleOpinions}
-            value={opinion}
-            onChange={setOpinion}
-            editable={isReviewMode}
-          />
-
           {isReviewMode ? (
             <div className="max-w-xs border-t border-slate-100 pt-4">
               <Label>付款渠道</Label>
@@ -96,6 +89,12 @@ function ReviewDetailInner() {
               </Select>
             </div>
           ) : null}
+          <OpinionSection
+            history={order.handleOpinions}
+            value={opinion}
+            onChange={setOpinion}
+            editable={isReviewMode}
+          />
         </CardContent>
       </Card>
 
