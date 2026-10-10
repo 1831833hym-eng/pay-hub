@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
 import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
+import { PayeeAccountPanel } from "@/components/payments/payee-account-panel";
 import { usePayments } from "@/lib/payments-store";
 
 export default function QueryDetailClient() {
@@ -50,6 +51,8 @@ export default function QueryDetailClient() {
             <DetailForm order={order} editable={false} />
           </CardContent>
         </Card>
+
+        <PayeeAccountPanel order={order} />
 
         <HandleHistoryPanel history={order.handleOpinions} />
       </div>

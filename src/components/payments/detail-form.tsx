@@ -4,11 +4,9 @@ import { StatusBadge } from "@/components/ui/badge";
 import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import {
   APPLY_TYPES,
-  PAYEE_ACCOUNT_TYPES,
   PAYMENT_METHOD_TYPES,
   PAYMENT_METHOD_TYPE_META,
   paymentMethodTypeLabel,
-  type PayeeAccountType,
   type PaymentApplyType,
   type PaymentOrder,
   type PaymentMethodType,
@@ -155,44 +153,6 @@ export function DetailForm({
           </Field>
         ) : null}
 
-        <Field label="收款人账户类型">
-          {editable ? (
-            <Select
-              value={data.payeeAccountType}
-              onChange={(e) =>
-                set("payeeAccountType", e.target.value as PayeeAccountType)
-              }
-            >
-              {PAYEE_ACCOUNT_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </Select>
-          ) : (
-            <Value>{data.payeeAccountType}</Value>
-          )}
-        </Field>
-        <Field label="收款账号">
-          {editable ? (
-            <Input
-              value={data.payeeAccountNo}
-              onChange={(e) => set("payeeAccountNo", e.target.value)}
-            />
-          ) : (
-            <Value>{data.payeeAccountNo}</Value>
-          )}
-        </Field>
-        <Field label="收款银行">
-          {editable ? (
-            <Input
-              value={data.payeeBank}
-              onChange={(e) => set("payeeBank", e.target.value)}
-            />
-          ) : (
-            <Value>{data.payeeBank}</Value>
-          )}
-        </Field>
         <Field label="转账附言" className="sm:col-span-2">
           {editable ? (
             <Input
