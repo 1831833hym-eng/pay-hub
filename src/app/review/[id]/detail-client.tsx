@@ -64,7 +64,7 @@ function ReviewDetailInner() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">付款单明细</CardTitle>
+          <CardTitle className="text-base">复核付款单详情</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <DetailForm order={order} editable={false} />
