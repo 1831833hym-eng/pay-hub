@@ -19,7 +19,7 @@ export default function SubmitListPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
 
-  /** 提交菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
+  /** 初审菜单仅展示待提交单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
     return orders.filter((item) => {
       if (item.status !== "pending_submit") return false;
@@ -57,7 +57,7 @@ export default function SubmitListPage() {
   };
 
   return (
-    <AppShell title="提交付款单">
+    <AppShell title="初审付款单">
       {toast ? (
         <div className="mb-3 rounded-md border border-brand-200 bg-brand-50 px-3 py-2 text-sm text-brand-700">
           {toast}

@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 const MENUS = [
   {
     href: "/submit",
-    label: "提交付款单",
+    label: "初审付款单",
     icon: FileInput,
     match: (p: string) => p === "/" || p.startsWith("/submit"),
   },

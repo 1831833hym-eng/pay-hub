@@ -59,7 +59,7 @@ function SubmitDetailInner() {
 
   return (
     <AppShell
-      title={isEditMode ? "提交付款单明细" : "查看付款单"}
+      title={isEditMode ? "初审付款单明细" : "查看付款单"}
       actions={
         <Link href="/submit">
           <Button variant="secondary">返回列表</Button>
