@@ -51,3 +51,12 @@ export function compareMismatch(left: CompareSide, right: CompareSide) {
     payeeAccountNo: left.payeeAccountNo !== right.payeeAccountNo,
   };
 }
+
+export type CompareOutcome = "一致" | "不一致";
+
+export function compareOutcome(left: CompareSide, right: CompareSide): CompareOutcome {
+  const miss = compareMismatch(left, right);
+  return miss.amount || miss.currency || miss.payeeName || miss.payeeAccountNo
+    ? "不一致"
+    : "一致";
+}

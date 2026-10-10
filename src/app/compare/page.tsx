@@ -5,16 +5,22 @@ import { AppShell } from "@/components/layout/app-shell";
 import { CompareTable } from "@/components/payments/compare-table";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input, Label } from "@/components/ui/input";
-import { toCompareResults } from "@/lib/compare-data";
+import { Input, Label, Select } from "@/components/ui/input";
+import {
+  compareOutcome,
+  toCompareResults,
+  type CompareOutcome,
+} from "@/lib/compare-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function CompareListPage() {
   const { orders } = usePayments();
   const [draftOrderNo, setDraftOrderNo] = useState("");
   const [draftApprovalNo, setDraftApprovalNo] = useState("");
+  const [draftOutcome, setDraftOutcome] = useState<CompareOutcome | "">("");
   const [orderNo, setOrderNo] = useState("");
   const [approvalNo, setApprovalNo] = useState("");
+  const [outcome, setOutcome] = useState<CompareOutcome | "">("");
 
   const rows = useMemo(() => {
     return toCompareResults(orders).filter((item) => {
@@ -28,9 +34,11 @@ export default function CompareListPage() {
         !item.approval.docNo.toLowerCase().includes(approvalNo.toLowerCase())
       )
         return false;
+      if (outcome && compareOutcome(item.payment, item.approval) !== outcome)
+        return false;
       return true;
     });
-  }, [orders, orderNo, approvalNo]);
+  }, [orders, orderNo, approvalNo, outcome]);
 
   return (
     <AppShell title="查询单据比对结果">
@@ -54,12 +62,26 @@ export default function CompareListPage() {
                   placeholder="请输入"
                 />
               </div>
+              <div>
+                <Label>比对结果</Label>
+                <Select
+                  value={draftOutcome}
+                  onChange={(e) =>
+                    setDraftOutcome((e.target.value || "") as CompareOutcome | "")
+                  }
+                >
+                  <option value="">请选择</option>
+                  <option value="一致">一致</option>
+                  <option value="不一致">不一致</option>
+                </Select>
+              </div>
             </div>
             <div className="flex shrink-0 gap-2">
               <Button
                 onClick={() => {
                   setOrderNo(draftOrderNo);
                   setApprovalNo(draftApprovalNo);
+                  setOutcome(draftOutcome);
                 }}
               >
                 搜索
@@ -69,8 +91,10 @@ export default function CompareListPage() {
                 onClick={() => {
                   setDraftOrderNo("");
                   setDraftApprovalNo("");
+                  setDraftOutcome("");
                   setOrderNo("");
                   setApprovalNo("");
+                  setOutcome("");
                 }}
               >
                 重置
