@@ -80,7 +80,7 @@ export default function QueryListPage() {
                 setDraftStatus((e.target.value || "") as PaymentStatus | "")
               }
             >
-              <option value="">选择...</option>
+              <option value="">请选择</option>
               {STATUS_OPTIONS.filter(Boolean).map((s) => (
                 <option key={s} value={s}>
                   {STATUS_META[s as PaymentStatus].label}

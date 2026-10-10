@@ -54,7 +54,7 @@ export function QueryForm({
               <Input
                 value={values.orderNo}
                 onChange={(e) => set("orderNo", e.target.value)}
-                placeholder="输入..."
+                placeholder="请输入"
               />
             </div>
             <div>
@@ -62,7 +62,7 @@ export function QueryForm({
               <Input
                 value={values.feishuNo}
                 onChange={(e) => set("feishuNo", e.target.value)}
-                placeholder="输入..."
+                placeholder="请输入"
               />
             </div>
             <div>
@@ -71,7 +71,7 @@ export function QueryForm({
                 value={values.applyType}
                 onChange={(e) => set("applyType", e.target.value)}
               >
-                <option value="">选择...</option>
+                <option value="">请选择</option>
                 {APPLY_TYPES.map((t) => (
                   <option key={t} value={t}>
                     {t}
@@ -84,7 +84,7 @@ export function QueryForm({
               <Input
                 value={values.amount}
                 onChange={(e) => set("amount", e.target.value)}
-                placeholder="输入..."
+                placeholder="请输入"
                 inputMode="decimal"
               />
             </div>
@@ -93,7 +93,7 @@ export function QueryForm({
               <Input
                 value={values.purpose}
                 onChange={(e) => set("purpose", e.target.value)}
-                placeholder="输入..."
+                placeholder="请输入"
               />
             </div>
             <div>
@@ -102,7 +102,7 @@ export function QueryForm({
                 value={values.paymentMethodType}
                 onChange={(e) => set("paymentMethodType", e.target.value)}
               >
-                <option value="">选择...</option>
+                <option value="">请选择</option>
                 {PAYMENT_METHOD_TYPES.map((t) => (
                   <option key={t} value={t}>
                     {PAYMENT_METHOD_TYPE_META[t].label}
