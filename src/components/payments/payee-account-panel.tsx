@@ -55,8 +55,6 @@ function Field({
 
 function Value({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-md border border-slate-200 bg-[#f7f8fa] px-2.5 py-1.5 text-sm text-ink-1">
-      {children}
-    </div>
+    <div className="min-h-8 text-sm leading-6 text-ink-1">{children || "—"}</div>
   );
 }

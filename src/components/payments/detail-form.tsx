@@ -11,7 +11,7 @@ import {
   type PaymentOrder,
   type PaymentMethodType,
 } from "@/lib/payments-data";
-import { formatAmount, formatDate } from "@/lib/utils";
+import { cn, formatAmount, formatDate } from "@/lib/utils";
 
 export function DetailForm({
   order,
@@ -165,20 +165,16 @@ export function DetailForm({
       </div>
 
       {!editable && (order.worldfirstTxId || order.receiptNo) ? (
-        <div className="grid gap-3 sm:grid-cols-2 text-sm">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {order.worldfirstTxId ? (
-            <div className="rounded-md border border-slate-200 bg-[#f7f8fa] px-3 py-2.5">
-              <div className="text-xs text-ink-4">万里汇交易号</div>
-              <div className="mt-1 font-medium text-ink-1">
-                {order.worldfirstTxId}
-              </div>
-            </div>
+            <Field label="万里汇交易号">
+              <Value>{order.worldfirstTxId}</Value>
+            </Field>
           ) : null}
           {order.receiptNo ? (
-            <div className="rounded-md border border-slate-200 bg-[#f7f8fa] px-3 py-2.5">
-              <div className="text-xs text-ink-4">万里汇回单号</div>
-              <div className="mt-1 font-medium text-ink-1">{order.receiptNo}</div>
-            </div>
+            <Field label="万里汇回单号">
+              <Value>{order.receiptNo}</Value>
+            </Field>
           ) : null}
         </div>
       ) : null}
@@ -223,10 +219,8 @@ function Value({
   className?: string;
 }) {
   return (
-    <div
-      className={`rounded-md border border-slate-200 bg-[#f7f8fa] px-2.5 py-1.5 text-sm text-ink-1 ${className ?? ""}`}
-    >
-      {children}
+    <div className={cn("min-h-8 text-sm leading-6 text-ink-1", className)}>
+      {children || "—"}
     </div>
   );
 }
