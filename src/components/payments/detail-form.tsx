@@ -153,7 +153,7 @@ export function DetailForm({
           </Field>
         ) : null}
 
-        <Field label="转账附言" className="sm:col-span-2">
+        <Field label="转账附言" className="sm:col-span-2 lg:col-span-3">
           {editable ? (
             <Input
               value={data.transferMemo}
