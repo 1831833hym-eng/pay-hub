@@ -15,7 +15,10 @@ from docx.shared import Cm, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "docs" / "付款中心需求说明书.md"
-OUT = ROOT / "docs" / "feishu" / "付款中心需求说明书.docx"
+OUTS = [
+    ROOT / "docs" / "付款中心需求说明书.docx",
+    ROOT / "docs" / "feishu" / "付款中心需求说明书.docx",
+]
 
 
 def set_run_font(run, name="微软雅黑", size=11, bold=False, color=None):
@@ -158,8 +161,10 @@ def convert(md_text: str, dest: Path) -> None:
 
 
 def main():
-    convert(SRC.read_text(encoding="utf-8"), OUT)
-    print(f"wrote {OUT}")
+    text = SRC.read_text(encoding="utf-8")
+    for dest in OUTS:
+        convert(text, dest)
+        print(f"wrote {dest}")
 
 
 if __name__ == "__main__":

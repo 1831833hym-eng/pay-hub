@@ -6,7 +6,8 @@
 
 - 模版：[`docs/需求文档模版.md`](docs/需求文档模版.md)
 - 付款中心说明书（Markdown）：[`docs/付款中心需求说明书.md`](docs/付款中心需求说明书.md)
-- 飞书云文档导入稿（Word）：[`docs/feishu/付款中心需求说明书.docx`](docs/feishu/付款中心需求说明书.docx)
+- 本地 Word：[`docs/付款中心需求说明书.docx`](docs/付款中心需求说明书.docx)
+- 飞书云文档导入稿（Word，与本地 Word 相同）：[`docs/feishu/付款中心需求说明书.docx`](docs/feishu/付款中心需求说明书.docx)
 - 导入说明：[`docs/feishu/导入飞书云文档说明.md`](docs/feishu/导入飞书云文档说明.md)
 
 ## 业务说明
