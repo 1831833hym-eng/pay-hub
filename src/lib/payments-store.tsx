@@ -222,8 +222,10 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     (id: string) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_pay") return false;
+      const txSuffix = Date.now().toString().slice(-10);
       setStatus(id, "pending_receipt", {
-        worldfirstTxId: `WF${Date.now().toString().slice(-10)}`,
+        worldfirstTxId: `WF${txSuffix}`,
+        paymentSerialNo: `LS${txSuffix}`,
       });
       return true;
     },

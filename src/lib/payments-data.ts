@@ -95,6 +95,8 @@ export interface PaymentOrder {
   handleOpinions?: HandleOpinion[];
   worldfirstTxId?: string;
   receiptNo?: string;
+  /** 付款流水号（出款后生成，回单信息中位于回单字段之前） */
+  paymentSerialNo?: string;
   /** 回单时间 */
   receiptAt?: string;
   /** 付款回单附件文件名 */
@@ -480,6 +482,7 @@ export let paymentOrders: PaymentOrder[] = [
     payeeEmail: "ap@amazon-fulfillment.example",
     payeeMobile: "13800138001",
     worldfirstTxId: "WF202603261640001",
+    paymentSerialNo: "LS202603261640001",
     handleOpinions: [
       {
         stage: "初审",
@@ -522,6 +525,7 @@ export let paymentOrders: PaymentOrder[] = [
     payeeMobile: "13400134008",
     worldfirstTxId: "WF202603241800002",
     receiptNo: "WFR-20260325-0002",
+    paymentSerialNo: "LS202603241800002",
     receiptAt: "2026-03-25T09:05:00+08:00",
     receiptFileName: "WFR-20260325-0002.pdf",
     handleOpinions: [
@@ -637,6 +641,7 @@ function appendListDemoOrders() {
         remark: undefined,
         worldfirstTxId: undefined,
         receiptNo: undefined,
+        paymentSerialNo: undefined,
         receiptAt: undefined,
         receiptFileName: undefined,
         paymentChannel:

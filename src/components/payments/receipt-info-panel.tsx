@@ -23,6 +23,9 @@ export function ReceiptInfoPanel({
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Field label="付款流水号">
+            <Value>{order.paymentSerialNo || "—"}</Value>
+          </Field>
           <Field label="回单时间">
             <Value>{order.receiptAt ? formatDate(order.receiptAt) : "—"}</Value>
           </Field>
