@@ -38,6 +38,15 @@ export function PayeeAccountPanel({
           <Field label="银行支行">
             <Value>{order.bankBranch || "—"}</Value>
           </Field>
+          <Field label="收款人身份证号码">
+            <Value>{order.payeeIdNo || "—"}</Value>
+          </Field>
+          <Field label="收款人邮箱号码">
+            <Value>{order.payeeEmail || "—"}</Value>
+          </Field>
+          <Field label="收款人手机号码">
+            <Value>{order.payeeMobile || "—"}</Value>
+          </Field>
         </div>
       </CardContent>
     </Card>

@@ -172,36 +172,6 @@ export function DetailForm({
             <Value>{data.paymentChannel}</Value>
           </Field>
         ) : null}
-        <Field label="收款人身份证号码">
-          {editable ? (
-            <Input
-              value={data.payeeIdNo}
-              onChange={(e) => set("payeeIdNo", e.target.value)}
-            />
-          ) : (
-            <Value>{data.payeeIdNo}</Value>
-          )}
-        </Field>
-        <Field label="收款人邮箱号码">
-          {editable ? (
-            <Input
-              value={data.payeeEmail}
-              onChange={(e) => set("payeeEmail", e.target.value)}
-            />
-          ) : (
-            <Value>{data.payeeEmail}</Value>
-          )}
-        </Field>
-        <Field label="收款人手机号码">
-          {editable ? (
-            <Input
-              value={data.payeeMobile}
-              onChange={(e) => set("payeeMobile", e.target.value)}
-            />
-          ) : (
-            <Value>{data.payeeMobile}</Value>
-          )}
-        </Field>
       </div>
 
       {!editable && (order.worldfirstTxId || order.receiptNo) ? (
