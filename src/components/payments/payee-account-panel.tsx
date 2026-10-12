@@ -32,6 +32,12 @@ export function PayeeAccountPanel({
           <Field label="收款银行">
             <Value>{order.payeeBank || "—"}</Value>
           </Field>
+          <Field label="银行所在地区">
+            <Value>{order.bankRegion || "—"}</Value>
+          </Field>
+          <Field label="银行支行">
+            <Value>{order.bankBranch || "—"}</Value>
+          </Field>
         </div>
       </CardContent>
     </Card>

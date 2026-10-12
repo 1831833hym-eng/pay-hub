@@ -50,6 +50,8 @@ export interface PaymentOrder {
   applyType: PaymentApplyType;
   /** 付款事由 */
   purpose: string;
+  /** 费用具体明细 */
+  expenseDetail: string;
   /** 付款金额 */
   amount: number;
   /** 币种 */
@@ -72,12 +74,22 @@ export interface PaymentOrder {
   payeeAccountNo: string;
   /** 收款银行 */
   payeeBank: string;
+  /** 银行所在地区 */
+  bankRegion: string;
+  /** 银行支行 */
+  bankBranch: string;
   /** 转账附言（默认审批单编号） */
   transferMemo: string;
   /** 付款渠道（复核确认时选择） */
   paymentChannel?: PaymentChannel;
   /** 收款方名称 */
   payeeName?: string;
+  /** 收款人身份证号码 */
+  payeeIdNo: string;
+  /** 收款人邮箱号码 */
+  payeeEmail: string;
+  /** 收款人手机号码 */
+  payeeMobile: string;
   remark?: string;
   /** 初审/复核处理意见记录 */
   handleOpinions?: HandleOpinion[];
@@ -197,6 +209,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "跨境仓储费用审批",
     applyType: "仓储费用",
     purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
+    expenseDetail: "仓储费 8,200.00 USD；尾程配送费 4,650.00 USD",
     amount: 12850,
     currency: "USD",
     applicant: "王晓雯",
@@ -208,8 +221,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
+    bankRegion: "美国",
+    bankBranch: "New York Branch",
     transferMemo: "FS20260328001",
     payeeName: "Amazon Fulfillment Services Inc.",
+    payeeIdNo: "440301198803152618",
+    payeeEmail: "ap@amazon-fulfillment.example",
+    payeeMobile: "13800138001",
     remark: "复核退回：请补充尾程费用明细后重新提交",
     handleOpinions: [
       {
@@ -231,6 +249,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "物流费用付款审批",
     applyType: "物流费用",
     purpose: "欧洲仓一件代发服务费",
+    expenseDetail: "一件代发操作费 4,120.50 EUR；耗材费 2,300.00 EUR",
     amount: 6420.5,
     currency: "EUR",
     applicant: "李明轩",
@@ -242,8 +261,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "DE89370400440532011776",
     payeeBank: "Deutsche Bank",
+    bankRegion: "德国",
+    bankBranch: "Frankfurt am Main",
     transferMemo: "FS20260328002",
     payeeName: "EuroPack Logistics GmbH",
+    payeeIdNo: "310101199105063214",
+    payeeEmail: "billing@europack.example",
+    payeeMobile: "13900139002",
     handleOpinions: [
       {
         stage: "初审",
@@ -264,6 +288,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "采购货款付款审批",
     applyType: "采购货款",
     purpose: "采购货款-3月批次",
+    expenseDetail: "3月批次货款 186,000.00 HKD",
     amount: 186000,
     currency: "HKD",
     applicant: "王晓雯",
@@ -275,8 +300,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "012875903301",
     payeeBank: "招商银行香港分行",
+    bankRegion: "中国香港",
+    bankBranch: "中环支行",
     transferMemo: "FS20260328003",
     payeeName: "Shenzhen Huaqiang Supply Co.",
+    payeeIdNo: "440304198612084512",
+    payeeEmail: "finance@huaqiang-supply.example",
+    payeeMobile: "13700137003",
     handleOpinions: [
       {
         stage: "初审",
@@ -297,6 +327,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "广告投放费用审批",
     applyType: "广告投放",
     purpose: "东南亚广告投放结算",
+    expenseDetail: "信息流广告 6,800.00 SGD；搜索广告 3,000.00 SGD",
     amount: 9800,
     currency: "SGD",
     applicant: "赵一诺",
@@ -308,8 +339,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "072034567742",
     payeeBank: "DBS Bank",
+    bankRegion: "新加坡",
+    bankBranch: "Marina Bay Branch",
     transferMemo: "FS20260327018",
     payeeName: "Singapore Ads Pte. Ltd.",
+    payeeIdNo: "320106199208176028",
+    payeeEmail: "accounts@sg-ads.example",
+    payeeMobile: "13600136004",
     handleOpinions: [
       {
         stage: "初审",
@@ -335,6 +371,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "市场服务费审批",
     applyType: "服务费",
     purpose: "日本站内容营销服务费",
+    expenseDetail: "内容制作 280,000 JPY；投放服务 170,000 JPY",
     amount: 450000,
     currency: "JPY",
     applicant: "孙可",
@@ -346,8 +383,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "1002455201",
     payeeBank: "MUFG Bank",
+    bankRegion: "日本",
+    bankBranch: "Tokyo Main Office",
     transferMemo: "FS20260327009",
     payeeName: "Tokyo Media Agency KK",
+    payeeIdNo: "110105199411223046",
+    payeeEmail: "invoice@tokyo-media.example",
+    payeeMobile: "13500135005",
     handleOpinions: [
       {
         stage: "初审",
@@ -373,6 +415,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "跨境仓储费用审批",
     applyType: "仓储费用",
     purpose: "仓储超期费补缴",
+    expenseDetail: "超期仓储费 5,200.00 USD",
     amount: 5200,
     currency: "USD",
     applicant: "李明轩",
@@ -384,9 +427,14 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
+    bankRegion: "美国",
+    bankBranch: "New York Branch",
     transferMemo: "FS20260326011",
     paymentChannel: "万里汇",
     payeeName: "Amazon Fulfillment Services Inc.",
+    payeeIdNo: "440301198803152618",
+    payeeEmail: "ap@amazon-fulfillment.example",
+    payeeMobile: "13800138001",
     handleOpinions: [
       {
         stage: "初审",
@@ -407,6 +455,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "物流费用付款审批",
     applyType: "物流费用",
     purpose: "美国尾程配送结算",
+    expenseDetail: "尾程配送 3,200.00 USD",
     amount: 3200,
     currency: "USD",
     applicant: "周然",
@@ -418,9 +467,14 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
+    bankRegion: "美国",
+    bankBranch: "New York Branch",
     transferMemo: "FS20260325007",
     paymentChannel: "万里汇",
     payeeName: "Amazon Fulfillment Services Inc.",
+    payeeIdNo: "440301198803152618",
+    payeeEmail: "ap@amazon-fulfillment.example",
+    payeeMobile: "13800138001",
     worldfirstTxId: "WF202603261640001",
     handleOpinions: [
       {
@@ -442,6 +496,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "广告投放费用审批",
     applyType: "广告投放",
     purpose: "北美站投放月结",
+    expenseDetail: "北美站广告账户充值 15,600.00 USD",
     amount: 15600,
     currency: "USD",
     applicant: "赵一诺",
@@ -453,9 +508,14 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "第三方支付账户",
     payeeAccountNo: "META-PAY-8891",
     payeeBank: "Meta Payments",
+    bankRegion: "爱尔兰",
+    bankBranch: "Dublin Office",
     transferMemo: "FS20260324003",
     paymentChannel: "万里汇",
     payeeName: "Meta Platforms Ireland Ltd.",
+    payeeIdNo: "440106199607124028",
+    payeeEmail: "billing@meta-ads.example",
+    payeeMobile: "13400134008",
     worldfirstTxId: "WF202603241800002",
     receiptNo: "WFR-20260325-0002",
     handleOpinions: [
@@ -478,6 +538,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "采购货款付款审批",
     applyType: "采购货款",
     purpose: "深圳供应商货款补差",
+    expenseDetail: "货款补差 42,000.00 HKD",
     amount: 42000,
     currency: "HKD",
     applicant: "王晓雯",
@@ -489,8 +550,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "012875903301",
     payeeBank: "招商银行香港分行",
+    bankRegion: "中国香港",
+    bankBranch: "中环支行",
     transferMemo: "FS20260323015",
     payeeName: "Shenzhen Huaqiang Supply Co.",
+    payeeIdNo: "440304198612084512",
+    payeeEmail: "finance@huaqiang-supply.example",
+    payeeMobile: "13700137003",
     remark: "复核退回：合同附件缺失，请补充后重新提交",
     handleOpinions: [
       {
@@ -512,6 +578,7 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "仓储费用付款审批",
     applyType: "仓储费用",
     purpose: "海外仓月结费用重复申请，已作废",
+    expenseDetail: "海外仓月结 2,800.00 USD（重复申请）",
     amount: 2800,
     currency: "USD",
     applicant: "周然",
@@ -523,8 +590,13 @@ export let paymentOrders: PaymentOrder[] = [
     payeeAccountType: "对公账户",
     payeeAccountNo: "483920184821",
     payeeBank: "JPMorgan Chase",
+    bankRegion: "美国",
+    bankBranch: "New York Branch",
     transferMemo: "FS20260322008",
     payeeName: "Amazon Fulfillment Services Inc.",
+    payeeIdNo: "440301198803152618",
+    payeeEmail: "ap@amazon-fulfillment.example",
+    payeeMobile: "13800138001",
     remark: "初审作废",
     handleOpinions: [
       {

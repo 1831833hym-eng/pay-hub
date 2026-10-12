@@ -77,6 +77,16 @@ export function DetailForm({
             <Value>{data.purpose}</Value>
           )}
         </Field>
+        <Field label="费用具体明细" className="sm:col-span-2 lg:col-span-3">
+          {editable ? (
+            <Textarea
+              value={data.expenseDetail}
+              onChange={(e) => set("expenseDetail", e.target.value)}
+            />
+          ) : (
+            <Value>{data.expenseDetail}</Value>
+          )}
+        </Field>
         <Field label="转账附言" className="sm:col-span-2 lg:col-span-3">
           {editable ? (
             <Input
@@ -162,6 +172,36 @@ export function DetailForm({
             <Value>{data.paymentChannel}</Value>
           </Field>
         ) : null}
+        <Field label="收款人身份证号码">
+          {editable ? (
+            <Input
+              value={data.payeeIdNo}
+              onChange={(e) => set("payeeIdNo", e.target.value)}
+            />
+          ) : (
+            <Value>{data.payeeIdNo}</Value>
+          )}
+        </Field>
+        <Field label="收款人邮箱号码">
+          {editable ? (
+            <Input
+              value={data.payeeEmail}
+              onChange={(e) => set("payeeEmail", e.target.value)}
+            />
+          ) : (
+            <Value>{data.payeeEmail}</Value>
+          )}
+        </Field>
+        <Field label="收款人手机号码">
+          {editable ? (
+            <Input
+              value={data.payeeMobile}
+              onChange={(e) => set("payeeMobile", e.target.value)}
+            />
+          ) : (
+            <Value>{data.payeeMobile}</Value>
+          )}
+        </Field>
       </div>
 
       {!editable && (order.worldfirstTxId || order.receiptNo) ? (
