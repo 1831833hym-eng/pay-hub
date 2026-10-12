@@ -95,6 +95,10 @@ export interface PaymentOrder {
   handleOpinions?: HandleOpinion[];
   worldfirstTxId?: string;
   receiptNo?: string;
+  /** 回单时间 */
+  receiptAt?: string;
+  /** 付款回单附件文件名 */
+  receiptFileName?: string;
 }
 
 export type HandleStage = "初审" | "复核" | "作废";
@@ -518,6 +522,8 @@ export let paymentOrders: PaymentOrder[] = [
     payeeMobile: "13400134008",
     worldfirstTxId: "WF202603241800002",
     receiptNo: "WFR-20260325-0002",
+    receiptAt: "2026-03-25T09:05:00+08:00",
+    receiptFileName: "WFR-20260325-0002.pdf",
     handleOpinions: [
       {
         stage: "初审",
@@ -631,6 +637,8 @@ function appendListDemoOrders() {
         remark: undefined,
         worldfirstTxId: undefined,
         receiptNo: undefined,
+        receiptAt: undefined,
+        receiptFileName: undefined,
         paymentChannel:
           status === "pending_submit" || status === "pending_review"
             ? undefined

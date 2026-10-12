@@ -234,8 +234,11 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     (id: string) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_receipt") return false;
+      const receiptNo = `WFR-${Date.now().toString().slice(-8)}`;
       setStatus(id, "completed", {
-        receiptNo: `WFR-${Date.now().toString().slice(-8)}`,
+        receiptNo,
+        receiptAt: new Date().toISOString(),
+        receiptFileName: `${receiptNo}.pdf`,
       });
       return true;
     },

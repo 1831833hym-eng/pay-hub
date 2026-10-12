@@ -9,6 +9,7 @@ import { DetailActions } from "@/components/payments/detail-actions";
 import { DetailForm } from "@/components/payments/detail-form";
 import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { PayeeAccountPanel } from "@/components/payments/payee-account-panel";
+import { ReceiptInfoPanel } from "@/components/payments/receipt-info-panel";
 import { usePayments } from "@/lib/payments-store";
 
 export default function QueryDetailClient() {
@@ -53,6 +54,8 @@ export default function QueryDetailClient() {
         </Card>
 
         <PayeeAccountPanel order={order} />
+
+        <ReceiptInfoPanel order={order} />
 
         <HandleHistoryPanel history={order.handleOpinions} />
       </div>
