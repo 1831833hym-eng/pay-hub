@@ -18,7 +18,7 @@ function SubmitDetailInner() {
   const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { getById, submitOne, resyncOne } = usePayments();
+  const { getById, submitOne, resyncOne, updateOrder } = usePayments();
   const order = getById(params.id);
   const isEditMode =
     searchParams.get("mode") === "edit" && order?.status === "pending_submit";
@@ -61,7 +61,22 @@ function SubmitDetailInner() {
             <CardTitle className="text-base">基础信息</CardTitle>
           </CardHeader>
           <CardContent>
-            <DetailForm order={order} editable={false} />
+            <DetailForm
+              order={order}
+              draft={isEditMode ? draft : undefined}
+              editable={false}
+              memoEditable={isEditMode}
+              onChange={
+                isEditMode
+                  ? (next) => {
+                      setDraft(next);
+                      updateOrder(order.id, {
+                        transferMemo: next.transferMemo,
+                      });
+                    }
+                  : undefined
+              }
+            />
           </CardContent>
         </Card>
 
@@ -95,7 +110,7 @@ function SubmitDetailInner() {
             </Button>
             <Button
               onClick={() => {
-                submitOne(order.id, opinion);
+                submitOne(order.id, opinion, draft.transferMemo);
                 router.push("/submit");
               }}
             >

@@ -16,11 +16,14 @@ import { cn, formatAmount, formatDate } from "@/lib/utils";
 export function DetailForm({
   order,
   editable,
+  memoEditable = false,
   draft,
   onChange,
 }: {
   order: PaymentOrder;
   editable: boolean;
+  /** 仅初审编辑态开放转账附言 */
+  memoEditable?: boolean;
   draft?: PaymentOrder;
   onChange?: (next: PaymentOrder) => void;
 }) {
@@ -88,10 +91,11 @@ export function DetailForm({
           )}
         </Field>
         <Field label="转账附言" className="sm:col-span-2 lg:col-span-3">
-          {editable ? (
+          {editable || memoEditable ? (
             <Input
               value={data.transferMemo}
               onChange={(e) => set("transferMemo", e.target.value)}
+              aria-label="转账附言"
             />
           ) : (
             <Value>{data.transferMemo || data.feishuNo}</Value>

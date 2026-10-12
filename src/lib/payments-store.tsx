@@ -24,7 +24,7 @@ type Store = {
   updateOrder: (id: string, patch: Partial<PaymentOrder>) => void;
   batchSubmit: (ids: string[]) => number;
   batchApprove: (ids: string[], channel?: PaymentChannel) => number;
-  submitOne: (id: string, opinion?: string) => boolean;
+  submitOne: (id: string, opinion?: string, transferMemo?: string) => boolean;
   voidOne: (id: string) => boolean;
   batchVoid: (ids: string[]) => number;
   resyncOne: (id: string) => boolean;
@@ -119,10 +119,11 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
   );
 
   const submitOne = useCallback(
-    (id: string, opinion?: string) => {
+    (id: string, opinion?: string, transferMemo?: string) => {
       const target = orders.find((o) => o.id === id);
       if (!target || target.status !== "pending_submit") return false;
       setStatus(id, "pending_review", {
+        transferMemo: transferMemo ?? target.transferMemo,
         handleOpinions: withOpinion(target, "初审", opinion || "初审提交"),
       });
       return true;
