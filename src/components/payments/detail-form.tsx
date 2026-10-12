@@ -11,7 +11,7 @@ import {
   type PaymentOrder,
   type PaymentMethodType,
 } from "@/lib/payments-data";
-import { formatDate, formatMoney } from "@/lib/utils";
+import { formatAmount, formatDate } from "@/lib/utils";
 
 export function DetailForm({
   order,
@@ -62,6 +62,11 @@ export function DetailForm({
             <Value>{data.applyType}</Value>
           )}
         </Field>
+        <Field label="付款单状态">
+          <div className="flex h-8 items-center">
+            <StatusBadge status={data.status} />
+          </div>
+        </Field>
         <Field label="付款事由" className="sm:col-span-2 lg:col-span-3">
           {editable ? (
             <Textarea
@@ -80,7 +85,7 @@ export function DetailForm({
               inputMode="decimal"
             />
           ) : (
-            <Value>{formatMoney(data.amount, data.currency)}</Value>
+            <Value>{formatAmount(data.amount)}</Value>
           )}
         </Field>
         <Field label="币种">
@@ -141,11 +146,6 @@ export function DetailForm({
           ) : (
             <Value>{formatDate(data.appliedAt)}</Value>
           )}
-        </Field>
-        <Field label="付款单状态">
-          <div className="flex h-8 items-center">
-            <StatusBadge status={data.status} />
-          </div>
         </Field>
         {data.paymentChannel ? (
           <Field label="付款渠道">
