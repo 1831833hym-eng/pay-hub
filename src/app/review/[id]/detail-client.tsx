@@ -117,7 +117,7 @@ function ReviewDetailInner() {
                 router.push("/review");
               }}
             >
-              确认
+              复核确认
             </Button>
             <Button
               variant="danger"
