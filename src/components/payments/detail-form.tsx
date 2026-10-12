@@ -77,6 +77,16 @@ export function DetailForm({
             <Value>{data.purpose}</Value>
           )}
         </Field>
+        <Field label="转账附言" className="sm:col-span-2 lg:col-span-3">
+          {editable ? (
+            <Input
+              value={data.transferMemo}
+              onChange={(e) => set("transferMemo", e.target.value)}
+            />
+          ) : (
+            <Value>{data.transferMemo || data.feishuNo}</Value>
+          )}
+        </Field>
         <Field label="付款金额">
           {editable ? (
             <Input
@@ -152,17 +162,6 @@ export function DetailForm({
             <Value>{data.paymentChannel}</Value>
           </Field>
         ) : null}
-
-        <Field label="转账附言" className="sm:col-span-2 lg:col-span-3">
-          {editable ? (
-            <Input
-              value={data.transferMemo}
-              onChange={(e) => set("transferMemo", e.target.value)}
-            />
-          ) : (
-            <Value>{data.transferMemo || data.feishuNo}</Value>
-          )}
-        </Field>
       </div>
 
       {!editable && (order.worldfirstTxId || order.receiptNo) ? (
