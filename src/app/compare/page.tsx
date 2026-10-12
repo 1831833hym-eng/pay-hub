@@ -47,7 +47,7 @@ export default function CompareListPage() {
           <div className="flex flex-col gap-3">
             <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <Label>付款单编号</Label>
+                <Label>付款单号</Label>
                 <Input
                   value={draftOrderNo}
                   onChange={(e) => setDraftOrderNo(e.target.value)}

@@ -37,11 +37,11 @@ export function DetailForm({
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {/* 付款单编号、审批单编号、审批单名称：始终不可修改 */}
-        <Field label="付款单编号">
+        {/* 付款单号、审批单号、审批单名称：始终不可修改 */}
+        <Field label="付款单号">
           <Value>{data.orderNo}</Value>
         </Field>
-        <Field label="审批单编号">
+        <Field label="审批单号">
           <Value>{data.feishuNo}</Value>
         </Field>
         <Field label="审批单名称">

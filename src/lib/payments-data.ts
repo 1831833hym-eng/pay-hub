@@ -40,9 +40,9 @@ export const PAYMENT_CHANNELS: PaymentChannel[] = [
 
 export interface PaymentOrder {
   id: string;
-  /** 付款单编号 */
+  /** 付款单号 */
   orderNo: string;
-  /** 审批单编号 */
+  /** 审批单号 */
   feishuNo: string;
   /** 审批单名称 */
   approvalFlowName: string;
@@ -78,7 +78,7 @@ export interface PaymentOrder {
   bankRegion: string;
   /** 银行支行 */
   bankBranch: string;
-  /** 转账附言（默认审批单编号） */
+  /** 转账附言（默认审批单号） */
   transferMemo: string;
   /** 付款渠道（复核确认时选择） */
   paymentChannel?: PaymentChannel;

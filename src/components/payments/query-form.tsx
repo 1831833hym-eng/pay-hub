@@ -50,7 +50,7 @@ export function QueryForm({
         <div className="flex flex-col gap-3">
           <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <Label>付款单编号</Label>
+              <Label>付款单号</Label>
               <Input
                 value={values.orderNo}
                 onChange={(e) => set("orderNo", e.target.value)}
@@ -58,7 +58,7 @@ export function QueryForm({
               />
             </div>
             <div>
-              <Label>审批单编号</Label>
+              <Label>审批单号</Label>
               <Input
                 value={values.feishuNo}
                 onChange={(e) => set("feishuNo", e.target.value)}

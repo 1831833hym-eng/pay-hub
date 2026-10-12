@@ -72,10 +72,10 @@ export function OrderTable({
               </th>
             ) : null}
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              付款单编号
+              付款单号
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              审批单编号
+              审批单号
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               审批单名称
