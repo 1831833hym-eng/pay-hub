@@ -108,7 +108,7 @@ export interface PaymentOrder {
   receiptFileName?: string;
 }
 
-export type HandleStage = "初审" | "复核" | "作废";
+export type HandleStage = "初审" | "复核" | "作废" | "重试支付";
 
 export interface HandleOpinion {
   stage: HandleStage;

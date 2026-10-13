@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
+import { ConfirmDialog } from "@/components/payments/confirm-dialog";
 import {
   EMPTY_QUERY,
   QueryForm,
@@ -24,11 +25,14 @@ const STATUS_OPTIONS: Array<PaymentStatus | ""> = [
 ];
 
 export default function QueryListPage() {
-  const { orders } = usePayments();
+  const { orders, voidOne, retryPay } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [draftStatus, setDraftStatus] = useState<PaymentStatus | "">("");
   const [appliedStatus, setAppliedStatus] = useState<PaymentStatus | "">("");
+  const [voidId, setVoidId] = useState<string | null>(null);
+  const voidIdRef = useRef<string | null>(null);
+  voidIdRef.current = voidId;
 
   const filtered = useMemo(() => {
     return orders.filter((item) => {
@@ -101,9 +105,25 @@ export default function QueryListPage() {
             viewBase="/query"
             showEdit={false}
             showSelect={false}
+            showQueryOps
+            onVoid={setVoidId}
+            onRetryPay={retryPay}
           />
         </CardContent>
       </Card>
+
+      <ConfirmDialog
+        open={voidId !== null}
+        description="将作废付款单，请确认审批单是否已作废。"
+        confirmText="确认"
+        confirmVariant="danger"
+        onConfirm={() => {
+          const id = voidIdRef.current;
+          if (id) voidOne(id, "查询作废");
+          setVoidId(null);
+        }}
+        onCancel={() => setVoidId(null)}
+      />
     </AppShell>
   );
 }

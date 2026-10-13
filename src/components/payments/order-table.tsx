@@ -20,8 +20,10 @@ export function OrderTable({
   showEdit,
   showReview,
   showVoid,
+  showQueryOps,
   showSelect,
   onVoid,
+  onRetryPay,
 }: {
   rows: PaymentOrder[];
   selectedIds: string[];
@@ -34,8 +36,11 @@ export function OrderTable({
   showReview?: boolean;
   /** 初审引导页：待初审单据显示【作废】 */
   showVoid?: boolean;
+  /** 查询引导页：操作列增加【作废】【重试支付】 */
+  showQueryOps?: boolean;
   showSelect?: boolean;
   onVoid?: (id: string) => void;
+  onRetryPay?: (id: string) => void;
 }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
@@ -272,6 +277,24 @@ export function OrderTable({
                       >
                         作废
                       </button>
+                    ) : null}
+                    {showQueryOps ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => onVoid?.(item.id)}
+                          className="inline-flex h-7 items-center rounded border border-rose-200 bg-white px-2.5 text-xs text-rose-600 hover:bg-rose-50"
+                        >
+                          作废
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => onRetryPay?.(item.id)}
+                          className="inline-flex h-7 items-center rounded border border-slate-200 bg-white px-2.5 text-xs text-ink-2 hover:border-brand-200 hover:text-brand-600"
+                        >
+                          重试支付
+                        </button>
+                      </>
                     ) : null}
                     {showReview && item.status === "pending_review" ? (
                       <Link

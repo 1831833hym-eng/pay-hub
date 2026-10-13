@@ -25,7 +25,8 @@ type Store = {
   batchSubmit: (ids: string[]) => number;
   batchApprove: (ids: string[], channel?: PaymentChannel) => number;
   submitOne: (id: string, opinion?: string, transferMemo?: string) => boolean;
-  voidOne: (id: string) => boolean;
+  voidOne: (id: string, remark?: string) => boolean;
+  retryPay: (id: string) => boolean;
   batchVoid: (ids: string[]) => number;
   resyncOne: (id: string) => boolean;
   approve: (id: string, channel?: PaymentChannel, opinion?: string) => boolean;
@@ -131,18 +132,18 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
-  /** 作废：仅将状态改为已作废（逻辑删除），不从列表数据中移除单据 */
-  const voidOne = useCallback((id: string) => {
+  /** 作废：状态改为已作废（逻辑删除），不从列表数据中移除单据 */
+  const voidOne = useCallback((id: string, remark = "初审作废") => {
     let ok = false;
     setOrders((prev) =>
       prev.map((o) => {
-        if (o.id === id && o.status === "pending_submit") {
+        if (o.id === id && o.status !== "voided") {
           ok = true;
           return {
             ...o,
             ...touch({
               status: "voided",
-              remark: "初审作废",
+              remark,
               handleOpinions: withOpinion(o, "作废", "作废"),
             }),
           };
@@ -218,6 +219,36 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
+  /** 查询页重试支付：待付款重新出款并进入待回单，其他未作废单据只记处理历史 */
+  const retryPay = useCallback((id: string) => {
+    let ok = false;
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (o.id !== id || o.status === "voided") return o;
+        ok = true;
+        if (o.status === "pending_pay") {
+          const txSuffix = Date.now().toString().slice(-10);
+          return {
+            ...o,
+            ...touch({
+              status: "pending_receipt",
+              worldfirstTxId: `WF${txSuffix}`,
+              paymentSerialNo: `LS${txSuffix}`,
+              handleOpinions: withOpinion(o, "重试支付", "重试支付"),
+            }),
+          };
+        }
+        return {
+          ...o,
+          ...touch({
+            handleOpinions: withOpinion(o, "重试支付", "重试支付"),
+          }),
+        };
+      })
+    );
+    return ok;
+  }, []);
+
   const markPaid = useCallback(
     (id: string) => {
       const target = orders.find((o) => o.id === id);
@@ -256,6 +287,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchApprove,
       submitOne,
       voidOne,
+      retryPay,
       batchVoid,
       resyncOne,
       approve,
@@ -271,6 +303,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchApprove,
       submitOne,
       voidOne,
+      retryPay,
       batchVoid,
       resyncOne,
       approve,
