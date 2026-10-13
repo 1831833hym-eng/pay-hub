@@ -106,6 +106,7 @@ export default function QueryListPage() {
             showEdit={false}
             showSelect={false}
             showQueryOps
+            showPayResult
             onVoid={setVoidId}
             onRetryPay={retryPay}
           />

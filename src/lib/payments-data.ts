@@ -26,6 +26,9 @@ export type PaymentMethodType = "1" | "2";
 /** 付款渠道。明细页只读；复核确认时由系统写入，默认万里汇 */
 export type PaymentChannel = "万里汇" | "连连国际" | "PingPong" | "银行直连";
 
+/** 支付状态（仅查询引导页列表，位于付款单状态右侧） */
+export type PayResultStatus = "未支付" | "支付中" | "支付成功" | "支付失败";
+
 /** 收款人账户类型 */
 export type PayeeAccountType =
   | "对公账户"
@@ -67,6 +70,10 @@ export interface PaymentOrder {
   appliedAt: string;
   /** 付款单状态 */
   status: PaymentStatus;
+  /** 支付状态（查询列表） */
+  payResultStatus?: PayResultStatus;
+  /** 支付失败原因（查询列表；仅支付失败时有值） */
+  payFailReason?: string;
   /** 创建时间 */
   createdAt: string;
   /** 更新时间 */
@@ -447,6 +454,8 @@ export let paymentOrders: PaymentOrder[] = [
     bankBranch: "New York Branch",
     transferMemo: "FS20260326011",
     paymentChannel: "万里汇",
+    payResultStatus: "支付失败",
+    payFailReason: "收款账户校验失败",
     payeeName: "Amazon Fulfillment Services Inc.",
     payeeIdNo: "440301198803152618",
     payeeEmail: "ap@amazon-fulfillment.example",
@@ -658,6 +667,8 @@ function appendListDemoOrders() {
           status === "pending_submit" || status === "pending_review"
             ? undefined
             : (src.paymentChannel ?? "万里汇"),
+        payResultStatus: "未支付",
+        payFailReason: undefined,
         handleOpinions: [
           { stage: "初审", content: "初审提交", at: src.createdAt },
           ...(status === "pending_submit"
@@ -676,7 +687,16 @@ function appendListDemoOrders() {
 
   push("pending_submit", 20);
   push("pending_review", 20);
-  paymentOrders = paymentOrders.concat(extras);
+  paymentOrders = paymentOrders.concat(extras).map((order) => {
+    if (order.payResultStatus) return order;
+    if (order.status === "pending_receipt" || order.status === "completed") {
+      return { ...order, payResultStatus: "支付成功" as const };
+    }
+    if (order.status === "pending_pay") {
+      return { ...order, payResultStatus: "支付中" as const };
+    }
+    return { ...order, payResultStatus: "未支付" as const };
+  });
 }
 
 /** 静态导出用：预生成明细页路径 */

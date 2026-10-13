@@ -232,6 +232,8 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
             ...o,
             ...touch({
               status: "pending_receipt",
+              payResultStatus: "支付成功",
+              payFailReason: undefined,
               worldfirstTxId: `WF${txSuffix}`,
               paymentSerialNo: `LS${txSuffix}`,
               handleOpinions: withOpinion(o, "重试支付", "重试支付"),
@@ -257,6 +259,8 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       setStatus(id, "pending_receipt", {
         worldfirstTxId: `WF${txSuffix}`,
         paymentSerialNo: `LS${txSuffix}`,
+        payResultStatus: "支付成功",
+        payFailReason: undefined,
       });
       return true;
     },

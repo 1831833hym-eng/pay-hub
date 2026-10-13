@@ -21,6 +21,7 @@ export function OrderTable({
   showReview,
   showVoid,
   showQueryOps,
+  showPayResult,
   showSelect,
   onVoid,
   onRetryPay,
@@ -38,6 +39,8 @@ export function OrderTable({
   showVoid?: boolean;
   /** 查询引导页：操作列增加【作废】【重试支付】 */
   showQueryOps?: boolean;
+  /** 查询引导页：付款单状态右侧展示支付状态、支付失败原因 */
+  showPayResult?: boolean;
   showSelect?: boolean;
   onVoid?: (id: string) => void;
   onRetryPay?: (id: string) => void;
@@ -55,6 +58,7 @@ export function OrderTable({
     () => rows.slice((safePage - 1) * pageSize, safePage * pageSize),
     [rows, safePage, pageSize]
   );
+  const columnCount = 17 + (showSelect ? 1 : 0) + (showPayResult ? 2 : 0);
   const allIds = pagedRows.map((r) => r.id);
   const allSelected =
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
@@ -118,6 +122,16 @@ export function OrderTable({
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               付款单状态
             </th>
+            {showPayResult ? (
+              <>
+                <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+                  支付状态
+                </th>
+                <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+                  支付失败原因
+                </th>
+              </>
+            ) : null}
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               创建时间
             </th>
@@ -152,6 +166,12 @@ export function OrderTable({
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
+            {showPayResult ? (
+              <>
+                <th className="border-b border-slate-200 px-3 py-2" />
+                <th className="border-b border-slate-200 px-3 py-2" />
+              </>
+            ) : null}
             <th className="sticky right-0 z-20 border-b border-l border-slate-200 bg-[#eef4ff] px-3 py-2 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.08)]" />
           </tr>
         </thead>
@@ -247,6 +267,21 @@ export function OrderTable({
                 >
                   <StatusBadge status={item.status} />
                 </td>
+                {showPayResult ? (
+                  <>
+                    <td
+                      className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                    >
+                      {item.payResultStatus || "—"}
+                    </td>
+                    <td
+                      className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                      title={item.payFailReason}
+                    >
+                      {item.payFailReason || "—"}
+                    </td>
+                  </>
+                ) : null}
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-3 ${rowBg}`}
                 >
@@ -318,7 +353,7 @@ export function OrderTable({
           {rows.length === 0 ? (
             <tr>
               <td
-                colSpan={showSelect ? 18 : 17}
+                colSpan={columnCount}
                 className="px-3 py-14 text-center text-ink-4"
               >
                 暂无符合条件的付款单
