@@ -4,10 +4,12 @@ import { StatusBadge } from "@/components/ui/badge";
 import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import {
   APPLY_TYPES,
+  PAYMENT_CHANNELS,
   PAYMENT_METHOD_TYPES,
   PAYMENT_METHOD_TYPE_META,
   paymentMethodTypeLabel,
   type PaymentApplyType,
+  type PaymentChannel,
   type PaymentOrder,
   type PaymentMethodType,
 } from "@/lib/payments-data";
@@ -19,6 +21,10 @@ export function DetailForm({
   memoEditable = false,
   draft,
   onChange,
+  channelBesideStatus = false,
+  channelEditable = false,
+  channelValue,
+  onChannelChange,
 }: {
   order: PaymentOrder;
   editable: boolean;
@@ -26,6 +32,11 @@ export function DetailForm({
   memoEditable?: boolean;
   draft?: PaymentOrder;
   onChange?: (next: PaymentOrder) => void;
+  /** 复核明细：付款渠道放在付款单状态右侧 */
+  channelBesideStatus?: boolean;
+  channelEditable?: boolean;
+  channelValue?: PaymentChannel;
+  onChannelChange?: (next: PaymentChannel) => void;
 }) {
   const data = draft ?? order;
 
@@ -70,6 +81,27 @@ export function DetailForm({
             <StatusBadge status={data.status} />
           </div>
         </Field>
+        {channelBesideStatus ? (
+          <Field label="付款渠道">
+            {channelEditable ? (
+              <Select
+                aria-label="付款渠道"
+                value={channelValue}
+                onChange={(e) =>
+                  onChannelChange?.(e.target.value as PaymentChannel)
+                }
+              >
+                {PAYMENT_CHANNELS.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </Select>
+            ) : (
+              <Value>{channelValue || data.paymentChannel}</Value>
+            )}
+          </Field>
+        ) : null}
         <Field label="付款事由" className="sm:col-span-2 lg:col-span-3">
           {editable ? (
             <Textarea
@@ -171,7 +203,7 @@ export function DetailForm({
             <Value>{formatDate(data.appliedAt)}</Value>
           )}
         </Field>
-        {data.paymentChannel ? (
+        {!channelBesideStatus && data.paymentChannel ? (
           <Field label="付款渠道">
             <Value>{data.paymentChannel}</Value>
           </Field>

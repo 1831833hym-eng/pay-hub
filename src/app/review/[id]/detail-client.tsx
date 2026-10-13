@@ -11,10 +11,8 @@ import { DetailForm } from "@/components/payments/detail-form";
 import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { PayeeAccountPanel } from "@/components/payments/payee-account-panel";
 import { OpinionSection } from "@/components/payments/opinion-section";
-import { Label, Select } from "@/components/ui/input";
 import {
   DEFAULT_PAYMENT_CHANNEL,
-  PAYMENT_CHANNELS,
   type PaymentChannel,
 } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
@@ -65,7 +63,16 @@ function ReviewDetailInner() {
             <CardTitle className="text-base">基础信息</CardTitle>
           </CardHeader>
           <CardContent>
-            <DetailForm order={order} editable={false} />
+            <DetailForm
+              order={order}
+              editable={false}
+              channelBesideStatus
+              channelEditable={isReviewMode}
+              channelValue={
+                isReviewMode ? paymentChannel : order.paymentChannel
+              }
+              onChannelChange={setPaymentChannel}
+            />
           </CardContent>
         </Card>
 
@@ -75,29 +82,7 @@ function ReviewDetailInner() {
 
         {isReviewMode ? (
           <Card>
-            <CardContent className="space-y-3 pt-4">
-              <div className="max-w-xs">
-                <Label>
-                  付款渠道
-                  <span className="ml-0.5 text-rose-500" aria-hidden>
-                    *
-                  </span>
-                </Label>
-                <Select
-                  required
-                  aria-required="true"
-                  value={paymentChannel}
-                  onChange={(e) =>
-                    setPaymentChannel(e.target.value as PaymentChannel)
-                  }
-                >
-                  {PAYMENT_CHANNELS.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </Select>
-              </div>
+            <CardContent className="pt-4">
               <OpinionSection
                 value={opinion}
                 onChange={setOpinion}
