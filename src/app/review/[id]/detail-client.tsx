@@ -11,10 +11,7 @@ import { DetailForm } from "@/components/payments/detail-form";
 import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { PayeeAccountPanel } from "@/components/payments/payee-account-panel";
 import { OpinionSection } from "@/components/payments/opinion-section";
-import {
-  DEFAULT_PAYMENT_CHANNEL,
-  type PaymentChannel,
-} from "@/lib/payments-data";
+import { DEFAULT_PAYMENT_CHANNEL } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 function ReviewDetailInner() {
@@ -24,9 +21,6 @@ function ReviewDetailInner() {
   const { getById, approve, reject } = usePayments();
   const order = getById(params.id);
   const [opinion, setOpinion] = useState("");
-  const [paymentChannel, setPaymentChannel] = useState<PaymentChannel>(
-    order?.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL
-  );
 
   if (!order) {
     return (
@@ -67,7 +61,7 @@ function ReviewDetailInner() {
               order={order}
               editable={false}
               channelBesideStatus
-              channelValue={paymentChannel}
+              channelValue={order.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL}
             />
           </CardContent>
         </Card>
@@ -94,7 +88,11 @@ function ReviewDetailInner() {
           <>
             <Button
               onClick={() => {
-                approve(order.id, paymentChannel, opinion);
+                approve(
+                  order.id,
+                  order.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL,
+                  opinion
+                );
                 router.push("/review");
               }}
             >

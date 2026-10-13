@@ -20,7 +20,7 @@ export type PaymentApplyType =
 /** 收款方式类型编码：1 银行卡、2 支付宝 */
 export type PaymentMethodType = "1" | "2";
 
-/** 付款渠道（复核时选择，默认万里汇） */
+/** 付款渠道。明细页只读；复核确认时由系统写入，默认万里汇 */
 export type PaymentChannel = "万里汇" | "连连国际" | "PingPong" | "银行直连";
 
 /** 收款人账户类型 */
@@ -82,7 +82,7 @@ export interface PaymentOrder {
   bankBranch: string;
   /** 转账附言（默认审批单号） */
   transferMemo: string;
-  /** 付款渠道（复核确认时选择） */
+  /** 付款渠道（明细只读；复核确认时系统写入） */
   paymentChannel?: PaymentChannel;
   /** 收款方名称 */
   payeeName?: string;

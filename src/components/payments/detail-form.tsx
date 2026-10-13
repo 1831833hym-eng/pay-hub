@@ -29,8 +29,9 @@ export function DetailForm({
   memoEditable?: boolean;
   draft?: PaymentOrder;
   onChange?: (next: PaymentOrder) => void;
-  /** 复核明细：付款渠道放在付款单状态右侧，纯文本 */
+  /** 初审、复核明细：付款渠道放在付款单状态右侧，只读 */
   channelBesideStatus?: boolean;
+  /** 只读展示值；不传则用单据已有付款渠道，没有则空 */
   channelValue?: PaymentChannel;
 }) {
   const data = draft ?? order;
