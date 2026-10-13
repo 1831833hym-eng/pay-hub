@@ -66,6 +66,7 @@ function SubmitDetailInner() {
               draft={isEditMode ? draft : undefined}
               editable={false}
               memoEditable={isEditMode}
+              channelBesideStatus
               onChange={
                 isEditMode
                   ? (next) => {
