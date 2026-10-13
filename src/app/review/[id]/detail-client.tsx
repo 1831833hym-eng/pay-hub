@@ -67,11 +67,7 @@ function ReviewDetailInner() {
               order={order}
               editable={false}
               channelBesideStatus
-              channelEditable={isReviewMode}
-              channelValue={
-                isReviewMode ? paymentChannel : order.paymentChannel
-              }
-              onChannelChange={setPaymentChannel}
+              channelValue={paymentChannel}
             />
           </CardContent>
         </Card>
