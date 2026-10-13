@@ -8,14 +8,17 @@ export type PaymentStatus =
   | "voided";
 
 export type PaymentApplyType =
-  | "垫资业务付款申请"
-  | "物流费付款申请"
-  | "【线下】采购合同及付款申请 （一次付款/首款/中期款/尾款） - 系统结算"
-  | "日常付款"
-  | "报销申请"
-  | "电商业务付款申请"
-  | "【线下】采购合同及付款申请 （一次付款/首款/中期款/尾款）"
-  | "知识产权事务申请";
+  | "证书费用"
+  | "备用金付款（采购专用）"
+  | "客户相关费用"
+  | "备用金冲销（采购专用）"
+  | "商品运费"
+  | "样品费"
+  | "其他费用"
+  | "商品采购（无合同）【金额1万以下】"
+  | "拍摄费用"
+  | "1688采购合同（需盖章，无需付款）"
+  | "商品采购（有合同）";
 
 /** 收款方式类型编码：1 银行卡、2 支付宝 */
 export type PaymentMethodType = "1" | "2";
@@ -169,14 +172,17 @@ export const STATUS_META: Record<
 };
 
 export const APPLY_TYPES: PaymentApplyType[] = [
-  "垫资业务付款申请",
-  "物流费付款申请",
-  "【线下】采购合同及付款申请 （一次付款/首款/中期款/尾款） - 系统结算",
-  "日常付款",
-  "报销申请",
-  "电商业务付款申请",
-  "【线下】采购合同及付款申请 （一次付款/首款/中期款/尾款）",
-  "知识产权事务申请",
+  "证书费用",
+  "备用金付款（采购专用）",
+  "客户相关费用",
+  "备用金冲销（采购专用）",
+  "商品运费",
+  "样品费",
+  "其他费用",
+  "商品采购（无合同）【金额1万以下】",
+  "拍摄费用",
+  "1688采购合同（需盖章，无需付款）",
+  "商品采购（有合同）",
 ];
 
 export const PAYMENT_METHOD_TYPES: PaymentMethodType[] = ["1", "2"];
@@ -217,7 +223,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260328001",
     feishuNo: "FS20260328001",
     approvalFlowName: "跨境仓储费用审批",
-    applyType: "物流费付款申请",
+    applyType: "商品运费",
     purpose: "FBA仓储与尾程费用 · 2026-03 上半月",
     expenseDetail: "仓储费 8,200.00 USD；尾程配送费 4,650.00 USD",
     amount: 12850,
@@ -257,7 +263,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260328002",
     feishuNo: "FS20260328002",
     approvalFlowName: "物流费用付款审批",
-    applyType: "垫资业务付款申请",
+    applyType: "备用金付款（采购专用）",
     purpose: "欧洲仓一件代发服务费",
     expenseDetail: "一件代发操作费 4,120.50 EUR；耗材费 2,300.00 EUR",
     amount: 6420.5,
@@ -296,7 +302,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260328003",
     feishuNo: "FS20260328003",
     approvalFlowName: "采购货款付款审批",
-    applyType: "【线下】采购合同及付款申请 （一次付款/首款/中期款/尾款）",
+    applyType: "商品采购（有合同）",
     purpose: "采购货款-3月批次",
     expenseDetail: "3月批次货款 186,000.00 HKD",
     amount: 186000,
@@ -335,7 +341,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260327018",
     feishuNo: "FS20260327018",
     approvalFlowName: "广告投放费用审批",
-    applyType: "电商业务付款申请",
+    applyType: "客户相关费用",
     purpose: "东南亚广告投放结算",
     expenseDetail: "信息流广告 6,800.00 SGD；搜索广告 3,000.00 SGD",
     amount: 9800,
@@ -379,7 +385,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260327009",
     feishuNo: "FS20260327009",
     approvalFlowName: "市场服务费审批",
-    applyType: "日常付款",
+    applyType: "其他费用",
     purpose: "日本站内容营销服务费",
     expenseDetail: "内容制作 280,000 JPY；投放服务 170,000 JPY",
     amount: 450000,
@@ -423,7 +429,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260326011",
     feishuNo: "FS20260326011",
     approvalFlowName: "跨境仓储费用审批",
-    applyType: "报销申请",
+    applyType: "样品费",
     purpose: "仓储超期费补缴",
     expenseDetail: "超期仓储费 5,200.00 USD",
     amount: 5200,
@@ -463,7 +469,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260325007",
     feishuNo: "FS20260325007",
     approvalFlowName: "物流费用付款审批",
-    applyType: "物流费付款申请",
+    applyType: "拍摄费用",
     purpose: "美国尾程配送结算",
     expenseDetail: "尾程配送 3,200.00 USD",
     amount: 3200,
@@ -505,7 +511,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260324003",
     feishuNo: "FS20260324003",
     approvalFlowName: "广告投放费用审批",
-    applyType: "知识产权事务申请",
+    applyType: "证书费用",
     purpose: "北美站投放月结",
     expenseDetail: "北美站广告账户充值 15,600.00 USD",
     amount: 15600,
@@ -550,7 +556,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260323015",
     feishuNo: "FS20260323015",
     approvalFlowName: "采购货款付款审批",
-    applyType: "【线下】采购合同及付款申请 （一次付款/首款/中期款/尾款） - 系统结算",
+    applyType: "备用金冲销（采购专用）",
     purpose: "深圳供应商货款补差",
     expenseDetail: "货款补差 42,000.00 HKD",
     amount: 42000,
@@ -590,7 +596,7 @@ export let paymentOrders: PaymentOrder[] = [
     orderNo: "PAY20260322008",
     feishuNo: "FS20260322008",
     approvalFlowName: "仓储费用付款审批",
-    applyType: "电商业务付款申请",
+    applyType: "1688采购合同（需盖章，无需付款）",
     purpose: "海外仓月结费用重复申请，已作废",
     expenseDetail: "海外仓月结 2,800.00 USD（重复申请）",
     amount: 2800,
