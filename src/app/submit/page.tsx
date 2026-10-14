@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +11,10 @@ import {
 } from "@/components/payments/query-form";
 import { ConfirmDialog } from "@/components/payments/confirm-dialog";
 import { OrderTable } from "@/components/payments/order-table";
+import {
+  VOID_NOT_REJECTED_MESSAGE,
+  VOID_REJECTED_MESSAGE,
+} from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
@@ -18,9 +22,7 @@ export default function SubmitListPage() {
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [voidIds, setVoidIds] = useState<string[] | null>(null);
-  const voidIdsRef = useRef<string[] | null>(null);
-  voidIdsRef.current = voidIds;
+  const [voidMessage, setVoidMessage] = useState<string | null>(null);
 
   /** 初审菜单仅展示待初审单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
@@ -56,15 +58,14 @@ export default function SubmitListPage() {
   };
 
   const handleVoidOne = (id: string) => {
-    setVoidIds([id]);
-  };
-
-  const confirmVoid = () => {
-    const ids = voidIdsRef.current;
-    if (!ids || ids.length === 0) return;
-    voidOne(ids[0]);
-    setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
-    setVoidIds(null);
+    const order = orders.find((item) => item.id === id);
+    if (order?.approvalRejected) {
+      voidOne(id);
+      setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
+      setVoidMessage(VOID_REJECTED_MESSAGE);
+      return;
+    }
+    setVoidMessage(VOID_NOT_REJECTED_MESSAGE);
   };
 
   return (
@@ -108,12 +109,10 @@ export default function SubmitListPage() {
       </Card>
 
       <ConfirmDialog
-        open={voidIds !== null}
-        description="将作废付款单，请确认审批单是否已作废。"
-        confirmText="确认"
-        confirmVariant="danger"
-        onConfirm={confirmVoid}
-        onCancel={() => setVoidIds(null)}
+        open={voidMessage !== null}
+        description={voidMessage ?? ""}
+        closeOnly
+        onCancel={() => setVoidMessage(null)}
       />
     </AppShell>
   );

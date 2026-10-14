@@ -70,6 +70,8 @@ export interface PaymentOrder {
   appliedAt: string;
   /** 付款单状态 */
   status: PaymentStatus;
+  /** 对应审批单是否已驳回。作废时据此决定是否真正作废 */
+  approvalRejected?: boolean;
   /** 支付状态（查询列表） */
   payResultStatus?: PayResultStatus;
   /** 支付失败原因（查询列表；仅支付失败时有值） */
@@ -116,6 +118,11 @@ export interface PaymentOrder {
 }
 
 export type HandleStage = "初审" | "复核" | "作废" | "重试支付";
+
+/** 初审、查询引导页作废弹窗：已驳回才作废 */
+export const VOID_REJECTED_MESSAGE = "付款单已作废";
+export const VOID_NOT_REJECTED_MESSAGE =
+  "即将作废付款单，请确保审批单已驳回！";
 
 export interface HandleOpinion {
   stage: HandleStage;
@@ -238,6 +245,7 @@ export let paymentOrders: PaymentOrder[] = [
     applicant: "王晓雯",
     appliedAt: "2026-03-28T09:05:00+08:00",
     status: "pending_submit",
+    approvalRejected: true,
     createdAt: "2026-03-28T09:12:00+08:00",
     updatedAt: "2026-03-28T09:12:00+08:00",
     paymentMethodType: "1",
@@ -573,6 +581,7 @@ export let paymentOrders: PaymentOrder[] = [
     applicant: "王晓雯",
     appliedAt: "2026-03-23T11:00:00+08:00",
     status: "pending_submit",
+    approvalRejected: true,
     createdAt: "2026-03-23T11:10:00+08:00",
     updatedAt: "2026-03-23T16:20:00+08:00",
     paymentMethodType: "1",
@@ -613,6 +622,7 @@ export let paymentOrders: PaymentOrder[] = [
     applicant: "周然",
     appliedAt: "2026-03-22T09:30:00+08:00",
     status: "voided",
+    approvalRejected: true,
     createdAt: "2026-03-22T09:40:00+08:00",
     updatedAt: "2026-03-22T11:00:00+08:00",
     paymentMethodType: "1",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/payments/confirm-dialog";
@@ -10,7 +10,12 @@ import {
   type QueryValues,
 } from "@/components/payments/query-form";
 import { OrderTable } from "@/components/payments/order-table";
-import { STATUS_META, type PaymentStatus } from "@/lib/payments-data";
+import {
+  STATUS_META,
+  VOID_NOT_REJECTED_MESSAGE,
+  VOID_REJECTED_MESSAGE,
+  type PaymentStatus,
+} from "@/lib/payments-data";
 import { Select, Label } from "@/components/ui/input";
 import { usePayments } from "@/lib/payments-store";
 
@@ -30,9 +35,7 @@ export default function QueryListPage() {
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [draftStatus, setDraftStatus] = useState<PaymentStatus | "">("");
   const [appliedStatus, setAppliedStatus] = useState<PaymentStatus | "">("");
-  const [voidId, setVoidId] = useState<string | null>(null);
-  const voidIdRef = useRef<string | null>(null);
-  voidIdRef.current = voidId;
+  const [voidMessage, setVoidMessage] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     return orders.filter((item) => {
@@ -107,23 +110,25 @@ export default function QueryListPage() {
             showSelect={false}
             showQueryOps
             showPayResult
-            onVoid={setVoidId}
+            onVoid={(id) => {
+              const order = orders.find((item) => item.id === id);
+              if (order?.approvalRejected) {
+                voidOne(id, "查询作废");
+                setVoidMessage(VOID_REJECTED_MESSAGE);
+                return;
+              }
+              setVoidMessage(VOID_NOT_REJECTED_MESSAGE);
+            }}
             onRetryPay={retryPay}
           />
         </CardContent>
       </Card>
 
       <ConfirmDialog
-        open={voidId !== null}
-        description="将作废付款单，请确认审批单是否已作废。"
-        confirmText="确认"
-        confirmVariant="danger"
-        onConfirm={() => {
-          const id = voidIdRef.current;
-          if (id) voidOne(id, "查询作废");
-          setVoidId(null);
-        }}
-        onCancel={() => setVoidId(null)}
+        open={voidMessage !== null}
+        description={voidMessage ?? ""}
+        closeOnly
+        onCancel={() => setVoidMessage(null)}
       />
     </AppShell>
   );

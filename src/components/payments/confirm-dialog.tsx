@@ -15,6 +15,7 @@ export function ConfirmDialog({
   confirmText = "确认",
   cancelText = "取消",
   confirmVariant = "default",
+  closeOnly = false,
   onConfirm,
   onCancel,
 }: {
@@ -24,7 +25,9 @@ export function ConfirmDialog({
   confirmText?: string;
   cancelText?: string;
   confirmVariant?: "default" | "danger";
-  onConfirm: () => void;
+  /** 仅一个【关闭】按钮 */
+  closeOnly?: boolean;
+  onConfirm?: () => void;
   onCancel: () => void;
 }) {
   return (
@@ -43,28 +46,44 @@ export function ConfirmDialog({
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
         <div className="mt-5 flex justify-end gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onCancel();
-            }}
-          >
-            {cancelText}
-          </Button>
-          <Button
-            type="button"
-            variant={confirmVariant}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onConfirm();
-            }}
-          >
-            {confirmText}
-          </Button>
+          {closeOnly ? (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onCancel();
+              }}
+            >
+              关闭
+            </Button>
+          ) : (
+            <>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onCancel();
+                }}
+              >
+                {cancelText}
+              </Button>
+              <Button
+                type="button"
+                variant={confirmVariant}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onConfirm?.();
+                }}
+              >
+                {confirmText}
+              </Button>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>
