@@ -153,7 +153,6 @@ export function PaymentDetailPanel({
 
   const actions = (
       <DetailActions
-        align={layout === "drawer" ? "end" : "center"}
         className={
           layout === "drawer"
             ? "static bottom-auto m-0 shrink-0 rounded-none border-x-0 border-b-0 shadow-none"
