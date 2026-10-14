@@ -40,6 +40,7 @@ export function PaymentDetailDrawer({
           scene={scene}
           mode={detail.mode}
           onClose={onClose}
+          layout="drawer"
         />
       ) : null}
     </Drawer>
@@ -58,11 +59,13 @@ export function PaymentDetailPanel({
   scene,
   mode,
   onClose,
+  layout = "page",
 }: {
   orderId: string;
   scene: DetailScene;
   mode: DetailOpenMode;
   onClose: () => void;
+  layout?: "page" | "drawer";
 }) {
   const { getById, submitOne, resyncOne, updateOrder, approve, reject } =
     usePayments();
@@ -96,9 +99,8 @@ export function PaymentDetailPanel({
     mode === "review" &&
     order.status === "pending_review";
 
-  return (
-    <>
-      <div className="space-y-1">
+  const cards = (
+      <div className={layout === "drawer" ? "space-y-1 p-3 sm:p-4" : "space-y-1"}>
         <Card>
           <CardHeader>
             <CardTitle className="text-base">基础信息</CardTitle>
@@ -147,8 +149,17 @@ export function PaymentDetailPanel({
           </Card>
         ) : null}
       </div>
+  );
 
-      <DetailActions>
+  const actions = (
+      <DetailActions
+        align={layout === "drawer" ? "end" : "center"}
+        className={
+          layout === "drawer"
+            ? "static bottom-auto m-0 shrink-0 rounded-none border-x-0 border-b-0 shadow-none"
+            : undefined
+        }
+      >
         {isEditMode ? (
           <Button
             variant="secondary"
@@ -198,6 +209,21 @@ export function PaymentDetailPanel({
           关闭
         </Button>
       </DetailActions>
+  );
+
+  if (layout === "drawer") {
+    return (
+      <div className="flex h-full min-h-0 flex-col">
+        <div className="min-h-0 flex-1 overflow-y-auto">{cards}</div>
+        {actions}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {cards}
+      {actions}
     </>
   );
 }

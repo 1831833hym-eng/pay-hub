@@ -9,9 +9,11 @@ import { cn } from "@/lib/utils";
 export function DetailActions({
   children,
   className,
+  align = "center",
 }: {
   children: React.ReactNode;
   className?: string;
+  align?: "center" | "end";
 }) {
   return (
     <div
@@ -20,7 +22,12 @@ export function DetailActions({
         className
       )}
     >
-      <div className="flex w-full flex-wrap items-center justify-center gap-2 rounded-lg border border-slate-200/80 bg-white/95 px-4 py-2.5 shadow-[0_8px_28px_rgba(15,23,42,0.12)] backdrop-blur">
+      <div
+        className={cn(
+          "flex w-full flex-wrap items-center gap-2 rounded-lg border border-slate-200/80 bg-white/95 px-4 py-2.5 shadow-[0_8px_28px_rgba(15,23,42,0.12)] backdrop-blur",
+          align === "end" ? "justify-end" : "justify-center"
+        )}
+      >
         {children}
       </div>
     </div>

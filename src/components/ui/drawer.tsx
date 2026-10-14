@@ -23,7 +23,7 @@ export function Drawer({
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black/40" />
         <DialogPrimitive.Content
           className={cn(
-            "fixed inset-y-0 right-0 z-50 flex h-full w-full max-w-[1080px] flex-col border-l border-slate-200 bg-[#f5f6f8] shadow-[-12px_0_32px_rgba(15,23,42,0.12)] outline-none",
+            "fixed inset-y-0 right-0 left-auto z-50 flex h-full w-[min(760px,100vw)] flex-col border-l border-slate-200 bg-[#f5f6f8] shadow-[-12px_0_32px_rgba(15,23,42,0.12)] outline-none",
             "animate-drawer-in"
           )}
         >
@@ -38,7 +38,7 @@ export function Drawer({
               <X className="h-4 w-4" />
             </DialogPrimitive.Close>
           </div>
-          <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">{children}</div>
+          <div className="flex min-h-0 flex-1 flex-col">{children}</div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
