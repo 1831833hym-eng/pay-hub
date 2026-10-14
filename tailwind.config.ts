@@ -31,6 +31,15 @@ export default {
       boxShadow: {
         panel: "0 1px 2px rgba(15, 23, 42, 0.04)",
       },
+      keyframes: {
+        "drawer-in": {
+          from: { transform: "translateX(100%)" },
+          to: { transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        "drawer-in": "drawer-in 0.2s ease-out",
+      },
       fontFamily: {
         sans: [
           '"PingFang SC"',

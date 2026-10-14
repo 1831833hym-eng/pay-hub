@@ -11,6 +11,10 @@ import {
 } from "@/components/payments/query-form";
 import { ConfirmDialog } from "@/components/payments/confirm-dialog";
 import { OrderTable } from "@/components/payments/order-table";
+import {
+  PaymentDetailDrawer,
+  type DetailOpenMode,
+} from "@/components/payments/payment-detail-panel";
 import { VOID_CONFIRM_MESSAGE } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
@@ -19,6 +23,10 @@ export default function SubmitListPage() {
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [detail, setDetail] = useState<{
+    id: string;
+    mode: DetailOpenMode;
+  } | null>(null);
   const [voidId, setVoidId] = useState<string | null>(null);
   const voidIdRef = useRef<string | null>(null);
   voidIdRef.current = voidId;
@@ -93,8 +101,7 @@ export default function SubmitListPage() {
             showSelect
             showEdit
             showVoid
-            viewBase="/submit"
-            editBase="/submit"
+            onOpenDetail={(id, mode) => setDetail({ id, mode })}
             onVoid={handleVoidOne}
             onToggle={(id) =>
               setSelectedIds((prev) =>
@@ -107,6 +114,12 @@ export default function SubmitListPage() {
           />
         </CardContent>
       </Card>
+
+      <PaymentDetailDrawer
+        scene="submit"
+        detail={detail}
+        onClose={() => setDetail(null)}
+      />
 
       <ConfirmDialog
         open={voidId !== null}

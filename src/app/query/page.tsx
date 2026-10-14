@@ -11,6 +11,10 @@ import {
 } from "@/components/payments/query-form";
 import { OrderTable } from "@/components/payments/order-table";
 import {
+  PaymentDetailDrawer,
+  type DetailOpenMode,
+} from "@/components/payments/payment-detail-panel";
+import {
   STATUS_META,
   VOID_CONFIRM_MESSAGE,
   type PaymentStatus,
@@ -34,6 +38,10 @@ export default function QueryListPage() {
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [draftStatus, setDraftStatus] = useState<PaymentStatus | "">("");
   const [appliedStatus, setAppliedStatus] = useState<PaymentStatus | "">("");
+  const [detail, setDetail] = useState<{
+    id: string;
+    mode: DetailOpenMode;
+  } | null>(null);
   const [voidId, setVoidId] = useState<string | null>(null);
   const voidIdRef = useRef<string | null>(null);
   voidIdRef.current = voidId;
@@ -106,7 +114,7 @@ export default function QueryListPage() {
             selectedIds={[]}
             onToggle={() => undefined}
             onToggleAll={() => undefined}
-            viewBase="/query"
+            onOpenDetail={(id, mode) => setDetail({ id, mode })}
             showEdit={false}
             showSelect={false}
             showQueryOps
@@ -116,6 +124,12 @@ export default function QueryListPage() {
           />
         </CardContent>
       </Card>
+
+      <PaymentDetailDrawer
+        scene="query"
+        detail={detail}
+        onClose={() => setDetail(null)}
+      />
 
       <ConfirmDialog
         open={voidId !== null}

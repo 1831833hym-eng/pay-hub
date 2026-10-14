@@ -10,6 +10,10 @@ import {
   type QueryValues,
 } from "@/components/payments/query-form";
 import { OrderTable } from "@/components/payments/order-table";
+import {
+  PaymentDetailDrawer,
+  type DetailOpenMode,
+} from "@/components/payments/payment-detail-panel";
 import { usePayments } from "@/lib/payments-store";
 
 export default function ReviewListPage() {
@@ -17,6 +21,10 @@ export default function ReviewListPage() {
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [detail, setDetail] = useState<{
+    id: string;
+    mode: DetailOpenMode;
+  } | null>(null);
 
   /** 复核菜单仅展示待复核单据 */
   const filtered = useMemo(() => {
@@ -81,13 +89,19 @@ export default function ReviewListPage() {
               )
             }
             onToggleAll={(ids) => setSelectedIds(ids)}
-            viewBase="/review"
+            onOpenDetail={(id, mode) => setDetail({ id, mode })}
             showEdit={false}
             showReview
             showSelect
           />
         </CardContent>
       </Card>
+
+      <PaymentDetailDrawer
+        scene="review"
+        detail={detail}
+        onClose={() => setDetail(null)}
+      />
     </AppShell>
   );
 }

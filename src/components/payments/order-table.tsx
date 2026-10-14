@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { StatusBadge } from "@/components/ui/badge";
 import { TablePagination } from "@/components/ui/pagination";
@@ -15,8 +14,7 @@ export function OrderTable({
   selectedIds,
   onToggle,
   onToggleAll,
-  viewBase,
-  editBase,
+  onOpenDetail,
   showEdit,
   showReview,
   showVoid,
@@ -30,8 +28,8 @@ export function OrderTable({
   selectedIds: string[];
   onToggle: (id: string) => void;
   onToggleAll: (ids: string[]) => void;
-  viewBase: string;
-  editBase?: string;
+  /** 初审 / 复核 / 查看以抽屉打开 */
+  onOpenDetail: (id: string, action: "edit" | "review" | "view") => void;
   showEdit?: boolean;
   /** 复核引导页：待复核单据显示【复核】入口 */
   showReview?: boolean;
@@ -297,12 +295,13 @@ export function OrderTable({
                 >
                   <div className="flex flex-nowrap items-center justify-end gap-2">
                     {showEdit && item.status === "pending_submit" ? (
-                      <Link
-                        href={`${editBase ?? viewBase}/${item.id}?mode=edit`}
+                      <button
+                        type="button"
+                        onClick={() => onOpenDetail(item.id, "edit")}
                         className="inline-flex h-7 items-center rounded border border-slate-200 bg-white px-2.5 text-xs text-ink-2 hover:border-brand-200 hover:text-brand-600"
                       >
                         初审
-                      </Link>
+                      </button>
                     ) : null}
                     {showVoid && item.status === "pending_submit" ? (
                       <button
@@ -332,19 +331,21 @@ export function OrderTable({
                       </>
                     ) : null}
                     {showReview && item.status === "pending_review" ? (
-                      <Link
-                        href={`${viewBase}/${item.id}?mode=review`}
+                      <button
+                        type="button"
+                        onClick={() => onOpenDetail(item.id, "review")}
                         className="inline-flex h-7 items-center rounded border border-brand-200 bg-white px-2.5 text-xs font-medium text-brand-600 hover:bg-brand-50"
                       >
                         复核
-                      </Link>
+                      </button>
                     ) : null}
-                    <Link
-                      href={`${viewBase}/${item.id}`}
+                    <button
+                      type="button"
+                      onClick={() => onOpenDetail(item.id, "view")}
                       className="inline-flex h-7 items-center rounded bg-brand-500 px-2.5 text-xs font-medium text-white hover:bg-brand-600"
                     >
                       查看
-                    </Link>
+                    </button>
                   </div>
                 </td>
               </tr>
