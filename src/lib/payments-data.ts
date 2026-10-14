@@ -123,6 +123,8 @@ export type HandleStage = "初审" | "复核" | "作废" | "重试支付";
 export const VOID_CONFIRM_MESSAGE =
   "即将作废付款单，请确认！确认后请同步驳回审批单。";
 
+export const REPAY_NOTICE_MESSAGE = "已成功提交支付，请稍等。";
+
 export interface HandleOpinion {
   stage: HandleStage;
   content: string;

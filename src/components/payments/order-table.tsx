@@ -35,7 +35,7 @@ export function OrderTable({
   showReview?: boolean;
   /** 初审引导页：待初审单据显示【作废】 */
   showVoid?: boolean;
-  /** 查询引导页：操作列增加【作废】【重试支付】 */
+  /** 查询引导页：操作列增加【作废】【重新支付】 */
   showQueryOps?: boolean;
   /** 查询引导页：付款单状态右侧展示支付状态、支付失败原因 */
   showPayResult?: boolean;
@@ -326,7 +326,7 @@ export function OrderTable({
                           onClick={() => onRetryPay?.(item.id)}
                           className="inline-flex h-7 items-center rounded border border-slate-200 bg-white px-2.5 text-xs text-ink-2 hover:border-brand-200 hover:text-brand-600"
                         >
-                          重试支付
+                          重新支付
                         </button>
                       </>
                     ) : null}

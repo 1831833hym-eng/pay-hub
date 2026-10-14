@@ -15,6 +15,7 @@ import {
   type DetailOpenMode,
 } from "@/components/payments/payment-detail-panel";
 import {
+  REPAY_NOTICE_MESSAGE,
   STATUS_META,
   VOID_CONFIRM_MESSAGE,
   type PaymentStatus,
@@ -43,6 +44,7 @@ export default function QueryListPage() {
     mode: DetailOpenMode;
   } | null>(null);
   const [voidId, setVoidId] = useState<string | null>(null);
+  const [repayNoticeOpen, setRepayNoticeOpen] = useState(false);
   const voidIdRef = useRef<string | null>(null);
   voidIdRef.current = voidId;
 
@@ -120,7 +122,10 @@ export default function QueryListPage() {
             showQueryOps
             showPayResult
             onVoid={setVoidId}
-            onRetryPay={retryPay}
+            onRetryPay={(id) => {
+              retryPay(id);
+              setRepayNoticeOpen(true);
+            }}
           />
         </CardContent>
       </Card>
@@ -142,6 +147,13 @@ export default function QueryListPage() {
           setVoidId(null);
         }}
         onCancel={() => setVoidId(null)}
+      />
+
+      <ConfirmDialog
+        open={repayNoticeOpen}
+        description={REPAY_NOTICE_MESSAGE}
+        closeOnly
+        onCancel={() => setRepayNoticeOpen(false)}
       />
     </AppShell>
   );
