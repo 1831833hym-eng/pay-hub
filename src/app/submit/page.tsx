@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,18 +11,17 @@ import {
 } from "@/components/payments/query-form";
 import { ConfirmDialog } from "@/components/payments/confirm-dialog";
 import { OrderTable } from "@/components/payments/order-table";
-import {
-  VOID_NOT_REJECTED_MESSAGE,
-  VOID_REJECTED_MESSAGE,
-} from "@/lib/payments-data";
+import { VOID_CONFIRM_MESSAGE } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
-  const { orders, batchSubmit } = usePayments();
+  const { orders, batchSubmit, voidOne } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [voidMessage, setVoidMessage] = useState<string | null>(null);
+  const [voidId, setVoidId] = useState<string | null>(null);
+  const voidIdRef = useRef<string | null>(null);
+  voidIdRef.current = voidId;
 
   /** 初审菜单仅展示待初审单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
@@ -58,12 +57,15 @@ export default function SubmitListPage() {
   };
 
   const handleVoidOne = (id: string) => {
-    const order = orders.find((item) => item.id === id);
-    setVoidMessage(
-      order?.approvalRejected
-        ? VOID_REJECTED_MESSAGE
-        : VOID_NOT_REJECTED_MESSAGE
-    );
+    setVoidId(id);
+  };
+
+  const confirmVoid = () => {
+    const id = voidIdRef.current;
+    if (!id) return;
+    voidOne(id);
+    setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
+    setVoidId(null);
   };
 
   return (
@@ -107,10 +109,12 @@ export default function SubmitListPage() {
       </Card>
 
       <ConfirmDialog
-        open={voidMessage !== null}
-        description={voidMessage ?? ""}
-        closeOnly
-        onCancel={() => setVoidMessage(null)}
+        open={voidId !== null}
+        description={VOID_CONFIRM_MESSAGE}
+        confirmText="确认"
+        confirmVariant="danger"
+        onConfirm={confirmVoid}
+        onCancel={() => setVoidId(null)}
       />
     </AppShell>
   );

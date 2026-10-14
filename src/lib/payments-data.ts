@@ -119,10 +119,9 @@ export interface PaymentOrder {
 
 export type HandleStage = "初审" | "复核" | "作废" | "重试支付";
 
-/** 初审、查询引导页作废弹窗：只提示，不改状态 */
-export const VOID_REJECTED_MESSAGE = "付款单已作废";
-export const VOID_NOT_REJECTED_MESSAGE =
-  "即将作废付款单，请确保审批单已驳回！";
+/** 初审、查询引导页作废弹窗。确认后将付款单改为已作废 */
+export const VOID_CONFIRM_MESSAGE =
+  "即将作废付款单，请确认！确认后请同步驳回审批单。";
 
 export interface HandleOpinion {
   stage: HandleStage;

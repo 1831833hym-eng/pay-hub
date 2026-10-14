@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/payments/confirm-dialog";
@@ -12,8 +12,7 @@ import {
 import { OrderTable } from "@/components/payments/order-table";
 import {
   STATUS_META,
-  VOID_NOT_REJECTED_MESSAGE,
-  VOID_REJECTED_MESSAGE,
+  VOID_CONFIRM_MESSAGE,
   type PaymentStatus,
 } from "@/lib/payments-data";
 import { Select, Label } from "@/components/ui/input";
@@ -30,12 +29,14 @@ const STATUS_OPTIONS: Array<PaymentStatus | ""> = [
 ];
 
 export default function QueryListPage() {
-  const { orders, retryPay } = usePayments();
+  const { orders, retryPay, voidOne } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [draftStatus, setDraftStatus] = useState<PaymentStatus | "">("");
   const [appliedStatus, setAppliedStatus] = useState<PaymentStatus | "">("");
-  const [voidMessage, setVoidMessage] = useState<string | null>(null);
+  const [voidId, setVoidId] = useState<string | null>(null);
+  const voidIdRef = useRef<string | null>(null);
+  voidIdRef.current = voidId;
 
   const filtered = useMemo(() => {
     return orders.filter((item) => {
@@ -110,24 +111,23 @@ export default function QueryListPage() {
             showSelect={false}
             showQueryOps
             showPayResult
-            onVoid={(id) => {
-              const order = orders.find((item) => item.id === id);
-              setVoidMessage(
-                order?.approvalRejected
-                  ? VOID_REJECTED_MESSAGE
-                  : VOID_NOT_REJECTED_MESSAGE
-              );
-            }}
+            onVoid={setVoidId}
             onRetryPay={retryPay}
           />
         </CardContent>
       </Card>
 
       <ConfirmDialog
-        open={voidMessage !== null}
-        description={voidMessage ?? ""}
-        closeOnly
-        onCancel={() => setVoidMessage(null)}
+        open={voidId !== null}
+        description={VOID_CONFIRM_MESSAGE}
+        confirmText="确认"
+        confirmVariant="danger"
+        onConfirm={() => {
+          const id = voidIdRef.current;
+          if (id) voidOne(id, "查询作废");
+          setVoidId(null);
+        }}
+        onCancel={() => setVoidId(null)}
       />
     </AppShell>
   );
