@@ -219,7 +219,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
-  /** 查询页重试支付：待付款重新出款并进入待回单，其他未作废单据只记处理历史 */
+  /** 查询页重试支付：待支付重新出款并进入待回单，其他未作废单据只记处理历史 */
   const retryPay = useCallback((id: string) => {
     let ok = false;
     setOrders((prev) =>
