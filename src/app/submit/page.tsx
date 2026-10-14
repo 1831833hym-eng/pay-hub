@@ -18,7 +18,7 @@ import {
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
-  const { orders, batchSubmit, voidOne } = usePayments();
+  const { orders, batchSubmit } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -59,13 +59,11 @@ export default function SubmitListPage() {
 
   const handleVoidOne = (id: string) => {
     const order = orders.find((item) => item.id === id);
-    if (order?.approvalRejected) {
-      voidOne(id);
-      setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
-      setVoidMessage(VOID_REJECTED_MESSAGE);
-      return;
-    }
-    setVoidMessage(VOID_NOT_REJECTED_MESSAGE);
+    setVoidMessage(
+      order?.approvalRejected
+        ? VOID_REJECTED_MESSAGE
+        : VOID_NOT_REJECTED_MESSAGE
+    );
   };
 
   return (

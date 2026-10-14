@@ -30,7 +30,7 @@ const STATUS_OPTIONS: Array<PaymentStatus | ""> = [
 ];
 
 export default function QueryListPage() {
-  const { orders, voidOne, retryPay } = usePayments();
+  const { orders, retryPay } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [draftStatus, setDraftStatus] = useState<PaymentStatus | "">("");
@@ -112,12 +112,11 @@ export default function QueryListPage() {
             showPayResult
             onVoid={(id) => {
               const order = orders.find((item) => item.id === id);
-              if (order?.approvalRejected) {
-                voidOne(id, "查询作废");
-                setVoidMessage(VOID_REJECTED_MESSAGE);
-                return;
-              }
-              setVoidMessage(VOID_NOT_REJECTED_MESSAGE);
+              setVoidMessage(
+                order?.approvalRejected
+                  ? VOID_REJECTED_MESSAGE
+                  : VOID_NOT_REJECTED_MESSAGE
+              );
             }}
             onRetryPay={retryPay}
           />
