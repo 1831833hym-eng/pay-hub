@@ -125,6 +125,8 @@ export const VOID_CONFIRM_MESSAGE =
 
 export const REPAY_NOTICE_MESSAGE = "已成功提交支付，请稍等。";
 
+export const SELECT_REQUIRED_MESSAGE = "请先勾选数据！";
+
 export interface HandleOpinion {
   stage: HandleStage;
   content: string;

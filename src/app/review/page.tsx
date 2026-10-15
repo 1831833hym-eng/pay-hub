@@ -9,11 +9,13 @@ import {
   QueryForm,
   type QueryValues,
 } from "@/components/payments/query-form";
+import { ConfirmDialog } from "@/components/payments/confirm-dialog";
 import { OrderTable } from "@/components/payments/order-table";
 import {
   PaymentDetailDrawer,
   type DetailOpenMode,
 } from "@/components/payments/payment-detail-panel";
+import { SELECT_REQUIRED_MESSAGE } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function ReviewListPage() {
@@ -25,6 +27,7 @@ export default function ReviewListPage() {
     id: string;
     mode: DetailOpenMode;
   } | null>(null);
+  const [selectNoticeOpen, setSelectNoticeOpen] = useState(false);
 
   /** 复核菜单仅展示待复核单据 */
   const filtered = useMemo(() => {
@@ -54,7 +57,10 @@ export default function ReviewListPage() {
   }, [orders, appliedQuery]);
 
   const handleBatchApprove = () => {
-    if (selectedIds.length === 0) return;
+    if (selectedIds.length === 0) {
+      setSelectNoticeOpen(true);
+      return;
+    }
     batchApprove(selectedIds);
     setSelectedIds([]);
   };
@@ -101,6 +107,13 @@ export default function ReviewListPage() {
         scene="review"
         detail={detail}
         onClose={() => setDetail(null)}
+      />
+
+      <ConfirmDialog
+        open={selectNoticeOpen}
+        description={SELECT_REQUIRED_MESSAGE}
+        closeOnly
+        onCancel={() => setSelectNoticeOpen(false)}
       />
     </AppShell>
   );

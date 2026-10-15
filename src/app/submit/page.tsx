@@ -15,7 +15,10 @@ import {
   PaymentDetailDrawer,
   type DetailOpenMode,
 } from "@/components/payments/payment-detail-panel";
-import { VOID_CONFIRM_MESSAGE } from "@/lib/payments-data";
+import {
+  SELECT_REQUIRED_MESSAGE,
+  VOID_CONFIRM_MESSAGE,
+} from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
@@ -28,6 +31,7 @@ export default function SubmitListPage() {
     mode: DetailOpenMode;
   } | null>(null);
   const [voidId, setVoidId] = useState<string | null>(null);
+  const [selectNoticeOpen, setSelectNoticeOpen] = useState(false);
   const voidIdRef = useRef<string | null>(null);
   voidIdRef.current = voidId;
 
@@ -59,7 +63,10 @@ export default function SubmitListPage() {
   }, [orders, appliedQuery]);
 
   const handleBatchSubmit = () => {
-    if (selectedIds.length === 0) return;
+    if (selectedIds.length === 0) {
+      setSelectNoticeOpen(true);
+      return;
+    }
     batchSubmit(selectedIds);
     setSelectedIds([]);
   };
@@ -128,6 +135,13 @@ export default function SubmitListPage() {
         confirmVariant="danger"
         onConfirm={confirmVoid}
         onCancel={() => setVoidId(null)}
+      />
+
+      <ConfirmDialog
+        open={selectNoticeOpen}
+        description={SELECT_REQUIRED_MESSAGE}
+        closeOnly
+        onCancel={() => setSelectNoticeOpen(false)}
       />
     </AppShell>
   );
