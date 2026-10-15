@@ -642,7 +642,7 @@ export let paymentOrders: PaymentOrder[] = [
     remark: "初审作废",
     handleOpinions: [
       {
-        stage: "作废",
+        stage: "初审",
         content: "作废",
         at: "2026-03-22T11:00:00+08:00",
       },

@@ -144,7 +144,11 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
             ...touch({
               status: "voided",
               remark,
-              handleOpinions: withOpinion(o, "作废", "作废"),
+              handleOpinions: withOpinion(
+                o,
+                remark === "查询作废" ? "作废" : "初审",
+                "作废"
+              ),
             }),
           };
         }
@@ -165,7 +169,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
             ...touch({
               status: "voided",
               remark: "初审作废",
-              handleOpinions: withOpinion(o, "作废", "作废"),
+              handleOpinions: withOpinion(o, "初审", "作废"),
             }),
           };
         }
