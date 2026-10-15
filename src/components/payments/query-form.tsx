@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import {
   PAYMENT_METHOD_TYPES,
   PAYMENT_METHOD_TYPE_META,
 } from "@/lib/payments-data";
+import { cn } from "@/lib/utils";
 
 export type QueryValues = {
   orderNo: string;
@@ -41,6 +43,7 @@ export function QueryForm({
   onReset: () => void;
   extraFields?: React.ReactNode;
 }) {
+  const [expanded, setExpanded] = useState(false);
   const set = (key: keyof QueryValues, value: string) =>
     onChange({ ...values, [key]: value });
 
@@ -88,29 +91,33 @@ export function QueryForm({
                 inputMode="decimal"
               />
             </div>
-            <div>
-              <Label>付款事由</Label>
-              <Input
-                value={values.purpose}
-                onChange={(e) => set("purpose", e.target.value)}
-                placeholder="请输入"
-              />
-            </div>
-            <div>
-              <Label>收款方式类型</Label>
-              <Select
-                value={values.paymentMethodType}
-                onChange={(e) => set("paymentMethodType", e.target.value)}
-              >
-                <option value="">请选择</option>
-                {PAYMENT_METHOD_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {PAYMENT_METHOD_TYPE_META[t].label}
-                  </option>
-                ))}
-              </Select>
-            </div>
-            {extraFields}
+            {expanded ? (
+              <>
+                <div>
+                  <Label>付款事由</Label>
+                  <Input
+                    value={values.purpose}
+                    onChange={(e) => set("purpose", e.target.value)}
+                    placeholder="请输入"
+                  />
+                </div>
+                <div>
+                  <Label>收款方式类型</Label>
+                  <Select
+                    value={values.paymentMethodType}
+                    onChange={(e) => set("paymentMethodType", e.target.value)}
+                  >
+                    <option value="">请选择</option>
+                    {PAYMENT_METHOD_TYPES.map((t) => (
+                      <option key={t} value={t}>
+                        {PAYMENT_METHOD_TYPE_META[t].label}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                {extraFields}
+              </>
+            ) : null}
           </div>
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
             <Button onClick={onSearch}>搜索</Button>
@@ -119,10 +126,17 @@ export function QueryForm({
             </Button>
             <button
               type="button"
+              aria-expanded={expanded}
+              onClick={() => setExpanded((open) => !open)}
               className="inline-flex items-center gap-0.5 text-xs text-ink-3 hover:text-brand-600"
             >
-              展开
-              <ChevronDown className="h-3.5 w-3.5" />
+              {expanded ? "收起" : "展开"}
+              <ChevronDown
+                className={cn(
+                  "h-3.5 w-3.5 transition-transform",
+                  expanded && "rotate-180"
+                )}
+              />
             </button>
           </div>
         </div>
