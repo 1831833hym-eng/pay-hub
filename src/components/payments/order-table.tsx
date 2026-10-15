@@ -35,7 +35,7 @@ export function OrderTable({
   showReview?: boolean;
   /** 初审引导页：待初审单据显示【作废】 */
   showVoid?: boolean;
-  /** 查询引导页：操作列增加【作废】【重新支付】 */
+  /** 查询引导页：待支付或待回单且支付失败时显示【作废】【重新支付】 */
   showQueryOps?: boolean;
   /** 查询引导页：付款单状态右侧展示支付状态、支付失败原因 */
   showPayResult?: boolean;
@@ -312,7 +312,10 @@ export function OrderTable({
                         作废
                       </button>
                     ) : null}
-                    {showQueryOps ? (
+                    {showQueryOps &&
+                    (item.status === "pending_pay" ||
+                      item.status === "pending_receipt") &&
+                    item.payResultStatus === "支付失败" ? (
                       <>
                         <button
                           type="button"
