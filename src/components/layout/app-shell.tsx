@@ -88,9 +88,6 @@ export function AppShell({
           </div>
         </div>
         <nav className="flex-1 space-y-0.5 px-2 py-3">
-          <div className="mb-1 px-3 text-[11px] font-medium uppercase tracking-wide text-ink-4">
-            菜单
-          </div>
           {MENUS.map((item) => {
             const Icon = item.icon;
             const isActive = item.match(pathname);
