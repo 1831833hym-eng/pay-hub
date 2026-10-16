@@ -7,6 +7,7 @@ import {
   compareOutcome,
   type CompareResult,
 } from "@/lib/compare-data";
+import { currencyLabel } from "@/lib/payments-data";
 import { cn, formatAmount } from "@/lib/utils";
 
 const CELL =
@@ -81,7 +82,7 @@ export function CompareTable({ rows }: { rows: CompareResult[] }) {
                   {formatAmount(item.payment.amount)}
                 </td>
                 <td className={cn(CELL, rowBg, miss.currency && "bg-rose-50 text-rose-700")}>
-                  {item.payment.currency}
+                  {currencyLabel(item.payment.currency)}
                 </td>
                 <td className={cn(CELL, rowBg, miss.payeeName && "bg-rose-50 text-rose-700")}>
                   {item.payment.payeeName}
@@ -103,7 +104,7 @@ export function CompareTable({ rows }: { rows: CompareResult[] }) {
                   {formatAmount(item.approval.amount)}
                 </td>
                 <td className={cn(CELL, rowBg, miss.currency && "bg-rose-50 text-rose-700")}>
-                  {item.approval.currency}
+                  {currencyLabel(item.approval.currency)}
                 </td>
                 <td className={cn(CELL, rowBg, miss.payeeName && "bg-rose-50 text-rose-700")}>
                   {item.approval.payeeName}

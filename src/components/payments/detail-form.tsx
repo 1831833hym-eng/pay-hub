@@ -9,6 +9,8 @@ import {
   paymentMethodTypeLabel,
   type PaymentApplyType,
   type PaymentChannel,
+  CURRENCIES,
+  currencyLabel,
   type PaymentOrder,
   type PaymentMethodType,
 } from "@/lib/payments-data";
@@ -124,7 +126,7 @@ export function DetailForm({
             <Value>{formatAmount(data.amount)}</Value>
           )}
         </Field>
-        <Field label="币种">
+        <Field label="付款币种">
           {editable ? (
             <Select
               value={data.currency}
@@ -132,14 +134,14 @@ export function DetailForm({
                 set("currency", e.target.value as PaymentOrder["currency"])
               }
             >
-              {["USD", "EUR", "HKD", "SGD", "JPY", "GBP", "CNY"].map((c) => (
+              {CURRENCIES.map((c) => (
                 <option key={c} value={c}>
-                  {c}
+                  {currencyLabel(c)}
                 </option>
               ))}
             </Select>
           ) : (
-            <Value>{data.currency}</Value>
+            <Value>{currencyLabel(data.currency)}</Value>
           )}
         </Field>
         <Field label="收款方式类型">

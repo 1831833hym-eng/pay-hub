@@ -35,7 +35,19 @@ export type PayeeAccountType =
   | "对私账户"
   | "第三方支付账户";
 
-export type Currency = "USD" | "EUR" | "GBP" | "JPY" | "HKD" | "CNY" | "SGD";
+export type Currency = "USD" | "CNY" | "HKD";
+
+export const CURRENCIES: Currency[] = ["USD", "CNY", "HKD"];
+
+export const CURRENCY_META: Record<Currency, { code: Currency; label: string }> = {
+  USD: { code: "USD", label: "美元" },
+  CNY: { code: "CNY", label: "人民币" },
+  HKD: { code: "HKD", label: "港币" },
+};
+
+export function currencyLabel(code: Currency | string) {
+  return CURRENCY_META[code as Currency]?.label ?? code;
+}
 
 export const DEFAULT_PAYMENT_CHANNEL: PaymentChannel = "万里汇";
 
@@ -287,9 +299,9 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "物流费用付款审批",
     applyType: "备用金付款（采购专用）",
     purpose: "欧洲仓一件代发服务费",
-    expenseDetail: "一件代发操作费 4,120.50 EUR；耗材费 2,300.00 EUR",
+    expenseDetail: "一件代发操作费 4,120.50 CNY；耗材费 2,300.00 CNY",
     amount: 6420.5,
-    currency: "EUR",
+    currency: "CNY",
     applicant: "李明轩",
     appliedAt: "2026-03-28T10:20:00+08:00",
     status: "pending_submit",
@@ -365,9 +377,9 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "广告投放费用审批",
     applyType: "客户相关费用",
     purpose: "东南亚广告投放结算",
-    expenseDetail: "信息流广告 6,800.00 SGD；搜索广告 3,000.00 SGD",
+    expenseDetail: "信息流广告 6,800.00 HKD；搜索广告 3,000.00 HKD",
     amount: 9800,
-    currency: "SGD",
+    currency: "HKD",
     applicant: "赵一诺",
     appliedAt: "2026-03-27T16:40:00+08:00",
     status: "pending_review",
@@ -409,9 +421,9 @@ export let paymentOrders: PaymentOrder[] = [
     approvalFlowName: "市场服务费审批",
     applyType: "其他费用",
     purpose: "日本站内容营销服务费",
-    expenseDetail: "内容制作 280,000 JPY；投放服务 170,000 JPY",
+    expenseDetail: "内容制作 280,000.00 CNY；投放服务 170,000.00 CNY",
     amount: 450000,
-    currency: "JPY",
+    currency: "CNY",
     applicant: "孙可",
     appliedAt: "2026-03-27T14:10:00+08:00",
     status: "pending_review",
