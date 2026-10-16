@@ -26,6 +26,8 @@ type Store = {
   batchApprove: (ids: string[], channel?: PaymentChannel) => number;
   submitOne: (id: string, opinion?: string, transferMemo?: string) => boolean;
   voidOne: (id: string, remark?: string) => boolean;
+  /** 初审引导页：确认已转他人并线下付款后，状态改为已完成 */
+  markOfflinePaid: (id: string) => boolean;
   retryPay: (id: string) => boolean;
   batchVoid: (ids: string[]) => number;
   resyncOne: (id: string) => boolean;
@@ -223,6 +225,25 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
     [orders, setStatus]
   );
 
+  /** 初审已线下付款：待初审直接改为已完成，并记处理历史 */
+  const markOfflinePaid = useCallback((id: string) => {
+    let ok = false;
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (o.id !== id || o.status !== "pending_submit") return o;
+        ok = true;
+        return {
+          ...o,
+          ...touch({
+            status: "completed",
+            handleOpinions: withOpinion(o, "初审", "已线下付款"),
+          }),
+        };
+      })
+    );
+    return ok;
+  }, []);
+
   /** 查询页重试支付：待支付重新出款并进入待回单，其他未作废单据只记处理历史 */
   const retryPay = useCallback((id: string) => {
     let ok = false;
@@ -295,6 +316,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchApprove,
       submitOne,
       voidOne,
+      markOfflinePaid,
       retryPay,
       batchVoid,
       resyncOne,
@@ -311,6 +333,7 @@ export function PaymentsProvider({ children }: { children: ReactNode }) {
       batchApprove,
       submitOne,
       voidOne,
+      markOfflinePaid,
       retryPay,
       batchVoid,
       resyncOne,

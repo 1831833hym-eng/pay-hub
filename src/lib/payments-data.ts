@@ -123,6 +123,10 @@ export type HandleStage = "初审" | "复核" | "作废" | "重试支付";
 export const VOID_CONFIRM_MESSAGE =
   "即将作废付款单，请确认！确认后请同步驳回审批单。";
 
+/** 初审引导页【已线下付款】。确认后将付款单改为已完成 */
+export const OFFLINE_PAID_CONFIRM_MESSAGE =
+  "请确认该笔审批是否已转他人并线下付款？";
+
 export const REPAY_NOTICE_MESSAGE = "已成功提交支付，请稍等。";
 
 export const SELECT_REQUIRED_MESSAGE = "请先勾选数据！";

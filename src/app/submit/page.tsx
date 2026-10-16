@@ -17,12 +17,13 @@ import {
 } from "@/components/payments/payment-detail-panel";
 import {
   SELECT_REQUIRED_MESSAGE,
+  OFFLINE_PAID_CONFIRM_MESSAGE,
   VOID_CONFIRM_MESSAGE,
 } from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export default function SubmitListPage() {
-  const { orders, batchSubmit, voidOne } = usePayments();
+  const { orders, batchSubmit, voidOne, markOfflinePaid } = usePayments();
   const [draftQuery, setDraftQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [appliedQuery, setAppliedQuery] = useState<QueryValues>(EMPTY_QUERY);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -31,9 +32,12 @@ export default function SubmitListPage() {
     mode: DetailOpenMode;
   } | null>(null);
   const [voidId, setVoidId] = useState<string | null>(null);
+  const [offlinePayId, setOfflinePayId] = useState<string | null>(null);
   const [selectNoticeOpen, setSelectNoticeOpen] = useState(false);
   const voidIdRef = useRef<string | null>(null);
+  const offlinePayIdRef = useRef<string | null>(null);
   voidIdRef.current = voidId;
+  offlinePayIdRef.current = offlinePayId;
 
   /** 初审菜单仅展示待初审单据；复核退回后的单也会回到本列表 */
   const filtered = useMemo(() => {
@@ -83,6 +87,14 @@ export default function SubmitListPage() {
     setVoidId(null);
   };
 
+  const confirmOfflinePaid = () => {
+    const id = offlinePayIdRef.current;
+    if (!id) return;
+    markOfflinePaid(id);
+    setSelectedIds((prev) => prev.filter((itemId) => itemId !== id));
+    setOfflinePayId(null);
+  };
+
   return (
     <AppShell title="初审付款单">
       <QueryForm
@@ -108,8 +120,10 @@ export default function SubmitListPage() {
             showSelect
             showEdit
             showVoid
+            showOfflinePay
             onOpenDetail={(id, mode) => setDetail({ id, mode })}
             onVoid={handleVoidOne}
+            onOfflinePay={setOfflinePayId}
             onToggle={(id) =>
               setSelectedIds((prev) =>
                 prev.includes(id)
@@ -135,6 +149,14 @@ export default function SubmitListPage() {
         confirmVariant="danger"
         onConfirm={confirmVoid}
         onCancel={() => setVoidId(null)}
+      />
+
+      <ConfirmDialog
+        open={offlinePayId !== null}
+        description={OFFLINE_PAID_CONFIRM_MESSAGE}
+        confirmText="确认"
+        onConfirm={confirmOfflinePaid}
+        onCancel={() => setOfflinePayId(null)}
       />
 
       <ConfirmDialog
