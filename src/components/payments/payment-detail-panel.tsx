@@ -10,7 +10,11 @@ import { HandleHistoryPanel } from "@/components/payments/handle-history-panel";
 import { PayeeAccountPanel } from "@/components/payments/payee-account-panel";
 import { OpinionSection } from "@/components/payments/opinion-section";
 import { ReceiptInfoPanel } from "@/components/payments/receipt-info-panel";
-import { DEFAULT_PAYMENT_CHANNEL, type PaymentOrder } from "@/lib/payments-data";
+import {
+  DEFAULT_PAYMENT_CHANNEL,
+  type Currency,
+  type PaymentOrder,
+} from "@/lib/payments-data";
 import { usePayments } from "@/lib/payments-store";
 
 export type DetailScene = "submit" | "review" | "query";
@@ -112,9 +116,18 @@ export function PaymentDetailPanel({
               editable={false}
               memoEditable={isEditMode}
               channelBesideStatus={scene !== "query"}
+              channelReadOnlySelect={scene === "review"}
               channelValue={
                 scene === "review"
                   ? (order.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL)
+                  : undefined
+              }
+              showSettlement={scene === "review"}
+              proposedCurrencyEditable={scene === "review"}
+              onProposedCurrencyChange={
+                scene === "review"
+                  ? (currency: Currency) =>
+                      updateOrder(order.id, { proposedCurrency: currency })
                   : undefined
               }
               onChange={

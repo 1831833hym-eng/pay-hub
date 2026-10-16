@@ -11,6 +11,11 @@ import {
   type PaymentChannel,
   CURRENCIES,
   currencyLabel,
+  currencyOptionLabel,
+  DEFAULT_PAYMENT_CHANNEL,
+  PAYMENT_CHANNELS,
+  reviewSettlement,
+  type Currency,
   type PaymentOrder,
   type PaymentMethodType,
 } from "@/lib/payments-data";
@@ -24,6 +29,10 @@ export function DetailForm({
   onChange,
   channelBesideStatus = false,
   channelValue,
+  channelReadOnlySelect = false,
+  showSettlement = false,
+  proposedCurrencyEditable = false,
+  onProposedCurrencyChange,
 }: {
   order: PaymentOrder;
   editable: boolean;
@@ -35,8 +44,16 @@ export function DetailForm({
   channelBesideStatus?: boolean;
   /** 只读展示值；不传则用单据已有付款渠道，没有则空 */
   channelValue?: PaymentChannel;
+  /** 复核明细：付款渠道为下拉框，默认万里汇，不可修改 */
+  channelReadOnlySelect?: boolean;
+  /** 仅复核明细：付款币种后展示提出金额、提出币种、收款金额、收款币种 */
+  showSettlement?: boolean;
+  /** 复核编辑态可选择提出币种 */
+  proposedCurrencyEditable?: boolean;
+  onProposedCurrencyChange?: (currency: Currency) => void;
 }) {
   const data = draft ?? order;
+  const settlement = reviewSettlement(data);
 
   const set = <K extends keyof PaymentOrder>(key: K, value: PaymentOrder[K]) => {
     if (!onChange) return;
@@ -81,7 +98,24 @@ export function DetailForm({
         </Field>
         {channelBesideStatus ? (
           <Field label="付款渠道">
-            <Value>{channelValue || data.paymentChannel}</Value>
+            {channelReadOnlySelect ? (
+              <Select
+                value={
+                  channelValue || data.paymentChannel || DEFAULT_PAYMENT_CHANNEL
+                }
+                disabled
+                aria-label="付款渠道"
+                className="cursor-default bg-slate-50 text-ink-1 disabled:opacity-100"
+              >
+                {PAYMENT_CHANNELS.map((channel) => (
+                  <option key={channel} value={channel}>
+                    {channel}
+                  </option>
+                ))}
+              </Select>
+            ) : (
+              <Value>{channelValue || data.paymentChannel}</Value>
+            )}
           </Field>
         ) : null}
         <Field label="付款事由" className="sm:col-span-2 lg:col-span-3">
@@ -144,6 +178,38 @@ export function DetailForm({
             <Value>{currencyLabel(data.currency)}</Value>
           )}
         </Field>
+        {showSettlement ? (
+          <>
+            <Field label="提出金额">
+              <Value>{formatAmount(settlement.proposedAmount)}</Value>
+            </Field>
+            <Field label="提出币种">
+              {proposedCurrencyEditable ? (
+                <Select
+                  value={settlement.proposedCurrency}
+                  aria-label="提出币种"
+                  onChange={(e) =>
+                    onProposedCurrencyChange?.(e.target.value as Currency)
+                  }
+                >
+                  {CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {currencyOptionLabel(c)}
+                    </option>
+                  ))}
+                </Select>
+              ) : (
+                <Value>{currencyOptionLabel(settlement.proposedCurrency)}</Value>
+              )}
+            </Field>
+            <Field label="收款金额">
+              <Value>{formatAmount(settlement.receiveAmount)}</Value>
+            </Field>
+            <Field label="收款币种">
+              <Value>{currencyLabel(settlement.receiveCurrency)}</Value>
+            </Field>
+          </>
+        ) : null}
         <Field label="收款方式类型">
           {editable ? (
             <Select

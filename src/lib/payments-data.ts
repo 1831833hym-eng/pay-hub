@@ -49,6 +49,42 @@ export function currencyLabel(code: Currency | string) {
   return CURRENCY_META[code as Currency]?.label ?? code;
 }
 
+export function currencyOptionLabel(code: Currency | string) {
+  const meta = CURRENCY_META[code as Currency];
+  return meta ? `${meta.code}（${meta.label}）` : code;
+}
+
+/**
+ * 1 美元折合的万里汇牌价。原型不接实时接口，用本地牌价模拟万里汇汇率。
+ * 提出金额 = 收款金额 / 汇率，汇率 = 收款币种牌价 / 提出币种牌价。同币种为 1。
+ */
+export const WORLDFIRST_PER_USD: Record<Currency, number> = {
+  USD: 1,
+  CNY: 7.1026,
+  HKD: 7.7823,
+};
+
+export function worldfirstRate(receiveCurrency: Currency, proposedCurrency: Currency) {
+  if (receiveCurrency === proposedCurrency) return 1;
+  return WORLDFIRST_PER_USD[receiveCurrency] / WORLDFIRST_PER_USD[proposedCurrency];
+}
+
+/** 收款金额 = 付款金额，收款币种 = 付款币种，提出金额 = 收款金额 / 万里汇汇率 */
+export function reviewSettlement(order: Pick<PaymentOrder, "amount" | "currency" | "proposedCurrency">) {
+  const receiveAmount = order.amount;
+  const receiveCurrency = order.currency;
+  const proposedCurrency = order.proposedCurrency ?? order.currency;
+  const exchangeRate = worldfirstRate(receiveCurrency, proposedCurrency);
+  const proposedAmount = Math.round((receiveAmount / exchangeRate) * 100) / 100;
+  return {
+    receiveAmount,
+    receiveCurrency,
+    proposedAmount,
+    proposedCurrency,
+    exchangeRate,
+  };
+}
+
 export const DEFAULT_PAYMENT_CHANNEL: PaymentChannel = "万里汇";
 
 export const PAYMENT_CHANNELS: PaymentChannel[] = [
@@ -74,8 +110,10 @@ export interface PaymentOrder {
   expenseDetail: string;
   /** 付款金额 */
   amount: number;
-  /** 币种 */
+  /** 付款币种 */
   currency: Currency;
+  /** 提出币种。复核明细页选择，未选择时与付款币种相同 */
+  proposedCurrency?: Currency;
   /** 申请人 */
   applicant: string;
   /** 申请时间 */
