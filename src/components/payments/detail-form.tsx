@@ -32,6 +32,7 @@ export function DetailForm({
   channelReadOnlySelect = false,
   showSettlement = false,
   proposedCurrencyEditable = false,
+  blankProposed = false,
   onProposedCurrencyChange,
 }: {
   order: PaymentOrder;
@@ -50,6 +51,8 @@ export function DetailForm({
   showSettlement?: boolean;
   /** 复核编辑态可选择提出币种；查看态为只读文字 */
   proposedCurrencyEditable?: boolean;
+  /** 初审明细：提出金额、提出币种为空 */
+  blankProposed?: boolean;
   onProposedCurrencyChange?: (currency: Currency) => void;
 }) {
   const data = draft ?? order;
@@ -187,10 +190,14 @@ export function DetailForm({
               <Value>{currencyLabel(settlement.receiveCurrency)}</Value>
             </Field>
             <Field label="提出金额">
-              <Value>{formatAmount(settlement.proposedAmount)}</Value>
+              <Value>
+                {blankProposed ? "—" : formatAmount(settlement.proposedAmount)}
+              </Value>
             </Field>
             <Field label="提出币种">
-              {proposedCurrencyEditable ? (
+              {blankProposed ? (
+                <Value>—</Value>
+              ) : proposedCurrencyEditable ? (
                 <Select
                   value={settlement.proposedCurrency}
                   aria-label="提出币种"

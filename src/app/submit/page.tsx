@@ -121,6 +121,7 @@ export default function SubmitListPage() {
             showEdit
             showVoid
             showOfflinePay
+            blankProposed
             onOpenDetail={(id, mode) => setDetail({ id, mode })}
             onVoid={handleVoidOne}
             onOfflinePay={setOfflinePayId}

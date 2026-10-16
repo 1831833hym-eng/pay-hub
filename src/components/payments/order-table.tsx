@@ -24,6 +24,8 @@ export function OrderTable({
   showQueryOps,
   showPayResult,
   showSelect,
+  /** 初审引导页：提出金额、提出币种为空 */
+  blankProposed,
   onVoid,
   onOfflinePay,
   onRetryPay,
@@ -46,6 +48,8 @@ export function OrderTable({
   /** 查询引导页：付款单状态右侧展示支付状态、支付失败原因 */
   showPayResult?: boolean;
   showSelect?: boolean;
+  /** 初审引导页：提出金额、提出币种为空 */
+  blankProposed?: boolean;
   onVoid?: (id: string) => void;
   onOfflinePay?: (id: string) => void;
   onRetryPay?: (id: string) => void;
@@ -265,12 +269,16 @@ export function OrderTable({
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
                 >
-                  {formatAmount(reviewSettlement(item).proposedAmount)}
+                  {blankProposed
+                    ? "—"
+                    : formatAmount(reviewSettlement(item).proposedAmount)}
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
-                  {currencyLabel(reviewSettlement(item).proposedCurrency)}
+                  {blankProposed
+                    ? "—"
+                    : currencyLabel(reviewSettlement(item).proposedCurrency)}
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}

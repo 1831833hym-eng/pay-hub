@@ -123,6 +123,7 @@ export function PaymentDetailPanel({
                   : undefined
               }
               showSettlement
+              blankProposed={scene === "submit"}
               proposedCurrencyEditable={isReviewMode}
               onProposedCurrencyChange={
                 isReviewMode
