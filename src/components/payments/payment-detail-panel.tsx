@@ -122,10 +122,10 @@ export function PaymentDetailPanel({
                   ? (order.paymentChannel ?? DEFAULT_PAYMENT_CHANNEL)
                   : undefined
               }
-              showSettlement={scene === "review"}
-              proposedCurrencyEditable={scene === "review"}
+              showSettlement
+              proposedCurrencyEditable={isReviewMode}
               onProposedCurrencyChange={
-                scene === "review"
+                isReviewMode
                   ? (currency: Currency) =>
                       updateOrder(order.id, { proposedCurrency: currency })
                   : undefined

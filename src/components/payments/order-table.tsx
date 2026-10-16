@@ -6,6 +6,7 @@ import { TablePagination } from "@/components/ui/pagination";
 import {
   currencyLabel,
   paymentMethodTypeLabel,
+  reviewSettlement,
   type PaymentOrder,
 } from "@/lib/payments-data";
 import { formatAmount, formatDate } from "@/lib/utils";
@@ -62,7 +63,7 @@ export function OrderTable({
     () => rows.slice((safePage - 1) * pageSize, safePage * pageSize),
     [rows, safePage, pageSize]
   );
-  const columnCount = 17 + (showSelect ? 1 : 0) + (showPayResult ? 2 : 0);
+  const columnCount = 21 + (showSelect ? 1 : 0) + (showPayResult ? 2 : 0);
   const allIds = pagedRows.map((r) => r.id);
   const allSelected =
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
@@ -103,6 +104,21 @@ export function OrderTable({
               付款金额
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              付款币种
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              提出金额
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              提出币种
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              收款金额
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              收款币种
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款人/户名
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
@@ -110,9 +126,6 @@ export function OrderTable({
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款银行
-            </th>
-            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              付款币种
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款方式类型
@@ -160,6 +173,10 @@ export function OrderTable({
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2 text-right font-semibold tabular-nums text-ink-1">
               {formatAmount(amountTotal)}
             </th>
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
+            <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
@@ -232,6 +249,31 @@ export function OrderTable({
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {currencyLabel(item.currency)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
+                >
+                  {formatAmount(reviewSettlement(item).proposedAmount)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {currencyLabel(reviewSettlement(item).proposedCurrency)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
+                >
+                  {formatAmount(reviewSettlement(item).receiveAmount)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {currencyLabel(reviewSettlement(item).receiveCurrency)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                   title={item.payeeName}
                 >
                   {item.payeeName || "—"}
@@ -245,11 +287,6 @@ export function OrderTable({
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {item.payeeBank || "—"}
-                </td>
-                <td
-                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
-                >
-                  {currencyLabel(item.currency)}
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}

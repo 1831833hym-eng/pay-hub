@@ -46,9 +46,9 @@ export function DetailForm({
   channelValue?: PaymentChannel;
   /** 复核明细：付款渠道为下拉框，默认万里汇，不可修改 */
   channelReadOnlySelect?: boolean;
-  /** 仅复核明细：付款币种后展示提出金额、提出币种、收款金额、收款币种 */
+  /** 付款币种后展示提出金额、提出币种、收款金额、收款币种 */
   showSettlement?: boolean;
-  /** 复核编辑态可选择提出币种 */
+  /** 复核编辑态可选择提出币种；查看态为只读文字 */
   proposedCurrencyEditable?: boolean;
   onProposedCurrencyChange?: (currency: Currency) => void;
 }) {
@@ -199,7 +199,7 @@ export function DetailForm({
                   ))}
                 </Select>
               ) : (
-                <Value>{currencyOptionLabel(settlement.proposedCurrency)}</Value>
+                <Value>{currencyLabel(settlement.proposedCurrency)}</Value>
               )}
             </Field>
             <Field label="收款金额">
