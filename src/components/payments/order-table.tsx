@@ -107,16 +107,16 @@ export function OrderTable({
               付款币种
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              提出金额
-            </th>
-            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              提出币种
-            </th>
-            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款金额
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款币种
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              提出金额
+            </th>
+            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+              提出币种
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款人/户名
@@ -255,22 +255,22 @@ export function OrderTable({
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
                 >
-                  {formatAmount(reviewSettlement(item).proposedAmount)}
-                </td>
-                <td
-                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
-                >
-                  {currencyLabel(reviewSettlement(item).proposedCurrency)}
-                </td>
-                <td
-                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
-                >
                   {formatAmount(reviewSettlement(item).receiveAmount)}
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                 >
                   {currencyLabel(reviewSettlement(item).receiveCurrency)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
+                >
+                  {formatAmount(reviewSettlement(item).proposedAmount)}
+                </td>
+                <td
+                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                >
+                  {currencyLabel(reviewSettlement(item).proposedCurrency)}
                 </td>
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
