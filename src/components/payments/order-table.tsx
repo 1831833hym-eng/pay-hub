@@ -24,8 +24,8 @@ export function OrderTable({
   showQueryOps,
   showPayResult,
   showSelect,
-  /** 初审引导页：提出金额、提出币种为空 */
-  blankProposed,
+  /** 查询引导页：收款币种后展示提出金额、提出币种 */
+  showProposed,
   onVoid,
   onOfflinePay,
   onRetryPay,
@@ -48,8 +48,8 @@ export function OrderTable({
   /** 查询引导页：付款单状态右侧展示支付状态、支付失败原因 */
   showPayResult?: boolean;
   showSelect?: boolean;
-  /** 初审引导页：提出金额、提出币种为空 */
-  blankProposed?: boolean;
+  /** 查询引导页：收款币种后展示提出金额、提出币种 */
+  showProposed?: boolean;
   onVoid?: (id: string) => void;
   onOfflinePay?: (id: string) => void;
   onRetryPay?: (id: string) => void;
@@ -67,7 +67,8 @@ export function OrderTable({
     () => rows.slice((safePage - 1) * pageSize, safePage * pageSize),
     [rows, safePage, pageSize]
   );
-  const columnCount = 21 + (showSelect ? 1 : 0) + (showPayResult ? 2 : 0);
+  const columnCount =
+    (showProposed ? 21 : 19) + (showSelect ? 1 : 0) + (showPayResult ? 2 : 0);
   const allIds = pagedRows.map((r) => r.id);
   const allSelected =
     allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
@@ -116,12 +117,16 @@ export function OrderTable({
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款币种
             </th>
-            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              提出金额
-            </th>
-            <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              提出币种
-            </th>
+            {showProposed ? (
+              <>
+                <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+                  提出金额
+                </th>
+                <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
+                  提出币种
+                </th>
+              </>
+            ) : null}
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款人/户名
             </th>
@@ -180,8 +185,12 @@ export function OrderTable({
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
-            <th className="border-b border-slate-200 px-3 py-2" />
-            <th className="border-b border-slate-200 px-3 py-2" />
+            {showProposed ? (
+              <>
+                <th className="border-b border-slate-200 px-3 py-2" />
+                <th className="border-b border-slate-200 px-3 py-2" />
+              </>
+            ) : null}
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
             <th className="border-b border-slate-200 px-3 py-2" />
@@ -266,20 +275,20 @@ export function OrderTable({
                 >
                   {currencyLabel(reviewSettlement(item).receiveCurrency)}
                 </td>
-                <td
-                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
-                >
-                  {blankProposed
-                    ? "—"
-                    : formatAmount(reviewSettlement(item).proposedAmount)}
-                </td>
-                <td
-                  className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
-                >
-                  {blankProposed
-                    ? "—"
-                    : currencyLabel(reviewSettlement(item).proposedCurrency)}
-                </td>
+                {showProposed ? (
+                  <>
+                    <td
+                      className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-right tabular-nums text-ink-1 ${rowBg}`}
+                    >
+                      {formatAmount(reviewSettlement(item).proposedAmount)}
+                    </td>
+                    <td
+                      className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
+                    >
+                      {currencyLabel(reviewSettlement(item).proposedCurrency)}
+                    </td>
+                  </>
+                ) : null}
                 <td
                   className={`whitespace-nowrap border-b border-slate-100 px-3 py-2.5 text-ink-2 ${rowBg}`}
                   title={item.payeeName}

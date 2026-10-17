@@ -121,6 +121,7 @@ export default function QueryListPage() {
             showSelect={false}
             showQueryOps
             showPayResult
+            showProposed
             onVoid={setVoidId}
             onRetryPay={(id) => {
               retryPay(id);
