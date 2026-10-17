@@ -47,7 +47,7 @@ export function DetailForm({
   channelValue?: PaymentChannel;
   /** 复核明细：付款渠道为下拉框，默认万里汇，不可修改 */
   channelReadOnlySelect?: boolean;
-  /** 付款币种后展示收款金额、收款币种、提出金额、提出币种 */
+  /** 审批币种后展示收款金额、收款币种、提出金额、提出币种 */
   showSettlement?: boolean;
   /** 复核编辑态可选择提出币种；查看态为只读文字 */
   proposedCurrencyEditable?: boolean;
@@ -152,7 +152,7 @@ export function DetailForm({
             <Value>{data.transferMemo || data.feishuNo}</Value>
           )}
         </Field>
-        <Field label="付款金额">
+        <Field label="审批金额">
           {editable ? (
             <Input
               value={String(data.amount)}
@@ -163,7 +163,7 @@ export function DetailForm({
             <Value>{formatAmount(data.amount)}</Value>
           )}
         </Field>
-        <Field label="付款币种">
+        <Field label="审批币种">
           {editable ? (
             <Select
               value={data.currency}

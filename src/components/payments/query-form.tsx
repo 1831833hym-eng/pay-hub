@@ -83,7 +83,7 @@ export function QueryForm({
               </Select>
             </div>
             <div>
-              <Label>付款金额</Label>
+              <Label>审批金额</Label>
               <Input
                 value={values.amount}
                 onChange={(e) => set("amount", e.target.value)}

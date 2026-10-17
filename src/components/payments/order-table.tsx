@@ -106,10 +106,10 @@ export function OrderTable({
               付款事由
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              付款金额
+              审批金额
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
-              付款币种
+              审批币种
             </th>
             <th className="whitespace-nowrap border-b border-slate-200 px-3 py-2.5 text-center font-medium">
               收款金额

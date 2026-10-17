@@ -58,12 +58,12 @@ export function CompareTable({ rows }: { rows: CompareResult[] }) {
           <tr className="bg-[#f5f6f8] text-xs text-ink-2">
             <th className={HEAD}>付款单号</th>
             <th className={HEAD}>付款单金额</th>
-            <th className={HEAD}>付款币种</th>
+            <th className={HEAD}>审批币种</th>
             <th className={HEAD}>收款人</th>
             <th className={`${HEAD} border-r-2`}>收款账号</th>
             <th className={HEAD}>审批单号</th>
-            <th className={HEAD}>付款金额</th>
-            <th className={HEAD}>付款币种</th>
+            <th className={HEAD}>审批金额</th>
+            <th className={HEAD}>审批币种</th>
             <th className={HEAD}>收款人</th>
             <th className={`${HEAD} border-r-2`}>收款账号</th>
           </tr>

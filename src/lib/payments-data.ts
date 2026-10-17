@@ -69,7 +69,7 @@ export function worldfirstRate(receiveCurrency: Currency, proposedCurrency: Curr
   return WORLDFIRST_PER_USD[receiveCurrency] / WORLDFIRST_PER_USD[proposedCurrency];
 }
 
-/** 收款金额 = 付款金额，收款币种 = 付款币种，提出金额 = 收款金额 / 万里汇汇率 */
+/** 收款金额 = 审批金额，收款币种 = 审批币种，提出金额 = 收款金额 / 万里汇汇率 */
 export function reviewSettlement(order: Pick<PaymentOrder, "amount" | "currency" | "proposedCurrency">) {
   const receiveAmount = order.amount;
   const receiveCurrency = order.currency;
@@ -108,11 +108,11 @@ export interface PaymentOrder {
   purpose: string;
   /** 费用具体明细 */
   expenseDetail: string;
-  /** 付款金额 */
+  /** 审批金额 */
   amount: number;
-  /** 付款币种 */
+  /** 审批币种 */
   currency: Currency;
-  /** 提出币种。复核明细页选择，未选择时与付款币种相同 */
+  /** 提出币种。复核明细页选择，未选择时与审批币种相同 */
   proposedCurrency?: Currency;
   /** 申请人 */
   applicant: string;
